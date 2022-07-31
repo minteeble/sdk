@@ -8,8 +8,9 @@
  * Website:   https://minteeble.com
  */
 
-// export * from "./services";
-
-export interface Dsdsd {
-  sdsd: string;
+/**
+ * Service for Authentication and Authorization on Minteeble platform
+ */
+class AuthService {
+  constructor() {}
 }
