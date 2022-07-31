@@ -8,8 +8,4 @@
  * Website:   https://minteeble.com
  */
 
-// export * from "./services";
-
-export interface Dsdsd {
-  sdsd: string;
-}
+export * from "./services";
