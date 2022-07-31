@@ -1,1 +1,1 @@
-# Minteeble SDK fro React.js
+# sdk

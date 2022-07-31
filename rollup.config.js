@@ -4,7 +4,9 @@ import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 import { terser } from "rollup-plugin-terser";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
+// import scss from "rollup-plugin-scss";
 import json from "@rollup/plugin-json";
+
 const packageJson = require("./package.json");
 
 export default [
@@ -23,6 +25,7 @@ export default [
       },
     ],
     plugins: [
+      // scss(),
       peerDepsExternal(),
       resolve(),
       commonjs(),
