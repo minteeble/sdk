@@ -32,7 +32,7 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
 
   useEffect(() => {
     (async () => {
-      if (walletAddress !== "" && authService) {
+      if (walletAddress !== "" && !user && authService) {
         console.log("Auth service is ready for signing");
         let signedInUser = await authService.signIn(walletAddress);
 
