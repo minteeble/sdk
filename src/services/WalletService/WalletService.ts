@@ -113,6 +113,21 @@ class WalletService {
       console.log(error);
     });
   };
+
+  public sign = async (
+    web3: Web3,
+    walletAddress: string,
+    message: any
+  ): Promise<any> => {
+    const signature = await web3.eth.personal.sign(
+      message,
+      walletAddress,
+      "",
+      undefined
+    );
+
+    return signature;
+  };
 }
 
 export default WalletService;

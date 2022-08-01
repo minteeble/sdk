@@ -68,12 +68,32 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     }
   };
 
+  const sign = async (message: any): Promise<any> => {
+    return new Promise<any>(async (resolve, reject) => {
+      if (walletService && walletAddress && web3) {
+        try {
+          const signature = await walletService.sign(
+            web3,
+            walletAddress,
+            message
+          );
+
+          resolve(signature);
+        } catch (err) {
+          console.error(err);
+          reject();
+        }
+      } else reject();
+    });
+  };
+
   return (
     <WalletServiceContext.Provider
       value={{
         walletService: walletService as WalletService | undefined,
         connectWallet,
         disconnectWallet,
+        sign,
         walletAddress,
       }}
     >
