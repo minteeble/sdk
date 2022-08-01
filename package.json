@@ -1,38 +1,37 @@
 {
   "name": "@minteeble/sdk",
   "version": "1.0.0",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
   "description": "Minteeble React.js SDK package",
-  "repository": "https://github.com/minteeble/sdk.git",
-  "author": "Samuele Girgenti <samuele.girgenti458@gmail.com>",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/esm/index.d.ts",
   "license": "MIT",
-  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c"
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
+    "prepublishOnly": "yarn build"
   },
-  "devDependencies": {
-    "@babel/core": "^7.18.9",
-    "@rollup/plugin-commonjs": "^22.0.1",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@rollup/plugin-typescript": "^8.3.3",
-    "@types/react": "^18.0.15",
-    "babel-loader": "^8.2.5",
+  "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "rollup": "^2.77.0",
-    "rollup-plugin-dts": "^4.2.2",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-scss": "^3.0.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "tslib": "^2.4.0",
-    "typescript": "^4.7.4"
+    "web3": "^1.7.4",
+    "web3modal": "^1.9.8"
   },
+  "devDependencies": {
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.7.4",
+    "web3": "^1.7.4",
+    "web3modal": "^1.9.8"
+  },
+  "files": [
+    "/lib"
+  ],
   "dependencies": {
     "@walletconnect/web3-provider": "^1.7.8",
-    "web3": "^1.7.4",
-    "web3-utils": "^1.7.4",
-    "web3modal": "^1.9.8"
+    "core-js": "^3.24.1"
   }
 }

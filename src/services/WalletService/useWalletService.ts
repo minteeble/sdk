@@ -4,7 +4,7 @@ import { WalletServiceContext } from "./WalletServiceContext";
 export const useWalletService = () => {
   const context = React.useContext(WalletServiceContext);
 
-  if (context === undefined) {
+  if (typeof context === undefined) {
     throw new Error(
       "`useWalletService` must be within a `WalletServiceProvider`"
     );

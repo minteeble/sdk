@@ -7,26 +7,17 @@
  * Email:     minteeble@gmail.com
  * Website:   https://minteeble.com
  */
+"use strict";
 
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+import Web3Modal, { removeLocal } from "web3modal";
 
 import Web3 from "web3";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 class WalletService {
-  private modal: Web3Modal | null;
+  constructor() {}
 
-  private web3: Web3 | null;
-
-  private walletAddress: string;
-
-  constructor() {
-    this.modal = null;
-    this.web3 = null;
-    this.walletAddress = "";
-  }
-
-  public init(): void {
+  public getModal = (): Web3Modal => {
     const providerOptions = {
       walletconnect: {
         package: WalletConnectProvider,
@@ -42,32 +33,64 @@ class WalletService {
       disableInjectedProvider: false,
       providerOptions,
     });
-  }
 
-  public async connectWallet(): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
+    // if (web3Modal.cachedProvider) {
+    //   this.connectWallet();
+    // }
+
+    return web3Modal;
+  };
+
+  public connectWallet = async (modal: Web3Modal): Promise<Web3> => {
+    return new Promise<Web3>(async (resolve, reject) => {
       try {
-        console.log("Connecting to wallet.");
+        console.log("Connecting to wallet");
 
-        let provider = await this.modal!.connect();
+        console.log("Modal:", this);
+
+        let provider = await modal.connect();
 
         console.log("Got provider", provider);
-        this.web3 = new Web3(provider);
-        resolve();
+        let web3 = new Web3(provider);
+
+        resolve(web3);
+
+        // if (accounts.length > 0) {
+        //   this._walletAddress = accounts[0];
+
+        //   this.registerWeb3Events(this.web3.eth.currentProvider);
+        // } else {
+        //   await this.disconnectWallet();
+        // }
+        // resolve();
       } catch (err) {
-        console.log("CLosed");
+        console.log("CLosed", err);
         reject("Modal closed.");
       }
     });
-  }
+  };
 
-  public async disconnectWallet(): Promise<void> {
-    this.modal?.clearCachedProvider();
-    this.web3 = null;
-    this.walletAddress = "";
-  }
+  public getWalletAddress = async (web3: Web3): Promise<string> => {
+    return new Promise<string>(async (resolve, reject) => {
+      try {
+        let accounts = await web3.eth.getAccounts();
 
-  public registerWeb3Events(provider: any): void {
+        if (accounts.length > 0) {
+          resolve(accounts[0]);
+        } else resolve("");
+      } catch (err) {
+        reject("Cannot get wallet address");
+      }
+    });
+  };
+
+  // public disconnectWallet = async (): Promise<void> => {
+  //   this.modal?.clearCachedProvider();
+  //   this.web3 = null;
+  //   this._walletAddress = "";
+  // };
+
+  public registerWeb3Events = (provider: any): void => {
     // Subscribe to accounts change
     provider.on("accountsChanged", (accounts: string[]) => {
       console.log(accounts);
@@ -89,7 +112,7 @@ class WalletService {
     provider.on("disconnect", (error: { code: number; message: string }) => {
       console.log(error);
     });
-  }
+  };
 }
 
 export default WalletService;
