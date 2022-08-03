@@ -3,6 +3,7 @@ import AuthService from "./AuthService";
 import { AuthServiceContext } from "./AuthServiceContext";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { useWalletService } from "../WalletService";
+import { API } from "aws-amplify";
 
 export interface AuthServiceProviderProps {
   children: any;
@@ -43,6 +44,27 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
         console.log("Signing done.");
 
         await authService.sendChallengeAnswer!(signedInUser, signature);
+      }
+
+      if (user) {
+        // let data = await API.post("ApiGatewayRestApi", "/reserved-area", {
+        //   responseType: "text",
+        //   body: {
+        //     urlName: "test-7",
+        //     fullName: "Test 7",
+        //     contractAddress: "0xAD3e4bC4EAA24d294aaa1CbD06E196DEBEEb9442",
+        //     type: "nft",
+        //     chain: "rinkeby",
+        //   },
+        // });
+
+        let data2 = await API.get(
+          "ApiGatewayRestApi",
+          "/reserved-area/test-7/access-conditions-result",
+          {
+            responseType: "text",
+          }
+        );
       }
     })();
   }, [walletAddress]);
