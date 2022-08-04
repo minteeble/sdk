@@ -2383,6 +2383,13 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
+"@minteeble/utils@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.22.tgz#f738ef07e7800f2b63a998825eda9745b70d6bb5"
+  integrity sha512-txD+slaQYo+DpKAAygtx5C0bNo6ct01BHA6snUowcbw6ghdEmgCHjpFPTULaxbKwfaXL5MEd4xfKmlkil+Qtaw==
+  dependencies:
+    typescript-json-serializer "^4.2.0"
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
@@ -5622,6 +5629,11 @@ readable-stream@~1.0.15:
     isarray "0.0.1"
     string_decoder "~0.10.x"
 
+reflect-metadata@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/reflect-metadata/-/reflect-metadata-0.1.13.tgz#67ae3ca57c972a2aa1642b10fe363fe32d49dc08"
+  integrity sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==
+
 regenerator-runtime@^0.13.4:
   version "0.13.9"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz#8925742a98ffd90814988d7566ad30ca3b263b52"
@@ -6132,6 +6144,14 @@ typedarray-to-buffer@3.1.5, typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typescript-json-serializer@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/typescript-json-serializer/-/typescript-json-serializer-4.2.0.tgz#0ded6bc9e19bd2b0fcf02c4725c53a8a9a0dd2d6"
+  integrity sha512-o/rgBfbtOO1PC/8YeNBenl53WlZKE7GxL2E7Pvnvsv1NhSUWbGLchtfMMjPUHhqNYVkHj1FL5XHFJS3ZeR0Gsw==
+  dependencies:
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
 
 typescript@^4.7.4:
   version "4.7.4"

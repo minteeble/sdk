@@ -43,7 +43,9 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
 
         console.log("Signing done.");
 
-        await authService.sendChallengeAnswer!(signedInUser, signature);
+        setUser(
+          await authService.sendChallengeAnswer!(signedInUser, signature)
+        );
       }
 
       if (user) {
