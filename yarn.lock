@@ -2383,10 +2383,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@minteeble/utils@^1.0.22":
-  version "1.0.22"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.22.tgz#f738ef07e7800f2b63a998825eda9745b70d6bb5"
-  integrity sha512-txD+slaQYo+DpKAAygtx5C0bNo6ct01BHA6snUowcbw6ghdEmgCHjpFPTULaxbKwfaXL5MEd4xfKmlkil+Qtaw==
+"@minteeble/utils@^1.0.27":
+  version "1.0.27"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.27.tgz#bfc107f14ab5ed0503e99737dfd47612d21bd4e3"
+  integrity sha512-UhaPc66ENh9avqWJk75wwhSdb1lO658tnb8NlxeE50hWBjEiueSizIPSrvMXeGA1e3ZjXf3rBY3iyjW6n7f4Ww==
   dependencies:
     typescript-json-serializer "^4.2.0"
 
