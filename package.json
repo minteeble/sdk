@@ -13,8 +13,8 @@
     "prepublishOnly": "yarn build"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "web3": "^1.7.4",
     "web3modal": "^1.9.8"
   },
@@ -22,8 +22,6 @@
     "@types/aws-lambda": "^8.10.100",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "typescript": "^4.7.4",
     "web3": "^1.7.4",
     "web3modal": "^1.9.8"
