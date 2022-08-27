@@ -29,7 +29,7 @@ export const NavigationServiceProvider = (
         console.log("Navigation service:", navigationService);
         if (navigationService) {
           let navigationInfo =
-            await navigationService.getNavigationInfoForGroup("admin_group");
+            await navigationService.getNavigationInfoForUser();
 
           setUserNavigationInfo(navigationInfo);
 

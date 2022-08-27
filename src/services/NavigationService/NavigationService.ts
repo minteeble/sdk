@@ -25,6 +25,20 @@ class NavigationService {
       throw err;
     }
   };
+
+  public getNavigationInfoForUser =
+    async (): Promise<GetNavigationByGroupResponseDto> => {
+      try {
+        let data = await API.get("ApiGatewayRestApi", `/navigation`, {
+          responseType: "text",
+        });
+
+        return data as GetNavigationByGroupResponseDto;
+      } catch (err) {
+        console.log("Error on getting Navigation info for user:", err);
+        throw err;
+      }
+    };
 }
 
 export default NavigationService;
