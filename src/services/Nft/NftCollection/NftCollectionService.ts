@@ -11,6 +11,7 @@
 import {
   CreateNftCollectionRequestDto,
   ICreateNftCollectionRequestDto,
+  NftCollectionInfoClientModel,
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
 
@@ -54,6 +55,25 @@ class NftCollectionService {
       return data as any;
     } catch (err) {
       console.log("Error on creating NftCollection:", err);
+      throw err;
+    }
+  };
+
+  public getUserNftCollections = async (
+    user: string
+  ): Promise<Array<NftCollectionInfoClientModel>> => {
+    try {
+      let data = await API.post(
+        "ApiGatewayRestApi",
+        `/nft-collection/user/${user}`,
+        {
+          responseType: "text",
+        }
+      );
+
+      return data;
+    } catch (err) {
+      console.log("Error on getting collections:", err);
       throw err;
     }
   };

@@ -41,9 +41,32 @@ export const NftCollectionServiceProvider = (
     });
   };
 
+  const getUserNftCollections = async (
+    user: string
+  ): Promise<Array<NftCollectionInfoClientModel>> => {
+    return new Promise<Array<NftCollectionInfoClientModel>>(
+      async (resolve, reject) => {
+        try {
+          let collections = await nftCollectionService?.getUserNftCollections(
+            user
+          );
+
+          resolve(collections || []);
+        } catch (err) {
+          console.log(err);
+          reject(err);
+        }
+      }
+    );
+  };
+
   return (
     <NftCollectionServiceContext.Provider
-      value={{ nftCollectionService, createNftCollection }}
+      value={{
+        nftCollectionService,
+        createNftCollection,
+        getUserNftCollections,
+      }}
     >
       {props.children}
     </NftCollectionServiceContext.Provider>
