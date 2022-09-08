@@ -22,7 +22,24 @@ export const NftCollectionServiceProvider = (
 
   const createNftCollection = async (
     nftCollection: NftCollectionInfoClientModel
-  ): Promise<void> => {};
+  ): Promise<void> => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await nftCollectionService?.createNftCollection(
+          nftCollection.chainName,
+          nftCollection.collectionName,
+          nftCollection.address,
+          nftCollection.type,
+          nftCollection.resourceOwner
+        );
+
+        resolve();
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  };
 
   return (
     <NftCollectionServiceContext.Provider
