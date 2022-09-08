@@ -18,7 +18,7 @@ export const NftCollectionServiceProvider = (
     let service = new NftCollectionService();
 
     setNftCollectionService(service);
-  });
+  }, []);
 
   const createNftCollection = async (
     nftCollection: NftCollectionInfoClientModel
