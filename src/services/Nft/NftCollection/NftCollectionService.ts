@@ -63,7 +63,7 @@ class NftCollectionService {
     user: string
   ): Promise<Array<NftCollectionInfoClientModel>> => {
     try {
-      let data = await API.post(
+      let data = await API.get(
         "ApiGatewayRestApi",
         `/nft-collection/user/${user}`,
         {
