@@ -42,13 +42,15 @@ export const NftCollectionServiceProvider = (
   };
 
   const getUserNftCollections = async (
-    user: string
+    user: string,
+    chainName: string
   ): Promise<Array<NftCollectionInfoClientModel>> => {
     return new Promise<Array<NftCollectionInfoClientModel>>(
       async (resolve, reject) => {
         try {
           let collections = await nftCollectionService?.getUserNftCollections(
-            user
+            user,
+            chainName
           );
 
           resolve(collections || []);

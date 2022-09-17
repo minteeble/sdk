@@ -10,7 +10,8 @@ export interface NftCollectionServiceContent {
   ) => Promise<void>;
 
   getUserNftCollections: (
-    user: string
+    user: string,
+    chainName: string
   ) => Promise<Array<NftCollectionInfoClientModel>>;
 }
 
@@ -23,5 +24,6 @@ export const NftCollectionServiceContext =
       new Promise(() => {}),
 
     // @ts-ignore
-    getUserNftCollections: (user: string) => new Promise(() => {}),
+    getUserNftCollections: (user: string, chainName: string) =>
+      new Promise(() => {}),
   });

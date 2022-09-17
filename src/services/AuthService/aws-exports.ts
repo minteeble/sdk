@@ -5,6 +5,8 @@ const awsmobile = {
   aws_cloud_logic_custom: [
     {
       endpoint: "https://t5o5erl9sc.execute-api.eu-central-1.amazonaws.com/d1",
+      // endpoint: "https://d3hdjqbifqc4x6.cloudfront.net/d1",
+      // endpoint: "https://api.minteeble.com/d1",
       name: "ApiGatewayRestApi",
       region: "eu-central-1",
     },

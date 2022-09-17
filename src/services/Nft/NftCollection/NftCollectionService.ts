@@ -60,12 +60,13 @@ class NftCollectionService {
   };
 
   public getUserNftCollections = async (
-    user: string
+    user: string,
+    chainName: string
   ): Promise<Array<NftCollectionInfoClientModel>> => {
     try {
       let data = await API.get(
         "ApiGatewayRestApi",
-        `/nft-collection/user/${user}`,
+        `/nft-collection/chain/${chainName}/user/${user}`,
         {
           responseType: "text",
         }
