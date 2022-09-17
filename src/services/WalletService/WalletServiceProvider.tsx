@@ -95,6 +95,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
         disconnectWallet,
         sign,
         walletAddress,
+        web3: web3 || undefined,
       }}
     >
       {props.children}
