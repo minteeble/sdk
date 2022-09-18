@@ -16,4 +16,5 @@ export const WalletServiceContext = createContext<WalletServiceContent>({
   disconnectWallet: () => new Promise<void>(() => {}),
   sign: () => new Promise<any>(() => {}),
   walletAddress: "",
+  web3: undefined,
 });
