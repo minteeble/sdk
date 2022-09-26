@@ -1,4 +1,7 @@
-import { ICreateWebhookListenerResponseDto } from "@minteeble/utils";
+import {
+  ICreateWebhookListenerResponseDto,
+  IGetListenersResponseDto,
+} from "@minteeble/utils";
 import { useEffect, useState } from "react";
 import WebhooksService from "./WebhooksService";
 import { WebhooksServiceContext } from "./WebhooksServiceContext";
@@ -37,9 +40,22 @@ export const WebhooksServiceProvider = (
     );
   };
 
+  const getOwnedListeners = async (): Promise<IGetListenersResponseDto> => {
+    return new Promise<IGetListenersResponseDto>(async (resolve, reject) => {
+      try {
+        let data = await webhooksService?.getOwnedListeners();
+
+        resolve(data!);
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  };
+
   return (
     <WebhooksServiceContext.Provider
-      value={{ webhooksService, createWebhookListener }}
+      value={{ webhooksService, createWebhookListener, getOwnedListeners }}
     >
       {props.children}
     </WebhooksServiceContext.Provider>

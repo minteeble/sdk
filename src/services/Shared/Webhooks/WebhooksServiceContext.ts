@@ -1,4 +1,7 @@
-import { ICreateWebhookListenerResponseDto } from "@minteeble/utils";
+import {
+  ICreateWebhookListenerResponseDto,
+  IGetListenersResponseDto,
+} from "@minteeble/utils";
 import { createContext } from "react";
 import WebhooksService from "./WebhooksService";
 
@@ -8,6 +11,8 @@ export interface WebhooksServiceContent {
   createWebhookListener: (
     name: string
   ) => Promise<ICreateWebhookListenerResponseDto>;
+
+  getOwnedListeners: () => Promise<IGetListenersResponseDto>;
 }
 
 export const WebhooksServiceContext = createContext<WebhooksServiceContent>({
@@ -15,4 +20,6 @@ export const WebhooksServiceContext = createContext<WebhooksServiceContent>({
 
   //@ts-ignore
   createWebhookListener: (name: string) => new Promise(() => {}),
+
+  getOwnedListeners: () => new Promise(() => {}),
 });
