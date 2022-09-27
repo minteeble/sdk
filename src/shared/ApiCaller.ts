@@ -9,7 +9,7 @@ export class ApiCaller {
 
   constructor(serviceSlug: string) {
     this.serviceSlug = serviceSlug;
-    this.appName = "default2";
+    this.appName = "Minteeble";
   }
 
   public async post(

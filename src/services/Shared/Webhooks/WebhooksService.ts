@@ -2,6 +2,7 @@ import {
   ICreateWebhookListenerRequestDto,
   ICreateWebhookListenerResponseDto,
   IGetListenersResponseDto,
+  IWebhookEventClientModel,
   WebhookListenerClientModel,
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
@@ -47,10 +48,30 @@ class WebhooksService extends BaseService {
    */
   public getOwnedListeners = async (): Promise<IGetListenersResponseDto> => {
     try {
-      let data = await this.apiCaller.get(`/listener`, {
+      let data = await this.apiCaller.get(`/listeners`, {
         responseType: "text",
       });
 
+      return data;
+    } catch (err) {
+      console.log("Error on getting Webhook Listener:", err);
+      throw err;
+    }
+  };
+
+  /**
+   * Gets the list of events for a specified listener
+   *
+   * @param listenerId Listener ID
+   * @returns List of events
+   */
+  public getListenerEvents = async (
+    listenerId: string
+  ): Promise<Array<IWebhookEventClientModel>> => {
+    try {
+      let data = await this.apiCaller.get(`/listener/${listenerId}`, {
+        responseType: "text",
+      });
       return data;
     } catch (err) {
       console.log("Error on getting Webhook Listener:", err);
