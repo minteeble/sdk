@@ -69,10 +69,11 @@ class WebhooksService extends BaseService {
     listenerId: string
   ): Promise<Array<IWebhookEventClientModel>> => {
     try {
-      let data = await this.apiCaller.get(`/listener/${listenerId}`, {
+      let data = await this.apiCaller.get(`/listener/${listenerId}/events`, {
         responseType: "text",
       });
-      return data;
+
+      return data.events || [];
     } catch (err) {
       console.log("Error on getting Webhook Listener:", err);
       throw err;
