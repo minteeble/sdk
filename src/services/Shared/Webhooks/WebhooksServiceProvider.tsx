@@ -71,6 +71,36 @@ export const WebhooksServiceProvider = (
     );
   };
 
+  const addListenerViewer = async (
+    listenerId: string,
+    viewerAddress: string
+  ) => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await webhooksService?.addListenerViewer(listenerId, viewerAddress);
+        resolve();
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  };
+
+  const removeListenerViewer = async (
+    listenerId: string,
+    viewerAddress: string
+  ) => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await webhooksService?.removeListenerViewer(listenerId, viewerAddress);
+        resolve();
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  };
+
   return (
     <WebhooksServiceContext.Provider
       value={{
@@ -78,6 +108,8 @@ export const WebhooksServiceProvider = (
         createWebhookListener,
         getOwnedListeners,
         getListenerEvents,
+        addListenerViewer,
+        removeListenerViewer,
       }}
     >
       {props.children}

@@ -18,6 +18,16 @@ export interface WebhooksServiceContent {
   getListenerEvents: (
     listenerId: string
   ) => Promise<Array<WebhookEventClientModel>>;
+
+  addListenerViewer: (
+    listenerId: string,
+    viewerAddress: string
+  ) => Promise<void>;
+
+  removeListenerViewer: (
+    listenerId: string,
+    viewerAddress: string
+  ) => Promise<void>;
 }
 
 export const WebhooksServiceContext = createContext<WebhooksServiceContent>({
@@ -29,4 +39,8 @@ export const WebhooksServiceContext = createContext<WebhooksServiceContent>({
   getOwnedListeners: () => new Promise(() => {}),
 
   getListenerEvents: () => new Promise(() => {}),
+
+  addListenerViewer: () => new Promise(() => {}),
+
+  removeListenerViewer: () => new Promise(() => {}),
 });

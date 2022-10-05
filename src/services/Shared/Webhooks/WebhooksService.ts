@@ -3,6 +3,7 @@ import {
   ICreateWebhookListenerResponseDto,
   IGetListenersResponseDto,
   IWebhookEventClientModel,
+  IViewerUpdateRequestDto,
   WebhookListenerClientModel,
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
@@ -76,6 +77,48 @@ class WebhooksService extends BaseService {
       return data.events || [];
     } catch (err) {
       console.log("Error on getting Webhook Listener:", err);
+      throw err;
+    }
+  };
+
+  public addListenerViewer = async (
+    listenerId: string,
+    viewerAddress: string
+  ): Promise<void> => {
+    try {
+      let bodyPayload: IViewerUpdateRequestDto = {
+        listenerId: listenerId,
+        viewerAddress: viewerAddress,
+      } as IViewerUpdateRequestDto;
+
+      await this.apiCaller.post(`/listener/${listenerId}/viewer`, {
+        responseType: "text",
+        body: bodyPayload,
+      });
+    } catch (err) {
+      console.log("Error on adding listener viewer:", err);
+      throw err;
+    }
+  };
+
+  public removeListenerViewer = async (
+    listenerId: string,
+    viewerAddress: string
+  ): Promise<void> => {
+    try {
+      let bodyPayload = {
+        listenerId: listenerId,
+      };
+
+      await this.apiCaller.post(
+        `/listener/${listenerId}/viewer/${viewerAddress}`,
+        {
+          responseType: "text",
+          body: bodyPayload,
+        }
+      );
+    } catch (err) {
+      console.log("Error on adding listener viewer:", err);
       throw err;
     }
   };
