@@ -3,7 +3,7 @@ import AuthService from "./AuthService";
 import { AuthServiceContext } from "./AuthServiceContext";
 import { CognitoUser } from "amazon-cognito-identity-js";
 import { useWalletService } from "../WalletService";
-import { API } from "aws-amplify";
+import { API, Auth, Signer } from "aws-amplify";
 
 export interface AuthServiceProviderProps {
   children: any;
@@ -54,7 +54,29 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
     await connectWallet();
   };
 
-  const signOut = async (): Promise<void> => {};
+  const signOut = async (): Promise<void> => {
+    console.log("Signing out");
+    const credentials = await Auth.currentCredentials();
+
+    const accessInfo = {
+      access_key: credentials.accessKeyId,
+      secret_key: credentials.secretAccessKey,
+      session_token: credentials.sessionToken,
+    };
+
+    console.log("Acess info:", accessInfo);
+
+    console.log("Signing standard request");
+
+    const wssUrl = "wss://websocket.minteeble.com/d1";
+
+    const signedUrl = Signer.signUrl(wssUrl, accessInfo, {
+      service: "execute-api",
+      region: "eu-central-1",
+    });
+
+    console.log("Signer url", signedUrl);
+  };
 
   return (
     <AuthServiceContext.Provider value={{ user, signIn, signOut }}>
