@@ -52,13 +52,14 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
 
   useEffect(() => {
     (async () => {
+      let jwtToken = "NOAUTH";
+
       if (user) {
         const credentials = await Auth.currentCredentials();
 
         const currentSession = await Auth.currentSession();
         const idToken = currentSession.getIdToken();
-        const jwtToken = idToken.getJwtToken();
-
+        jwtToken = idToken.getJwtToken();
         // const accessInfo = {
         //   access_key: credentials.accessKeyId,
         //   secret_key: credentials.secretAccessKey,
@@ -66,16 +67,21 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
         // };
 
         console.log("JwtToken:", jwtToken);
-
-        const wssUrl = `wss://websocket.minteeble.com/d1?idToken=${jwtToken}`;
-        // const signedUrl = Signer.signUrl(wssUrl, accessInfo, {
-        //   service: "execute-api",
-        //   region: "eu-central-1",
-        // });
-        // console.log("Signed url:", signedUrl);
-        let wsClient = new W3CWebSocket(wssUrl);
-        setWsClient(wsClient);
       }
+
+      const wssUrl = `wss://websocket.minteeble.com/d1?idToken=${jwtToken}`;
+      // const signedUrl = Signer.signUrl(wssUrl, accessInfo, {
+      //   service: "execute-api",
+      //   region: "eu-central-1",
+      // });
+      // console.log("Signed url:", signedUrl);
+
+      if (wsClient) {
+        wsClient.close();
+      }
+
+      let ws = new W3CWebSocket(wssUrl);
+      setWsClient(ws);
     })();
   }, [user]);
 
