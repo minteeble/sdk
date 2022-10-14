@@ -5,6 +5,7 @@ import WalletService from "./WalletService";
 export interface WalletServiceContent {
   walletService?: WalletService;
   web3?: Web3;
+  userIsSigning: boolean;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => Promise<void>;
   sign: (message: any) => Promise<any>;
@@ -17,4 +18,5 @@ export const WalletServiceContext = createContext<WalletServiceContent>({
   sign: () => new Promise<any>(() => {}),
   walletAddress: "",
   web3: undefined,
+  userIsSigning: false,
 });

@@ -17,6 +17,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   const [web3, setWeb3] = useState<Web3 | null>();
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [modal, setModal] = useState<Web3Modal>();
+  const [userIsSigning, setUserIsSigning] = useState<boolean>(false);
 
   useEffect(() => {
     let service = new WalletService();
@@ -54,6 +55,14 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     })();
   }, [web3]);
 
+  useEffect(() => {
+    if (userIsSigning) {
+      console.log("User is signing");
+    } else {
+      console.log("User is not signing");
+    }
+  }, [userIsSigning]);
+
   const disconnectWallet = async (): Promise<void> => {
     modal?.clearCachedProvider();
     setWeb3(null);
@@ -72,14 +81,19 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     return new Promise<any>(async (resolve, reject) => {
       if (walletService && walletAddress && web3) {
         try {
+          setUserIsSigning(true);
+
           const signature = await walletService.sign(
             web3,
             walletAddress,
             message
           );
 
+          setUserIsSigning(false);
+
           resolve(signature);
         } catch (err) {
+          setUserIsSigning(false);
           console.error(err);
           reject();
         }
@@ -95,6 +109,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
         disconnectWallet,
         sign,
         walletAddress,
+        userIsSigning,
         web3: web3 || undefined,
       }}
     >
