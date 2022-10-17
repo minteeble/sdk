@@ -25,6 +25,19 @@ export class ApiCaller {
     );
   }
 
+  public async put(
+    path: string,
+    init: {
+      [key: string]: any;
+    }
+  ): Promise<any> {
+    return API.put(
+      ApiCaller.apiName,
+      `/${this.serviceSlug}/${this.appName}${path}`,
+      init
+    );
+  }
+
   public async get(
     path: string,
     init: {
