@@ -19,7 +19,6 @@
     "web3modal": "^1.9.8"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.100",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/websocket": "^1.0.5",
@@ -33,8 +32,6 @@
   "dependencies": {
     "@minteeble/utils": "^1.0.48",
     "@walletconnect/web3-provider": "^1.7.8",
-    "aws-amplify": "^4.3.37",
-    "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1153.0",
     "core-js": "^3.24.1",
     "websocket": "^1.0.34"
