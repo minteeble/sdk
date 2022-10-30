@@ -1,6 +1,6 @@
 {
   "name": "@minteeble/sdk",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Minteeble React.js SDK package.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
