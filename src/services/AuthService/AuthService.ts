@@ -12,13 +12,23 @@ import { CognitoUser } from "amazon-cognito-identity-js";
 import Amplify, { Auth } from "aws-amplify";
 
 // @ts-ignore
-import awsmobile from "./aws-exports";
+import awsmobileProd from "./aws-exports-d1";
+
+// @ts-ignore
+import awsmobileDev from "./aws-exports-p1";
+import { EnvironmentType, EnvManager } from "../../EnvManager";
 
 /**
  * Service for Authentication and Authorization on Minteeble platform
  */
 class AuthService {
   constructor() {
+    console.log("Loading Auth configs. Env: ", EnvManager.environment);
+
+    let awsmobile =
+      EnvManager.environment === EnvironmentType.Dev
+        ? awsmobileDev
+        : awsmobileProd;
     Amplify.configure(awsmobile);
   }
 
