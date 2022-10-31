@@ -12,10 +12,10 @@ import { CognitoUser } from "amazon-cognito-identity-js";
 import Amplify, { Auth } from "aws-amplify";
 
 // @ts-ignore
-import awsmobileProd from "./aws-exports-d1";
+import awsmobileDev from "./aws-exports-d1";
 
 // @ts-ignore
-import awsmobileDev from "./aws-exports-p1";
+import awsmobileProd from "./aws-exports-p1";
 import { EnvironmentType, EnvManager } from "../../EnvManager";
 
 /**
