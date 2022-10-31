@@ -14,12 +14,15 @@ import {
   NftCollectionInfoClientModel,
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
+import { BaseService } from "../../../shared/BaseService";
 
 /**
  * Service class for handling NftCollections API
  */
-class NftCollectionService {
-  constructor() {}
+class NftCollectionService extends BaseService {
+  constructor() {
+    super("nft-collection");
+  }
 
   /**
    * Interacts with API for creating a new NftCollection
@@ -47,7 +50,7 @@ class NftCollectionService {
     };
 
     try {
-      let data = await API.post("ApiGatewayRestApi", `/nft-collection`, {
+      let data = await this.apiCaller.post(`/collection`, {
         responseType: "text",
         body: bodyPayload,
       });
@@ -64,9 +67,8 @@ class NftCollectionService {
     chainName: string
   ): Promise<Array<NftCollectionInfoClientModel>> => {
     try {
-      let data = await API.get(
-        "ApiGatewayRestApi",
-        `/nft-collection/chain/${chainName}/user/${user}`,
+      let data = await this.apiCaller.get(
+        `/collection/chain/${chainName}/user/${user}`,
         {
           responseType: "text",
         }
