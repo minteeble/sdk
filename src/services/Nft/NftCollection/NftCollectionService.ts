@@ -74,7 +74,7 @@ class NftCollectionService extends BaseService {
         }
       );
 
-      return data;
+      return data.collections;
     } catch (err) {
       console.log("Error on getting collections:", err);
       throw err;
