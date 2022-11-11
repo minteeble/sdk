@@ -11,10 +11,14 @@
 import {
   CreateNftCollectionRequestDto,
   ICreateNftCollectionRequestDto,
+  INftCollectionInfoClientModel,
   NftCollectionInfoClientModel,
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
+import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../../shared/BaseService";
+
+const serializer = new JsonSerializer();
 
 /**
  * Service class for handling NftCollections API
@@ -47,6 +51,7 @@ class NftCollectionService extends BaseService {
       address,
       type,
       resourceOwner,
+      abi: [],
     };
 
     try {
@@ -77,6 +82,49 @@ class NftCollectionService extends BaseService {
       return data.collections;
     } catch (err) {
       console.log("Error on getting collections:", err);
+      throw err;
+    }
+  };
+
+  /**
+   * Gets the NftCollection info by specifying chain and ID
+   *
+   * @param chainName Chain name
+   * @param collectionId Collection ID
+   * @returns NftCollection info
+   */
+  public getCollectionInfo = async (
+    chainName: string,
+    collectionId: string,
+    fetchAbi: boolean
+  ): Promise<NftCollectionInfoClientModel | null> => {
+    try {
+      let reqInit: any = {
+        responseType: "text",
+      };
+
+      if (fetchAbi) {
+        reqInit.queryStringParameters = {
+          abi: true,
+        };
+      }
+
+      let data = await this.apiCaller.get(
+        `/collection/chain/${chainName}/id/${collectionId}`,
+        {
+          responseType: "text",
+        }
+      );
+
+      let collection =
+        serializer.deserializeObject<NftCollectionInfoClientModel>(
+          data,
+          NftCollectionInfoClientModel
+        );
+
+      return collection || null;
+    } catch (err) {
+      console.log("Error on getting collection:", err);
       throw err;
     }
   };
