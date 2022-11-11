@@ -7,7 +7,7 @@ import {
  * Interface model for NftCollectionInstance
  */
 export interface INftCollectionInstance extends INftCollectionInfoClientModel {
-  isActive(): boolean;
+  active: boolean;
 }
 
 /**
@@ -24,7 +24,7 @@ export class NftCollectionInstance
   /**
    * Specifies whether current instance is active or not
    */
-  private active: boolean;
+  private _active: boolean;
 
   constructor(collectionModel?: NftCollectionInfoClientModel) {
     super();
@@ -37,10 +37,55 @@ export class NftCollectionInstance
       this.type = collectionModel.type;
     }
 
-    this.active = false;
+    this._active = false;
   }
 
-  public isActive(): boolean {
-    return this.active;
+  public get active(): boolean {
+    return this._active;
+  }
+
+  /**
+   * Method for checking that the NftCollection instance is active.
+   * If not active throws an exception.
+   */
+  protected requireActive(): void {
+    if (!this.active) throw new Error("Collection not active.");
   }
 }
+
+// -----------------
+
+/**
+ * Interface for base IERC721 collection interfaces
+ */
+export interface IERC721Instance extends INftCollectionInstance {
+  mintToken(amount: number): Promise<void>;
+}
+
+/**
+ * Base IERC721 instance
+ */
+export class ERC721Instance
+  extends NftCollectionInstance
+  implements IMinteebleERC721AInstance
+{
+  public async mintToken(amount: number): Promise<void> {
+    this.requireActive();
+
+    console.log("Requested minting", amount);
+  }
+}
+
+// -----------------
+
+/**
+ * Interface for Minteeble ERC721 collections
+ */
+export interface IMinteebleERC721AInstance extends IERC721Instance {}
+
+/**
+ * Interface for ERC721 collections
+ */
+export class MinteebleERC721AInstance
+  extends ERC721Instance
+  implements IMinteebleERC721AInstance {}

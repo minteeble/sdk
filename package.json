@@ -33,7 +33,6 @@
     "@minteeble/utils": "^1.0.53",
     "@walletconnect/web3-provider": "^1.7.8",
     "aws-amplify": "^4.3.37",
-    "aws-sdk": "^2.1153.0",
     "core-js": "^3.24.1",
     "typescript-json-serializer": "^5.1.0",
     "websocket": "^1.0.34"

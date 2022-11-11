@@ -4,3 +4,5 @@
 /example/build
 
 *.log
+
+.DS_Store
