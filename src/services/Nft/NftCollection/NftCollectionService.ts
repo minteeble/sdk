@@ -105,15 +105,13 @@ class NftCollectionService extends BaseService {
 
       if (fetchAbi) {
         reqInit.queryStringParameters = {
-          abi: true,
+          fetchAbi: 1,
         };
       }
 
       let data = await this.apiCaller.get(
         `/collection/chain/${chainName}/id/${collectionId}`,
-        {
-          responseType: "text",
-        }
+        reqInit
       );
 
       let collection =

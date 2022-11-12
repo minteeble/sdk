@@ -1,5 +1,6 @@
 import { NftCollectionInfoClientModel } from "@minteeble/utils";
 import { createContext } from "react";
+import { NftCollectionInstance } from "./NftCollectionInstance";
 import NftCollectionService from "./NftCollectionService";
 
 export interface NftCollectionServiceContent {
@@ -13,6 +14,12 @@ export interface NftCollectionServiceContent {
     user: string,
     chainName: string
   ) => Promise<Array<NftCollectionInfoClientModel>>;
+
+  getCollectionInstance: (
+    chainName: string,
+    collectionId: string,
+    connect: boolean
+  ) => Promise<NftCollectionInstance | null>;
 }
 
 export const NftCollectionServiceContext =
@@ -26,4 +33,13 @@ export const NftCollectionServiceContext =
     // @ts-ignore
     getUserNftCollections: (user: string, chainName: string) =>
       new Promise(() => {}),
+
+    getCollectionInstance: (
+      // @ts-ignore
+      chainName: string,
+      // @ts-ignore
+      collectionId: string,
+      // @ts-ignore
+      connect: boolean
+    ) => new Promise(() => {}),
   });

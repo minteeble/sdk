@@ -3,7 +3,10 @@ import { useEffect, useState } from "react";
 import NftCollectionService from "./NftCollectionService";
 import { NftCollectionServiceContext } from "./NftCollectionServiceContext";
 import React from "react";
-import { NftCollectionInstance } from "./NftCollectionInstance";
+import {
+  MinteebleERC721AInstance,
+  NftCollectionInstance,
+} from "./NftCollectionInstance";
 import { useWalletService } from "../../WalletService";
 
 export interface NftCollectionServiceProviderProps {
@@ -16,11 +19,11 @@ export const NftCollectionServiceProvider = (
   const [nftCollectionService, setNftCollectionService] =
     useState<NftCollectionService | null>(null);
 
-  const [collections, setCollections] = useState<Array<NftCollectionInstance>>(
-    []
-  );
+  // const [collections, setCollections] = useState<Array<NftCollectionInstance>>(
+  //   []
+  // );
 
-  let { walletAddress } = useWalletService();
+  let { walletAddress, web3 } = useWalletService();
 
   useEffect(() => {
     let service = new NftCollectionService();
@@ -74,10 +77,15 @@ export const NftCollectionServiceProvider = (
     chainName: string,
     collectionId: string,
     connect: boolean
-  ) => {
+  ): Promise<NftCollectionInstance | null> => {
     return new Promise<NftCollectionInstance | null>(
       async (resolve, reject) => {
         try {
+          if (connect && !web3) {
+            reject("Error. Client is not yet connected to web3.");
+            return;
+          }
+
           let collectionModel = await nftCollectionService?.getCollectionInfo(
             chainName,
             collectionId,
@@ -87,7 +95,13 @@ export const NftCollectionServiceProvider = (
           let collectionInstance: NftCollectionInstance | null = null;
 
           if (collectionModel) {
-            collectionInstance = new NftCollectionInstance(collectionModel);
+            if (collectionModel.type === "MinteebleERC721A") {
+              collectionInstance = new MinteebleERC721AInstance(
+                collectionModel,
+                web3
+              );
+              await collectionInstance.connect();
+            }
           }
 
           resolve(collectionInstance);
@@ -105,6 +119,7 @@ export const NftCollectionServiceProvider = (
         nftCollectionService,
         createNftCollection,
         getUserNftCollections,
+        getCollectionInstance,
       }}
     >
       {props.children}
