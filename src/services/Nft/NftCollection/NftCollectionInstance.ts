@@ -75,6 +75,13 @@ export class NftCollectionInstance
       this._active = true;
     }
   }
+
+  /**
+   * Returns web3 contract object is instance is active. Returns null otherwise
+   */
+  public get contract(): Contract | null {
+    return this._contract || null;
+  }
 }
 
 // -----------------
@@ -86,6 +93,8 @@ export interface IERC721Instance extends INftCollectionInstance {
   mintToken(amount: number): Promise<void>;
 
   owner(): Promise<string | null>;
+
+  ownedIds(ownerAddress: string): Promise<Array<number>>;
 }
 
 /**
@@ -106,6 +115,12 @@ export class ERC721Instance
 
     return await this._contract?.methods.owner().call();
   }
+
+  public async ownedIds(ownerAddress: string): Promise<Array<number>> {
+    this.requireActive();
+
+    return await this._contract?.methods.walletOfOwner(ownerAddress).call();
+  }
 }
 
 // -----------------
@@ -124,7 +139,7 @@ export class MinteebleERC721AInstance
 {
   public override async owner(): Promise<string | null> {
     this.requireActive();
-
+    console.log("AAAAAAAAAAA");
     return await this._contract?.methods.owner().call();
   }
 }
