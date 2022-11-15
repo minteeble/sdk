@@ -4,6 +4,7 @@ import {
 } from "@minteeble/utils";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
+import * as BN from "bn.js";
 
 /**
  * Interface model for NftCollectionInstance
@@ -60,7 +61,7 @@ export class NftCollectionInstance
    * If not active throws an exception.
    */
   protected requireActive(): void {
-    if (!this.active) throw new Error("Collection not active.");
+    if (!this.active || !this._web3) throw new Error("Collection not active.");
   }
 
   public async connect(): Promise<void> {
@@ -90,8 +91,6 @@ export class NftCollectionInstance
  * Interface for base IERC721 collection interfaces
  */
 export interface IERC721Instance extends INftCollectionInstance {
-  mintToken(amount: number): Promise<void>;
-
   owner(): Promise<string | null>;
 
   ownedIds(ownerAddress: string): Promise<Array<number>>;
@@ -104,12 +103,6 @@ export class ERC721Instance
   extends NftCollectionInstance
   implements IERC721Instance
 {
-  public async mintToken(amount: number): Promise<void> {
-    this.requireActive();
-
-    console.log("Requested minting", amount);
-  }
-
   public async owner(): Promise<string | null> {
     this.requireActive();
 
@@ -119,7 +112,9 @@ export class ERC721Instance
   public async ownedIds(ownerAddress: string): Promise<Array<number>> {
     this.requireActive();
 
-    return await this._contract?.methods.walletOfOwner(ownerAddress).call();
+    let ids = await this._contract?.methods.walletOfOwner(ownerAddress).call();
+
+    return ids;
   }
 }
 
@@ -128,7 +123,11 @@ export class ERC721Instance
 /**
  * Interface for Minteeble ERC721 collections
  */
-export interface IMinteebleERC721AInstance extends IERC721Instance {}
+export interface IMinteebleERC721AInstance extends IERC721Instance {
+  mintToken(amount: number): Promise<void>;
+
+  mintPrice(): Promise<BN>;
+}
 
 /**
  * Interface for ERC721 collections
@@ -139,7 +138,55 @@ export class MinteebleERC721AInstance
 {
   public override async owner(): Promise<string | null> {
     this.requireActive();
-    console.log("AAAAAAAAAAA");
+
     return await this._contract?.methods.owner().call();
+  }
+
+  public async mintToken(amount: number): Promise<void> {
+    this.requireActive();
+
+    let price = await this.mintPrice();
+    let value = price.muln(amount).toString();
+    let accounts = await this._web3!.eth.getAccounts();
+
+    console.log("Mint with value", {
+      value: value,
+      from: accounts[0],
+    });
+
+    let trx = await this.contract!.methods.mint(amount).send({
+      value: value,
+      from: accounts[0],
+    });
+
+    console.log("Trx:", trx);
+  }
+
+  public async mintPrice(): Promise<BN> {
+    let price = await this.contract?.methods.mintPrice().call();
+    let priceNum = this._web3!.utils.toBN(price);
+
+    return priceNum;
+  }
+}
+
+// ----------
+
+export interface IMinteebleStaticMutationInstance
+  extends IMinteebleERC721AInstance {
+  mintMutant(oldCollectionId: number, serumId: number): Promise<void>;
+}
+
+export class MinteebleStaticMutationInstance
+  extends MinteebleERC721AInstance
+  implements IMinteebleStaticMutationInstance
+{
+  public async mintMutant(
+    oldCollectionId: number,
+    serumId: number
+  ): Promise<void> {
+    this.requireActive();
+
+    console.log(oldCollectionId, serumId);
   }
 }
