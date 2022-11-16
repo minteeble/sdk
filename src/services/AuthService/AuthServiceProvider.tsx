@@ -6,11 +6,19 @@ import { useWalletService } from "../WalletService";
 import { API, Auth, Signer } from "aws-amplify";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
+/**
+ * Auth service provider props
+ */
 export interface AuthServiceProviderProps {
   /**
    * Custom AWS config object
    */
   customConfig?: any;
+
+  /**
+   * Root websocket URL
+   */
+  websocketUrl?: string;
 
   /**
    * Provider children
@@ -77,7 +85,9 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
         console.log("JwtToken:", jwtToken);
       }
 
-      const wssUrl = `wss://websocket.minteeble.com/d1?idToken=${jwtToken}`;
+      const wssUrl = `${
+        props.websocketUrl || "wss://websocket.minteeble.com/d1"
+      }?idToken=${jwtToken}`;
       // const signedUrl = Signer.signUrl(wssUrl, accessInfo, {
       //   service: "execute-api",
       //   region: "eu-central-1",
@@ -98,21 +108,7 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
   };
 
   const signOut = async (): Promise<void> => {
-    // console.log("Signing out");
-    // const credentials = await Auth.currentCredentials();
-    // const accessInfo = {
-    //   access_key: credentials.accessKeyId,
-    //   secret_key: credentials.secretAccessKey,
-    //   session_token: credentials.sessionToken,
-    // };
-    // console.log("Acess info:", accessInfo);
-    // console.log("Signing standard request");
-    // const wssUrl = "wss://websocket.minteeble.com/d1";
-    // const signedUrl = Signer.signUrl(wssUrl, accessInfo, {
-    //   service: "execute-api",
-    //   region: "eu-central-1",
-    // });
-    // console.log("Signer url", signedUrl);
+    // TODO implement signing out
   };
 
   return (
