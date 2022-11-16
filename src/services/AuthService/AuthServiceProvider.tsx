@@ -7,6 +7,14 @@ import { API, Auth, Signer } from "aws-amplify";
 import { w3cwebsocket as W3CWebSocket } from "websocket";
 
 export interface AuthServiceProviderProps {
+  /**
+   * Custom AWS config object
+   */
+  customConfig?: any;
+
+  /**
+   * Provider children
+   */
   children: any;
 }
 
@@ -24,7 +32,7 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
   } = useWalletService();
 
   useEffect(() => {
-    let service = new AuthService();
+    let service = new AuthService(props.customConfig || null);
 
     setAuthService(service);
 

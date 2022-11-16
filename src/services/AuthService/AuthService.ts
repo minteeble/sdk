@@ -22,14 +22,16 @@ import { EnvironmentType, EnvManager } from "../../EnvManager";
  * Service for Authentication and Authorization on Minteeble platform
  */
 class AuthService {
-  constructor() {
+  constructor(customConfig: any | null = null) {
     console.log("Loading Auth configs. Env: ", EnvManager.environment);
 
     let awsmobile =
       EnvManager.environment === EnvironmentType.Dev
         ? awsmobileDev
         : awsmobileProd;
-    Amplify.configure(awsmobile);
+
+    // If customConfig is provided then use them as AWS config
+    Amplify.configure(customConfig || awsmobile);
   }
 
   public signIn = async (walletAddress: string): Promise<CognitoUser> => {
