@@ -30,6 +30,8 @@ class AuthService {
         ? awsmobileDev
         : awsmobileProd;
 
+    console.log("Cosnifguring with:", customConfig || awsmobile);
+
     // If customConfig is provided then use them as AWS config
     Amplify.configure(customConfig || awsmobile);
   }
