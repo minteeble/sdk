@@ -18,6 +18,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [modal, setModal] = useState<Web3Modal>();
   const [userIsSigning, setUserIsSigning] = useState<boolean>(false);
+  const [accounts, setAccounts] = useState<Array<string> | null>(null);
 
   useEffect(() => {
     let service = new WalletService();
@@ -47,7 +48,22 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
         if (address.length > 0) {
           setWalletAddress(address);
 
-          walletService.registerWeb3Events(web3.eth.currentProvider);
+          walletService.registerWeb3Events(
+            web3.eth.currentProvider,
+            (accounts) => {
+              setAccounts(accounts);
+            }
+          );
+
+          setAccounts(await web3.eth.getAccounts());
+
+          // (web3.eth.currentProvider as any).on(
+          //   "accountsChanged",
+          //   (accounts: string[]) => {
+          //     console.log(accounts);
+          //     window.location.reload();
+          //   }
+          // );
         } else {
           await disconnectWallet();
         }
@@ -108,6 +124,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
         connectWallet,
         disconnectWallet,
         sign,
+        accounts,
         walletAddress,
         userIsSigning,
         web3: web3 || undefined,

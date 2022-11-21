@@ -10,6 +10,7 @@ export interface WalletServiceContent {
   disconnectWallet: () => Promise<void>;
   sign: (message: any) => Promise<any>;
   walletAddress: string;
+  accounts: Array<string> | null;
 }
 
 export const WalletServiceContext = createContext<WalletServiceContent>({
@@ -19,4 +20,5 @@ export const WalletServiceContext = createContext<WalletServiceContent>({
   walletAddress: "",
   web3: undefined,
   userIsSigning: false,
+  accounts: null,
 });

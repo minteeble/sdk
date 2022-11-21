@@ -30,14 +30,29 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
   const [authService, setAuthService] = useState<AuthService | null>(null);
   const [user, setUser] = useState<CognitoUser | null>(null);
   const [wsClient, setWsClient] = useState<W3CWebSocket | null>(null);
-
+  const [initialAccountRead, setInitialAccountsRead] = useState<boolean>(true);
   const {
     walletAddress,
     walletService,
     connectWallet,
     disconnectWallet,
     sign,
+    accounts,
   } = useWalletService();
+
+  useEffect(() => {
+    (async () => {
+      if (accounts) {
+        if (initialAccountRead) {
+          setInitialAccountsRead(false);
+        } else {
+          console.log("Switched network");
+          await signOut();
+          window.location.reload();
+        }
+      }
+    })();
+  }, [accounts]);
 
   useEffect(() => {
     let service = new AuthService(props.customConfig || null);
@@ -109,6 +124,9 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
 
   const signOut = async (): Promise<void> => {
     // TODO implement signing out
+    await authService?.signOut();
+    await disconnectWallet();
+    console.log("Signed out");
   };
 
   return (

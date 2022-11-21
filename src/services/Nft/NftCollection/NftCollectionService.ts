@@ -44,7 +44,7 @@ class NftCollectionService extends BaseService {
     address: string,
     type: string,
     resourceOwner: string
-  ): Promise<any> => {
+  ): Promise<INftCollectionInfoClientModel> => {
     let bodyPayload: ICreateNftCollectionRequestDto = {
       chainName,
       collectionName,
@@ -60,7 +60,7 @@ class NftCollectionService extends BaseService {
         body: bodyPayload,
       });
 
-      return data as any;
+      return data as INftCollectionInfoClientModel;
     } catch (err) {
       console.log("Error on creating NftCollection:", err);
       throw err;

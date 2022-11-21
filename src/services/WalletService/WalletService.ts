@@ -90,11 +90,16 @@ class WalletService {
   //   this._walletAddress = "";
   // };
 
-  public registerWeb3Events = (provider: any): void => {
+  public registerWeb3Events = (
+    provider: any,
+    onAccountChange?: (accounts: Array<string>) => void
+  ): void => {
     // Subscribe to accounts change
     provider.on("accountsChanged", (accounts: string[]) => {
       console.log(accounts);
-      window.location.reload();
+      if (onAccountChange) {
+        onAccountChange(accounts);
+      }
     });
 
     // Subscribe to chainId change
