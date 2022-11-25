@@ -83,38 +83,40 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
 
   useEffect(() => {
     (async () => {
-      let jwtToken = "NOAUTH";
+      if (props.websocketUrl) {
+        let jwtToken = "NOAUTH";
 
-      if (user) {
-        const credentials = await Auth.currentCredentials();
+        if (user) {
+          const credentials = await Auth.currentCredentials();
 
-        const currentSession = await Auth.currentSession();
-        const idToken = currentSession.getIdToken();
-        jwtToken = idToken.getJwtToken();
-        // const accessInfo = {
-        //   access_key: credentials.accessKeyId,
-        //   secret_key: credentials.secretAccessKey,
-        //   session_token: credentials.sessionToken,
-        // };
+          const currentSession = await Auth.currentSession();
+          const idToken = currentSession.getIdToken();
+          jwtToken = idToken.getJwtToken();
+          // const accessInfo = {
+          //   access_key: credentials.accessKeyId,
+          //   secret_key: credentials.secretAccessKey,
+          //   session_token: credentials.sessionToken,
+          // };
 
-        console.log("JwtToken:", jwtToken);
+          console.log("JwtToken:", jwtToken);
+        }
+
+        const wssUrl = `${
+          props.websocketUrl || "wss://websocket.minteeble.com/d1"
+        }?idToken=${jwtToken}`;
+        // const signedUrl = Signer.signUrl(wssUrl, accessInfo, {
+        //   service: "execute-api",
+        //   region: "eu-central-1",
+        // });
+        // console.log("Signed url:", signedUrl);
+
+        if (wsClient) {
+          wsClient.close();
+        }
+
+        let ws = new W3CWebSocket(wssUrl);
+        setWsClient(ws);
       }
-
-      const wssUrl = `${
-        props.websocketUrl || "wss://websocket.minteeble.com/d1"
-      }?idToken=${jwtToken}`;
-      // const signedUrl = Signer.signUrl(wssUrl, accessInfo, {
-      //   service: "execute-api",
-      //   region: "eu-central-1",
-      // });
-      // console.log("Signed url:", signedUrl);
-
-      if (wsClient) {
-        wsClient.close();
-      }
-
-      let ws = new W3CWebSocket(wssUrl);
-      setWsClient(ws);
     })();
   }, [user]);
 
