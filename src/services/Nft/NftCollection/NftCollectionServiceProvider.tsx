@@ -52,6 +52,16 @@ export const NftCollectionServiceProvider = (
     });
   };
 
+  const deleteNftCollection = async (
+    chainName: string,
+    collectionId: string
+  ): Promise<void> => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+      } catch {}
+    });
+  };
+
   const getUserNftCollections = async (
     user: string,
     chainName: string

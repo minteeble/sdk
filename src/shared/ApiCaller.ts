@@ -50,4 +50,17 @@ export class ApiCaller {
       init
     );
   }
+
+  public async delete(
+    path: string,
+    init: {
+      [key: string]: any;
+    }
+  ): Promise<any> {
+    return API.del(
+      ApiCaller.apiName,
+      `/${this.serviceSlug}/${this.appName}${path}`,
+      init
+    );
+  }
 }
