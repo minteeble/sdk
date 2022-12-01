@@ -58,7 +58,15 @@ export const NftCollectionServiceProvider = (
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
-      } catch {}
+        await nftCollectionService?.deleteNftCollection(
+          chainName,
+          collectionId
+        );
+        resolve();
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
     });
   };
 
@@ -135,6 +143,7 @@ export const NftCollectionServiceProvider = (
         createNftCollection,
         getUserNftCollections,
         getCollectionInstance,
+        deleteNftCollection,
       }}
     >
       {props.children}

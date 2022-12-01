@@ -72,8 +72,16 @@ class NftCollectionService extends BaseService {
     collectionId: string
   ): Promise<void> => {
     try {
-      await this.apiCaller.delete();
-    } catch {}
+      await this.apiCaller.delete(
+        `/collection/chain/${chainName}/id/${collectionId}`,
+        {
+          responseType: "text",
+        }
+      );
+    } catch (err) {
+      console.log("Error on deleting collection:", err);
+      throw err;
+    }
   };
 
   public getUserNftCollections = async (

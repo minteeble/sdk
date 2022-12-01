@@ -10,6 +10,11 @@ export interface NftCollectionServiceContent {
     nftCollection: NftCollectionInfoClientModel
   ) => Promise<void>;
 
+  deleteNftCollection: (
+    chainName: string,
+    collectionId: string
+  ) => Promise<void>;
+
   getUserNftCollections: (
     user: string,
     chainName: string
