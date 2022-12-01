@@ -31,6 +31,10 @@ export const NftCollectionServiceContext =
       new Promise(() => {}),
 
     // @ts-ignore
+    deleteNftCollection: (chainName: string, collectionId: string) =>
+      new Promise(() => {}),
+
+    // @ts-ignore
     getUserNftCollections: (user: string, chainName: string) =>
       new Promise(() => {}),
 
