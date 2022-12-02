@@ -51,7 +51,7 @@ class NftCollectionService extends BaseService {
       address,
       type,
       resourceOwner,
-      abi: [],
+      ABI: [],
     };
 
     try {
