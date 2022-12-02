@@ -44,7 +44,7 @@ export class NftCollectionInstance
       this.collectionName = collectionModel.collectionName;
       this.resourceOwner = collectionModel.resourceOwner;
       this.type = collectionModel.type;
-      this.abi = collectionModel.abi;
+      this.ABI = collectionModel.ABI;
     }
 
     this._active = false;
@@ -66,9 +66,9 @@ export class NftCollectionInstance
 
   public async connect(): Promise<void> {
     if (!this._active && this._web3) {
-      console.log("Using abi:", this.abi);
+      console.log("Using abi:", this.ABI);
       let contract = new this._web3.eth.Contract(
-        this.abi.abi as any,
+        this.ABI.ABI as any,
         this.address
       );
 
