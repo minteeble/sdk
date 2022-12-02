@@ -70,6 +70,26 @@ export const NftCollectionServiceProvider = (
     });
   };
 
+  const setCustomABI = async (
+    chainName: string,
+    collectionId: string,
+    customABI: any
+  ): Promise<void> => {
+    return new Promise<void>(async (resolve, reject) => {
+      try {
+        await nftCollectionService?.setCustomABI(
+          chainName,
+          collectionId,
+          customABI
+        );
+        resolve();
+      } catch (err) {
+        console.log(err);
+        reject(err);
+      }
+    });
+  };
+
   const getUserNftCollections = async (
     user: string,
     chainName: string
@@ -144,6 +164,7 @@ export const NftCollectionServiceProvider = (
         getUserNftCollections,
         getCollectionInstance,
         deleteNftCollection,
+        setCustomABI,
       }}
     >
       {props.children}

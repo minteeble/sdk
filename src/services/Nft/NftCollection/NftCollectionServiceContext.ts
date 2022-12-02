@@ -15,6 +15,12 @@ export interface NftCollectionServiceContent {
     collectionId: string
   ) => Promise<void>;
 
+  setCustomABI: (
+    chainName: string,
+    collectionId: string,
+    customABI: any
+  ) => Promise<void>;
+
   getUserNftCollections: (
     user: string,
     chainName: string
@@ -37,6 +43,10 @@ export const NftCollectionServiceContext =
 
     // @ts-ignore
     deleteNftCollection: (chainName: string, collectionId: string) =>
+      new Promise(() => {}),
+
+    // @ts-ignore
+    setCustomABI: (chainName: string, collectionId: string, customABI: any) =>
       new Promise(() => {}),
 
     // @ts-ignore

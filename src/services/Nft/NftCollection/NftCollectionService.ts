@@ -84,6 +84,25 @@ class NftCollectionService extends BaseService {
     }
   };
 
+  public setCustomABI = async (
+    chainName: string,
+    collectionId: string,
+    customABI: any
+  ): Promise<void> => {
+    try {
+      await this.apiCaller.put(
+        `/collection/chain/${chainName}/id/${collectionId}/customABI`,
+        {
+          responseType: "text",
+          body: { customABI },
+        }
+      );
+    } catch (err) {
+      console.log("Error on setting custom ABI:", err);
+      throw err;
+    }
+  };
+
   public getUserNftCollections = async (
     user: string,
     chainName: string
