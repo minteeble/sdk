@@ -94,7 +94,7 @@ class NftCollectionService extends BaseService {
         `/collection/chain/${chainName}/id/${collectionId}/customABI`,
         {
           responseType: "text",
-          body: { customABI },
+          body: { ABI: customABI },
         }
       );
     } catch (err) {
