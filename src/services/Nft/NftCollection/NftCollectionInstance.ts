@@ -127,6 +127,10 @@ export interface IMinteebleERC721AInstance extends IERC721Instance {
   mintToken(amount: number): Promise<void>;
 
   mintPrice(): Promise<BN>;
+
+  isPaused(): Promise<boolean>;
+
+  setPaused(pausedState: boolean): Promise<void>;
 }
 
 /**
@@ -167,6 +171,16 @@ export class MinteebleERC721AInstance
     let priceNum = this._web3!.utils.toBN(price);
 
     return priceNum;
+  }
+
+  public async isPaused(): Promise<boolean> {
+    let pausedState = await this.contract?.methods.paused().call();
+
+    return pausedState;
+  }
+
+  public async setPaused(_pausedState: boolean): Promise<void> {
+    throw new Error("Method not implemented.");
   }
 }
 
