@@ -131,6 +131,10 @@ export interface IMinteebleERC721AInstance extends IERC721Instance {
   isPaused(): Promise<boolean>;
 
   setPaused(pausedState: boolean): Promise<void>;
+
+  maxMintAmountPerTrx(): Promise<number>;
+
+  setMaxMintAmountPerTrx(): Promise<void>;
 }
 
 /**
@@ -180,6 +184,16 @@ export class MinteebleERC721AInstance
   }
 
   public async setPaused(_pausedState: boolean): Promise<void> {
+    throw new Error("Method not implemented.");
+  }
+
+  public async maxMintAmountPerTrx(): Promise<number> {
+    let amount = await this.contract?.methods.maxMintAmountPerTrx().call();
+
+    return amount;
+  }
+
+  public async setMaxMintAmountPerTrx(): Promise<void> {
     throw new Error("Method not implemented.");
   }
 }
