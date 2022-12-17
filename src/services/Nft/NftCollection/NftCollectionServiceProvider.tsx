@@ -129,8 +129,10 @@ export const NftCollectionServiceProvider = (
           let collectionModel = await nftCollectionService?.getCollectionInfo(
             chainName,
             collectionId,
-            connect // Specifies that ABI has to be fetched
+            true
           );
+
+          console.log("Fetched collection info:", collectionModel);
 
           let collectionInstance: NftCollectionInstance | null = null;
 
