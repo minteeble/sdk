@@ -44,6 +44,7 @@ export class NftCollectionInstance
       this.collectionName = collectionModel.collectionName;
       this.resourceOwner = collectionModel.resourceOwner;
       this.type = collectionModel.type;
+      this.collectionId = collectionModel.collectionId;
       this.ABI = collectionModel.ABI;
     }
 
