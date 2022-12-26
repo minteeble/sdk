@@ -128,6 +128,7 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
     // TODO implement signing out
     await authService?.signOut();
     await disconnectWallet();
+    setUser(null);
     console.log("Signed out");
   };
 

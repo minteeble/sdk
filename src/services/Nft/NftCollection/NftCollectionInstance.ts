@@ -94,7 +94,7 @@ export class NftCollectionInstance
 export interface IERC721Instance extends INftCollectionInstance {
   owner(): Promise<string | null>;
 
-  ownedIds(ownerAddress: string): Promise<Array<number>>;
+  ownedIds(ownerAddress: string): Promise<Array<string>>;
 }
 
 /**
@@ -110,7 +110,7 @@ export class ERC721Instance
     return await this._contract?.methods.owner().call();
   }
 
-  public async ownedIds(ownerAddress: string): Promise<Array<number>> {
+  public async ownedIds(ownerAddress: string): Promise<Array<string>> {
     this.requireActive();
 
     let ids = await this._contract?.methods.walletOfOwner(ownerAddress).call();
