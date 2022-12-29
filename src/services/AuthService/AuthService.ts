@@ -38,15 +38,28 @@ class AuthService {
 
   public signIn = async (walletAddress: string): Promise<CognitoUser> => {
     try {
-      const cognitoUser: CognitoUser = await Auth.signIn(walletAddress);
+      // console.log("Request sign in", {
+      //   param1: "AAAAA",
+      // });
+      const cognitoUser: CognitoUser = await Auth.signIn(walletAddress, "", {
+        param1: "AAAAA",
+      });
+
       // setUser(cognitoUser);
       return cognitoUser;
     } catch (err) {
       //@ts-ignore
       if (err && err.message && err.message.includes("[404]")) {
+        // console.log("Request sign up");
         const params = {
           username: walletAddress,
           password: this.getRandomString(30),
+          // validationData: {
+          //   param2: "BBBB",
+          // },
+          // clientMetadata: {
+          //   param3: "CCCC",
+          // },
         };
         await Auth.signUp(params);
         return this.signIn(walletAddress);
