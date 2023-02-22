@@ -1,4 +1,6 @@
 import { API } from "aws-amplify";
+import axios from "axios";
+import { AuthService } from "../services";
 
 export class ApiCaller {
   private serviceSlug: string;
@@ -42,13 +44,20 @@ export class ApiCaller {
     path: string,
     init: {
       [key: string]: any;
-    }
+    },
+    authenticated: boolean = true
   ): Promise<any> {
-    return API.get(
-      ApiCaller.apiName,
-      `/${this.serviceSlug}/${this.appName}${path}`,
-      init
-    );
+    let urlPath = `/${this.serviceSlug}/${this.appName}${path}`;
+
+    if (authenticated) {
+      return API.get(ApiCaller.apiName, urlPath, init);
+    } else {
+      return (
+        await axios.get(`${AuthService.apiBaseUrl}${urlPath}`, {
+          params: init?.queryStringParameters || {},
+        })
+      ).data;
+    }
   }
 
   public async delete(

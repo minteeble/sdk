@@ -147,8 +147,11 @@ class NftCollectionService extends BaseService {
 
       let data = await this.apiCaller.get(
         `/collection/chain/${chainName}/id/${collectionId}`,
-        reqInit
+        reqInit,
+        false
       );
+
+      console.log("Instance data", data);
 
       let collection =
         serializer.deserializeObject<NftCollectionInfoClientModel>(

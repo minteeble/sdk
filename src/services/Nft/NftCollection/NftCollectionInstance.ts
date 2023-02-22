@@ -129,6 +129,8 @@ export interface IMinteebleERC721AInstance extends IERC721Instance {
 
   mintPrice(): Promise<BN>;
 
+  estimatedMintTrxFees(mintAmount: number): Promise<BN>;
+
   isPaused(): Promise<boolean>;
 
   setPaused(pausedState: boolean): Promise<void>;
@@ -176,6 +178,20 @@ export class MinteebleERC721AInstance
     let priceNum = this._web3!.utils.toBN(price);
 
     return priceNum;
+  }
+
+  public async estimatedMintTrxFees(mintAmount: number): Promise<BN> {
+    let accounts = await this._web3!.eth.getAccounts();
+    let mintPrice = await this.mintPrice();
+    let gasPrice = await this._web3?.eth.getGasPrice();
+    if (gasPrice) {
+      let gas = await this.contract?.methods.mint(mintAmount).estimateGas({
+        from: accounts[0],
+        value: new BN.BN(mintPrice).muln(mintAmount).toString(),
+      });
+
+      return new BN.BN(gas).mul(new BN.BN(gasPrice));
+    } else throw new Error("Error on getting gas price");
   }
 
   public async isPaused(): Promise<boolean> {

@@ -126,6 +126,7 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
 
   const signOut = async (): Promise<void> => {
     // TODO implement signing out
+    setInitialAccountsRead(true);
     await authService?.signOut();
     await disconnectWallet();
     setUser(null);

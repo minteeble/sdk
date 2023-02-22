@@ -119,8 +119,6 @@ export const NftCollectionServiceProvider = (
     return new Promise<NftCollectionInstance | null>(
       async (resolve, reject) => {
         try {
-          console.log("here");
-
           if (connect && !web3) {
             reject("Error. Client is not yet connected to web3.");
             return;

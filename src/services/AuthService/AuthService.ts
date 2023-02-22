@@ -110,6 +110,18 @@ class AuthService {
     window.crypto.getRandomValues(randomValues);
     return Array.from(randomValues).map(this.intToHex).join("");
   }
+
+  public static get apiBaseUrl(): string {
+    let url = "";
+
+    if (EnvManager.environment === EnvironmentType.Dev) {
+      url = awsmobileDev.aws_cloud_logic_custom[0].endpoint;
+    } else if (EnvManager.environment === EnvironmentType.Prod) {
+      url = awsmobileProd.aws_cloud_logic_custom[0].endpoint;
+    }
+
+    return url;
+  }
 }
 
 export default AuthService;
