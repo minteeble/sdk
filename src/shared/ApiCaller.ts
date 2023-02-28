@@ -9,9 +9,19 @@ export class ApiCaller {
 
   private appName: string;
 
+  private customBaseUrl?: string;
+
   constructor(serviceSlug: string, appName: string = "Minteeble") {
     this.serviceSlug = serviceSlug;
     this.appName = appName;
+  }
+
+  public set apiBaseUrl(value: string) {
+    this.customBaseUrl = value;
+  }
+
+  public get apiBaseUrl(): string {
+    return this.customBaseUrl || AuthService.apiBaseUrl;
   }
 
   public async post(
@@ -53,7 +63,7 @@ export class ApiCaller {
       return API.get(ApiCaller.apiName, urlPath, init);
     } else {
       return (
-        await axios.get(`${AuthService.apiBaseUrl}${urlPath}`, {
+        await axios.get(`${this.apiBaseUrl}${urlPath}`, {
           params: init?.queryStringParameters || {},
         })
       ).data;
