@@ -41,13 +41,24 @@ export class ApiCaller {
     path: string,
     init: {
       [key: string]: any;
-    }
+    },
+    authenticated: boolean = true
   ): Promise<any> {
-    return API.put(
-      ApiCaller.apiName,
-      `/${this.serviceSlug}/${this.appName}${path}`,
-      init
-    );
+    let urlPath = `/${this.serviceSlug}/${this.appName}${path}`;
+
+    if (authenticated) {
+      return API.put(
+        ApiCaller.apiName,
+        `/${this.serviceSlug}/${this.appName}${path}`,
+        init
+      );
+    } else {
+      return (
+        await axios.put(`${this.apiBaseUrl}${urlPath}`, {
+          params: init?.body || {},
+        })
+      ).data;
+    }
   }
 
   public async get(
