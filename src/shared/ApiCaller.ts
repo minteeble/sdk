@@ -54,8 +54,10 @@ export class ApiCaller {
       );
     } else {
       return (
-        await axios.put(`${this.apiBaseUrl}${urlPath}`, {
-          params: init?.body || {},
+        await axios({
+          method: "put",
+          url: `${this.apiBaseUrl}${urlPath}`,
+          data: init?.body || {},
         })
       ).data;
     }
