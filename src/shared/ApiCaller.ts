@@ -28,13 +28,25 @@ export class ApiCaller {
     path: string,
     init: {
       [key: string]: any;
-    }
+    },
+    authenticated: boolean = true
   ): Promise<any> {
-    return API.post(
-      ApiCaller.apiName,
-      `/${this.serviceSlug}/${this.appName}${path}`,
-      init
-    );
+    let urlPath = `/${this.serviceSlug}/${this.appName}${path}`;
+    if (authenticated) {
+      return API.post(
+        ApiCaller.apiName,
+        `/${this.serviceSlug}/${this.appName}${path}`,
+        init
+      );
+    } else {
+      return (
+        await axios({
+          method: "post",
+          url: `${this.apiBaseUrl}${urlPath}`,
+          data: init?.body || {},
+        })
+      ).data;
+    }
   }
 
   public async put(
