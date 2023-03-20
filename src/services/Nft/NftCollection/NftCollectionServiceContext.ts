@@ -1,5 +1,6 @@
 import { NftCollectionInfoClientModel } from "@minteeble/utils";
 import { createContext } from "react";
+import { SmartContractInstance } from "../SmartContract";
 import { NftCollectionInstance } from "./NftCollectionInstance";
 import NftCollectionService from "./NftCollectionService";
 
@@ -7,7 +8,8 @@ export interface NftCollectionServiceContent {
   nftCollectionService: NftCollectionService | null;
 
   createNftCollection: (
-    nftCollection: NftCollectionInfoClientModel
+    nftCollection: NftCollectionInfoClientModel,
+    address: string
   ) => Promise<void>;
 
   deleteNftCollection: (

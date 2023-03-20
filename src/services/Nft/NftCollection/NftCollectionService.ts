@@ -43,7 +43,8 @@ class NftCollectionService extends BaseService {
     collectionName: string,
     address: string,
     type: string,
-    resourceOwner: string
+    resourceOwner: string,
+    description: string
   ): Promise<INftCollectionInfoClientModel> => {
     let bodyPayload: ICreateNftCollectionRequestDto = {
       chainName,
@@ -51,7 +52,7 @@ class NftCollectionService extends BaseService {
       address,
       type,
       resourceOwner,
-      ABI: [],
+      description,
     };
 
     try {

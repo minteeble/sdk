@@ -4,10 +4,11 @@ import NftCollectionService from "./NftCollectionService";
 import { NftCollectionServiceContext } from "./NftCollectionServiceContext";
 import React from "react";
 import {
-  MinteebleERC721AInstance,
+  MinteebleERC721CollectionInstance,
   NftCollectionInstance,
 } from "./NftCollectionInstance";
 import { useWalletService } from "../../WalletService";
+import { SmartContractInstance } from "../SmartContract";
 
 export interface NftCollectionServiceProviderProps {
   children: any;
@@ -32,16 +33,18 @@ export const NftCollectionServiceProvider = (
   }, []);
 
   const createNftCollection = async (
-    nftCollection: NftCollectionInfoClientModel
+    nftCollection: NftCollectionInfoClientModel,
+    address: string
   ): Promise<void> => {
     return new Promise<void>(async (resolve, reject) => {
       try {
         await nftCollectionService?.createNftCollection(
           nftCollection.chainName,
           nftCollection.collectionName,
-          nftCollection.address,
+          address,
           nftCollection.type,
-          nftCollection.resourceOwner
+          nftCollection.resourceOwner,
+          nftCollection.description
         );
 
         resolve();
@@ -136,12 +139,12 @@ export const NftCollectionServiceProvider = (
 
           if (collectionModel) {
             if (collectionModel.type === "MinteebleERC721A") {
-              collectionInstance = new MinteebleERC721AInstance(
+              collectionInstance = new MinteebleERC721CollectionInstance(
                 collectionModel,
                 web3
               );
 
-              if (connect) {
+              if (connect && collectionInstance) {
                 await collectionInstance.connect();
               }
             }

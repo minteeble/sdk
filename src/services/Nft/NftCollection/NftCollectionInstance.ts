@@ -1,10 +1,15 @@
 import {
   INftCollectionInfoClientModel,
   NftCollectionInfoClientModel,
+  SmartContractClientModel,
 } from "@minteeble/utils";
 import Web3 from "web3";
-import { Contract } from "web3-eth-contract";
-import * as BN from "bn.js";
+import {
+  ERC721SMartContractInstance,
+  MinteebleErc721SmartContractInstance,
+  SmartContractInstance,
+} from "../SmartContract";
+import { SmartContractService } from "../SmartContract/SmartContractService";
 
 /**
  * Interface model for NftCollectionInstance
@@ -29,32 +34,57 @@ export class NftCollectionInstance
   /**
    * Specifies whether current instance is active or not
    */
-  private _active: boolean;
+  protected _active: boolean;
+
+  protected _smartContract: SmartContractInstance | null;
 
   protected _web3: Web3 | null;
 
-  protected _contract: Contract | null;
-
-  constructor(collectionModel?: NftCollectionInfoClientModel, web3?: Web3) {
+  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
     super();
 
     if (collectionModel) {
-      this.address = collectionModel.address;
-      this.chainName = collectionModel.chainName;
       this.collectionName = collectionModel.collectionName;
+      this.description = collectionModel.description;
+      this.logo = collectionModel.logo;
+      this.chainName = collectionModel.chainName;
       this.resourceOwner = collectionModel.resourceOwner;
       this.type = collectionModel.type;
       this.collectionId = collectionModel.collectionId;
-      this.ABI = collectionModel.ABI;
+      this.smartContractId = collectionModel.smartContractId;
     }
 
     this._active = false;
     this._web3 = web3 || null;
-    this._contract = null;
+    this._smartContract = null;
   }
 
   public get active(): boolean {
     return this._active;
+  }
+
+  public async connect(): Promise<void> {
+    if (!this._active) {
+      let smartContractInfo =
+        await SmartContractService.instance.getSmartContractInfo(
+          this.chainName,
+          this.smartContractId
+        );
+
+      if (smartContractInfo && this._web3) {
+        let smartContract = new SmartContractInstance(
+          smartContractInfo,
+          this._web3
+        );
+        await smartContract.connect();
+
+        if (smartContract.active) {
+          // @ts-ignore
+          this._smartContract = smartContract;
+          this._active = true;
+        }
+      } else throw new Error("Cannot load smart contract");
+    }
   }
 
   /**
@@ -62,176 +92,45 @@ export class NftCollectionInstance
    * If not active throws an exception.
    */
   protected requireActive(): void {
-    if (!this.active || !this._web3) throw new Error("Collection not active.");
+    if (!this.active) throw new Error("Collection not active.");
   }
 
-  public async connect(): Promise<void> {
-    if (!this._active && this._web3) {
-      console.log("Using abi:", this.ABI);
-      let contract = new this._web3.eth.Contract(
-        this.ABI.ABI as any,
-        this.address
-      );
-
-      this._contract = contract || null;
-      this._active = true;
-    }
-  }
-
-  /**
-   * Returns web3 contract object is instance is active. Returns null otherwise
-   */
-  public get contract(): Contract | null {
-    return this._contract || null;
+  public get smartContract(): SmartContractInstance | null {
+    return this._smartContract;
   }
 }
 
-// -----------------
+export interface IERC721CollectionInstance extends INftCollectionInstance {}
 
-/**
- * Interface for base IERC721 collection interfaces
- */
-export interface IERC721Instance extends INftCollectionInstance {
-  owner(): Promise<string | null>;
-
-  ownedIds(ownerAddress: string): Promise<Array<string>>;
-}
-
-/**
- * Base IERC721 instance
- */
-export class ERC721Instance
+export class ERC721CollectionInstance
   extends NftCollectionInstance
-  implements IERC721Instance
+  implements IERC721CollectionInstance
 {
-  public async owner(): Promise<string | null> {
-    this.requireActive();
+  protected _smartContract: ERC721SMartContractInstance;
 
-    return await this._contract?.methods.owner().call();
+  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
+    super(collectionModel, web3);
   }
 
-  public async ownedIds(ownerAddress: string): Promise<Array<string>> {
-    this.requireActive();
-
-    let ids = await this._contract?.methods.walletOfOwner(ownerAddress).call();
-
-    return ids;
+  public get smartContract() {
+    return this._smartContract;
   }
 }
 
-// -----------------
+export interface IMintebleERC721CollectionInstance
+  extends IERC721CollectionInstance {}
 
-/**
- * Interface for Minteeble ERC721 collections
- */
-export interface IMinteebleERC721AInstance extends IERC721Instance {
-  mintToken(amount: number): Promise<void>;
-
-  mintPrice(): Promise<BN>;
-
-  estimatedMintTrxFees(mintAmount: number): Promise<BN>;
-
-  isPaused(): Promise<boolean>;
-
-  setPaused(pausedState: boolean): Promise<void>;
-
-  maxMintAmountPerTrx(): Promise<number>;
-
-  setMaxMintAmountPerTrx(): Promise<void>;
-}
-
-/**
- * Interface for ERC721 collections
- */
-export class MinteebleERC721AInstance
-  extends ERC721Instance
-  implements IMinteebleERC721AInstance
+export class MinteebleERC721CollectionInstance
+  extends ERC721CollectionInstance
+  implements IMintebleERC721CollectionInstance
 {
-  public override async owner(): Promise<string | null> {
-    this.requireActive();
+  protected _smartContract: MinteebleErc721SmartContractInstance;
 
-    return await this._contract?.methods.owner().call();
+  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
+    super(collectionModel, web3);
   }
 
-  public async mintToken(amount: number): Promise<void> {
-    this.requireActive();
-
-    let price = await this.mintPrice();
-    let value = price.muln(amount).toString();
-    let accounts = await this._web3!.eth.getAccounts();
-
-    console.log("Mint with value", {
-      value: value,
-      from: accounts[0],
-    });
-
-    let trx = await this.contract!.methods.mint(amount).send({
-      value: value,
-      from: accounts[0],
-    });
-
-    console.log("Trx:", trx);
-  }
-
-  public async mintPrice(): Promise<BN> {
-    let price = await this.contract?.methods.mintPrice().call();
-    let priceNum = this._web3!.utils.toBN(price);
-
-    return priceNum;
-  }
-
-  public async estimatedMintTrxFees(mintAmount: number): Promise<BN> {
-    let accounts = await this._web3!.eth.getAccounts();
-    let mintPrice = await this.mintPrice();
-    let gasPrice = await this._web3?.eth.getGasPrice();
-    if (gasPrice) {
-      let gas = await this.contract?.methods.mint(mintAmount).estimateGas({
-        from: accounts[0],
-        value: new BN.BN(mintPrice).muln(mintAmount).toString(),
-      });
-
-      return new BN.BN(gas).mul(new BN.BN(gasPrice));
-    } else throw new Error("Error on getting gas price");
-  }
-
-  public async isPaused(): Promise<boolean> {
-    let pausedState = await this.contract?.methods.paused().call();
-
-    return pausedState;
-  }
-
-  public async setPaused(_pausedState: boolean): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-
-  public async maxMintAmountPerTrx(): Promise<number> {
-    let amount = await this.contract?.methods.maxMintAmountPerTrx().call();
-
-    return amount;
-  }
-
-  public async setMaxMintAmountPerTrx(): Promise<void> {
-    throw new Error("Method not implemented.");
-  }
-}
-
-// ----------
-
-export interface IMinteebleStaticMutationInstance
-  extends IMinteebleERC721AInstance {
-  mintMutant(oldCollectionId: number, serumId: number): Promise<void>;
-}
-
-export class MinteebleStaticMutationInstance
-  extends MinteebleERC721AInstance
-  implements IMinteebleStaticMutationInstance
-{
-  public async mintMutant(
-    oldCollectionId: number,
-    serumId: number
-  ): Promise<void> {
-    this.requireActive();
-
-    console.log(oldCollectionId, serumId);
+  public get smartContract() {
+    return this._smartContract;
   }
 }
