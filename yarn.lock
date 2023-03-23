@@ -2539,10 +2539,10 @@
   dependencies:
     typescript-json-serializer "^4.2.0"
 
-"@minteeble/utils@^1.0.79":
-  version "1.0.79"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.79.tgz#56380ceb3cda96e67f52f0bc53ba59645318ea88"
-  integrity sha512-vqpuDQJbgDWA5QuUSCi88dSpTIFbRJWGZv4usxgXwKXf2T42lZB0Q8iPqWwf0S28msLkbakNjjuhwR0SlqEHOA==
+"@minteeble/utils@^1.0.81":
+  version "1.0.81"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.81.tgz#b5278e76a9df6391b381971dc01faf6309119a27"
+  integrity sha512-CvgJanRRBHaFPGQ9t0EUan2Jy5SjRr1xJ9sML8Gq0XOXElItmFvJhZXYX2antYmlPj8iczETahPcI5ikOmpbiQ==
   dependencies:
     typescript-json-serializer "^4.2.0"
 

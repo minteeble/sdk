@@ -76,6 +76,8 @@ export class NftCollectionInstance
           smartContractInfo,
           this._web3
         );
+
+        console.log("Using smart contract", smartContract);
         await smartContract.connect();
 
         if (smartContract.active) {
@@ -132,5 +134,31 @@ export class MinteebleERC721CollectionInstance
 
   public get smartContract() {
     return this._smartContract;
+  }
+
+  public async connect(): Promise<void> {
+    if (!this._active) {
+      let smartContractInfo =
+        await SmartContractService.instance.getSmartContractInfo(
+          this.chainName,
+          this.smartContractId
+        );
+
+      if (smartContractInfo && this._web3) {
+        let smartContract = new MinteebleErc721SmartContractInstance(
+          smartContractInfo,
+          this._web3
+        );
+
+        console.log("Using smart contract", smartContract);
+        await smartContract.connect();
+
+        if (smartContract.active) {
+          // @ts-ignore
+          this._smartContract = smartContract;
+          this._active = true;
+        }
+      } else throw new Error("Cannot load smart contract");
+    }
   }
 }

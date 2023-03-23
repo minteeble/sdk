@@ -12,7 +12,7 @@ export class SmartContractService extends BaseService {
   private static _instance: SmartContractService;
 
   constructor() {
-    super("contract");
+    super("smart-contract");
   }
 
   public static get instance(): SmartContractService {
@@ -35,10 +35,14 @@ export class SmartContractService extends BaseService {
       false
     );
 
+    console.log("Raw smart contract", data);
+
     let smartContract = serializer.deserializeObject<SmartContractClientModel>(
       data,
       SmartContractClientModel
     );
+
+    console.log("After:", smartContract);
 
     return smartContract || null;
   }
