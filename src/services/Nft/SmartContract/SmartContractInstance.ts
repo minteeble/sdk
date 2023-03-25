@@ -186,8 +186,59 @@ export class ERC1155SmartContractInstance
   implements IERC1155SmartContractInstance {}
 
 export interface IMinteebleERC1155SmartContractInstance
-  extends IERC1155SmartContractInstance {}
+  extends IERC1155SmartContractInstance {
+  mintPrice(id: number): Promise<BN>;
+
+  estimatedMintTrxFees(id: number, mintAmount: number): Promise<BN>;
+
+  mintToken(id: number, amount: number): Promise<void>;
+}
 
 export class MinteebleERC1155SmartContractInstance
   extends ERC1155SmartContractInstance
-  implements IMinteebleERC1155SmartContractInstance {}
+  implements IMinteebleERC1155SmartContractInstance
+{
+  public async mintPrice(id: number): Promise<BN> {
+    let price = await this.contract?.methods.mintPrice(id).call();
+    let priceNum = this._web3!.utils.toBN(price);
+
+    return priceNum;
+  }
+
+  public async estimatedMintTrxFees(
+    id: number,
+    mintAmount: number
+  ): Promise<BN> {
+    let accounts = await this._web3!.eth.getAccounts();
+    let mintPrice = await this.mintPrice(id);
+    let gasPrice = await this._web3?.eth.getGasPrice();
+    if (gasPrice) {
+      let gas = await this.contract?.methods.mint(id, mintAmount).estimateGas({
+        from: accounts[0],
+        value: new BN.BN(mintPrice).muln(mintAmount).toString(),
+      });
+
+      return new BN.BN(gas).mul(new BN.BN(gasPrice));
+    } else throw new Error("Error on getting gas price");
+  }
+
+  public async mintToken(id: number, amount: number): Promise<void> {
+    this.requireActive();
+
+    let price = await this.mintPrice(id);
+    let value = price.muln(amount).toString();
+    let accounts = await this._web3!.eth.getAccounts();
+
+    console.log("Mint with value", {
+      value: value,
+      from: accounts[0],
+    });
+
+    let trx = await this.contract!.methods.mint(id, amount).send({
+      value: value,
+      from: accounts[0],
+    });
+
+    console.log("Trx:", trx);
+  }
+}

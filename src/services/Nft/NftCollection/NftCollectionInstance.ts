@@ -7,6 +7,7 @@ import Web3 from "web3";
 import {
   ERC1155SmartContractInstance,
   ERC721SMartContractInstance,
+  MinteebleERC1155SmartContractInstance,
   MinteebleErc721SmartContractInstance,
   SmartContractInstance,
 } from "../SmartContract";
@@ -188,7 +189,7 @@ export class MinteebleERC1155CollectionInstance
   extends ERC1155CollectionInstance
   implements IMinteebleERC1155CollectionInstance
 {
-  protected _smartContract: MinteebleErc721SmartContractInstance;
+  protected _smartContract: MinteebleERC1155SmartContractInstance;
 
   constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
     super(collectionModel, web3);
@@ -196,5 +197,31 @@ export class MinteebleERC1155CollectionInstance
 
   public get smartContract() {
     return this._smartContract;
+  }
+
+  public async connect(): Promise<void> {
+    if (!this._active) {
+      let smartContractInfo =
+        await SmartContractService.instance.getSmartContractInfo(
+          this.chainName,
+          this.smartContractId
+        );
+
+      if (smartContractInfo && this._web3) {
+        let smartContract = new MinteebleERC1155SmartContractInstance(
+          smartContractInfo,
+          this._web3
+        );
+
+        console.log("Using smart contract", smartContract);
+        await smartContract.connect();
+
+        if (smartContract.active) {
+          // @ts-ignore
+          this._smartContract = smartContract;
+          this._active = true;
+        }
+      } else throw new Error("Cannot load smart contract");
+    }
   }
 }
