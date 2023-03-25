@@ -178,3 +178,16 @@ export class MinteebleErc721SmartContractInstance
     throw new Error("Method not implemented.");
   }
 }
+
+export interface IERC1155SmartContractInstance extends ISmartContractInstance {}
+
+export class ERC1155SmartContractInstance
+  extends SmartContractInstance
+  implements IERC1155SmartContractInstance {}
+
+export interface IMinteebleERC1155SmartContractInstance
+  extends IERC1155SmartContractInstance {}
+
+export class MinteebleERC1155SmartContractInstance
+  extends ERC1155SmartContractInstance
+  implements IMinteebleERC1155SmartContractInstance {}

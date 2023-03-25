@@ -147,6 +147,15 @@ export const NftCollectionServiceProvider = (
               if (connect && collectionInstance) {
                 await collectionInstance.connect();
               }
+            } else if (collectionModel.type === "MINTEEBLE_ERC1155") {
+              collectionInstance = new MinteebleERC721CollectionInstance(
+                collectionModel,
+                web3
+              );
+
+              if (connect && collectionInstance) {
+                await collectionInstance.connect();
+              }
             }
           }
 

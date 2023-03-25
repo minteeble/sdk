@@ -5,6 +5,7 @@ import {
 } from "@minteeble/utils";
 import Web3 from "web3";
 import {
+  ERC1155SmartContractInstance,
   ERC721SMartContractInstance,
   MinteebleErc721SmartContractInstance,
   SmartContractInstance,
@@ -160,5 +161,40 @@ export class MinteebleERC721CollectionInstance
         }
       } else throw new Error("Cannot load smart contract");
     }
+  }
+}
+
+export interface IERC1155CollectionInstance extends INftCollectionInstance {}
+
+export class ERC1155CollectionInstance
+  extends NftCollectionInstance
+  implements IERC1155CollectionInstance
+{
+  protected _smartContract: ERC1155SmartContractInstance;
+
+  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
+    super(collectionModel, web3);
+  }
+
+  public get smartContract() {
+    return this._smartContract;
+  }
+}
+
+export interface IMinteebleERC1155CollectionInstance
+  extends IERC1155CollectionInstance {}
+
+export class MinteebleERC1155CollectionInstance
+  extends ERC1155CollectionInstance
+  implements IMinteebleERC1155CollectionInstance
+{
+  protected _smartContract: MinteebleErc721SmartContractInstance;
+
+  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
+    super(collectionModel, web3);
+  }
+
+  public get smartContract() {
+    return this._smartContract;
   }
 }
