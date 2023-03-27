@@ -31,7 +31,6 @@
     "/lib"
   ],
   "dependencies": {
-    "@minteeble/sdk": "^1.0.41",
     "@minteeble/utils": "^1.0.81",
     "@walletconnect/web3-provider": "^1.7.8",
     "aws-amplify": "^4.3.37",
