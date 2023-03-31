@@ -32,6 +32,10 @@ export const SmartContractServiceProvider = (
           let smartContractInstance: SmartContractInstance | null =
             new SmartContractInstance(smartContractInfo || undefined, web3);
 
+          if (connect && smartContractInstance) {
+            await smartContractInstance.connect();
+          }
+
           resolve(smartContractInstance);
         } catch (err) {
           console.log(err);
