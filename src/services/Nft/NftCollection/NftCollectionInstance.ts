@@ -7,6 +7,9 @@ import Web3 from "web3";
 import {
   ERC1155SmartContractInstance,
   ERC721SMartContractInstance,
+  IMinteebleERC1155SmartContractInstance,
+  IMinteebleErc721SmartContractInstance,
+  ISmartContractInstance,
   MinteebleERC1155SmartContractInstance,
   MinteebleErc721SmartContractInstance,
   SmartContractInstance,
@@ -18,6 +21,8 @@ import { SmartContractService } from "../SmartContract/SmartContractService";
  */
 export interface INftCollectionInstance extends INftCollectionInfoClientModel {
   active: boolean;
+
+  loadSmartContract(): Promise<ISmartContractInstance | null>;
 
   connect(): Promise<void>;
 }
@@ -65,28 +70,34 @@ export class NftCollectionInstance
     return this._active;
   }
 
+  public async loadSmartContract(): Promise<SmartContractInstance | null> {
+    let smartContractInfo =
+      await SmartContractService.instance.getSmartContractInfo(
+        this.chainName,
+        this.smartContractId
+      );
+
+    if (smartContractInfo && this._web3) {
+      let smartContract = new SmartContractInstance(
+        smartContractInfo,
+        this._web3
+      );
+
+      this._smartContract = smartContract;
+
+      return this._smartContract;
+    } else throw new Error("Cannot load smart contract");
+  }
+
   public async connect(): Promise<void> {
     if (!this._active) {
-      let smartContractInfo =
-        await SmartContractService.instance.getSmartContractInfo(
-          this.chainName,
-          this.smartContractId
-        );
+      if (!this._smartContract) await this.loadSmartContract();
 
-      if (smartContractInfo && this._web3) {
-        let smartContract = new SmartContractInstance(
-          smartContractInfo,
-          this._web3
-        );
+      if (this._smartContract) await this._smartContract.connect();
+      else throw new Error("Cannot load smart contract");
 
-        console.log("Using smart contract", smartContract);
-        await smartContract.connect();
-
-        if (smartContract.active) {
-          // @ts-ignore
-          this._smartContract = smartContract;
-          this._active = true;
-        }
+      if (this._smartContract.active) {
+        this._active = true;
       } else throw new Error("Cannot load smart contract");
     }
   }
@@ -122,7 +133,9 @@ export class ERC721CollectionInstance
 }
 
 export interface IMintebleERC721CollectionInstance
-  extends IERC721CollectionInstance {}
+  extends IERC721CollectionInstance {
+  loadSmartContract(): Promise<IMinteebleErc721SmartContractInstance | null>;
+}
 
 export class MinteebleERC721CollectionInstance
   extends ERC721CollectionInstance
@@ -138,30 +151,22 @@ export class MinteebleERC721CollectionInstance
     return this._smartContract;
   }
 
-  public async connect(): Promise<void> {
-    if (!this._active) {
-      let smartContractInfo =
-        await SmartContractService.instance.getSmartContractInfo(
-          this.chainName,
-          this.smartContractId
-        );
+  public async loadSmartContract(): Promise<MinteebleErc721SmartContractInstance | null> {
+    let smartContractInfo =
+      await SmartContractService.instance.getSmartContractInfo(
+        this.chainName,
+        this.smartContractId
+      );
 
-      if (smartContractInfo && this._web3) {
-        let smartContract = new MinteebleErc721SmartContractInstance(
-          smartContractInfo,
-          this._web3
-        );
+    if (smartContractInfo && this._web3) {
+      let smartContract = new MinteebleErc721SmartContractInstance(
+        smartContractInfo,
+        this._web3
+      );
+      this._smartContract = smartContract;
 
-        console.log("Using smart contract", smartContract);
-        await smartContract.connect();
-
-        if (smartContract.active) {
-          // @ts-ignore
-          this._smartContract = smartContract;
-          this._active = true;
-        }
-      } else throw new Error("Cannot load smart contract");
-    }
+      return this._smartContract;
+    } else throw new Error("Cannot load smart contract");
   }
 }
 
@@ -183,7 +188,9 @@ export class ERC1155CollectionInstance
 }
 
 export interface IMinteebleERC1155CollectionInstance
-  extends IERC1155CollectionInstance {}
+  extends IERC1155CollectionInstance {
+  loadSmartContract(): Promise<IMinteebleERC1155SmartContractInstance | null>;
+}
 
 export class MinteebleERC1155CollectionInstance
   extends ERC1155CollectionInstance
@@ -199,29 +206,22 @@ export class MinteebleERC1155CollectionInstance
     return this._smartContract;
   }
 
-  public async connect(): Promise<void> {
-    if (!this._active) {
-      let smartContractInfo =
-        await SmartContractService.instance.getSmartContractInfo(
-          this.chainName,
-          this.smartContractId
-        );
+  public async loadSmartContract(): Promise<MinteebleERC1155SmartContractInstance | null> {
+    let smartContractInfo =
+      await SmartContractService.instance.getSmartContractInfo(
+        this.chainName,
+        this.smartContractId
+      );
 
-      if (smartContractInfo && this._web3) {
-        let smartContract = new MinteebleERC1155SmartContractInstance(
-          smartContractInfo,
-          this._web3
-        );
+    if (smartContractInfo && this._web3) {
+      let smartContract = new MinteebleERC1155SmartContractInstance(
+        smartContractInfo,
+        this._web3
+      );
 
-        console.log("Using smart contract", smartContract);
-        await smartContract.connect();
+      this._smartContract = smartContract;
 
-        if (smartContract.active) {
-          // @ts-ignore
-          this._smartContract = smartContract;
-          this._active = true;
-        }
-      } else throw new Error("Cannot load smart contract");
-    }
+      return this._smartContract;
+    } else throw new Error("Cannot load smart contract");
   }
 }
