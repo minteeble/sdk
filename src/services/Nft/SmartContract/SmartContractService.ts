@@ -1,4 +1,8 @@
-import { SmartContractClientModel } from "@minteeble/utils";
+import {
+  ICreateSmartContractRequestDto,
+  ISmartContractClientModel,
+  SmartContractClientModel,
+} from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../../shared/BaseService";
 import { SmartContractInstance } from "./SmartContractInstance";
@@ -21,6 +25,25 @@ export class SmartContractService extends BaseService {
     return this._instance;
   }
 
+  public async createSmartContract(
+    chainName: string,
+    address: string,
+    abi: string
+  ): Promise<ISmartContractClientModel> {
+    let bodyPayload: ICreateSmartContractRequestDto = {
+      chainName,
+      address,
+      abi,
+    };
+
+    let data = await this.apiCaller.post("/smart-contract", {
+      responseType: "text",
+      body: bodyPayload,
+    });
+
+    return data as ISmartContractClientModel;
+  }
+
   public async getSmartContractInfo(
     chainName: string,
     id: string
@@ -35,14 +58,10 @@ export class SmartContractService extends BaseService {
       false
     );
 
-    console.log("Raw smart contract", data);
-
     let smartContract = serializer.deserializeObject<SmartContractClientModel>(
       data,
       SmartContractClientModel
     );
-
-    console.log("After:", smartContract);
 
     return smartContract || null;
   }

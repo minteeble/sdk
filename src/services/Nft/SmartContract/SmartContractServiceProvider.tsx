@@ -1,3 +1,4 @@
+import { ISmartContractClientModel } from "@minteeble/utils";
 import React, { useEffect } from "react";
 import { useWalletService } from "../../WalletService";
 import { SmartContractInstance } from "./SmartContractInstance";
@@ -9,6 +10,18 @@ export const SmartContractServiceProvider = (
   props: SmartContractServiceProviderProps
 ) => {
   let { walletAddress, web3 } = useWalletService();
+
+  const createSmartContract = async (
+    chianName: string,
+    address: string,
+    abi: string
+  ): Promise<ISmartContractClientModel> => {
+    return await SmartContractService.instance.createSmartContract(
+      chianName,
+      address,
+      abi
+    );
+  };
 
   const getSmartContractInstance = async (
     chainName: string,
@@ -46,7 +59,9 @@ export const SmartContractServiceProvider = (
   };
 
   return (
-    <SmartContractServiceContext.Provider value={{ getSmartContractInstance }}>
+    <SmartContractServiceContext.Provider
+      value={{ getSmartContractInstance, createSmartContract }}
+    >
       {props.children}
     </SmartContractServiceContext.Provider>
   );

@@ -50,7 +50,6 @@ export class SmartContractInstance
 
   public async connect(): Promise<void> {
     if (!this._active && this._web3) {
-      console.log("Using abi:", this.abi);
       let contract = new this._web3.eth.Contract(this.abi as any, this.address);
       this._contract = contract || null;
       this._active = true;
@@ -124,17 +123,10 @@ export class MinteebleErc721SmartContractInstance
     let value = price.muln(amount).toString();
     let accounts = await this._web3!.eth.getAccounts();
 
-    console.log("Mint with value", {
-      value: value,
-      from: accounts[0],
-    });
-
     let trx = await this.contract!.methods.mint(amount).send({
       value: value,
       from: accounts[0],
     });
-
-    console.log("Trx:", trx);
   }
 
   public async mintPrice(): Promise<BN> {
@@ -229,16 +221,9 @@ export class MinteebleERC1155SmartContractInstance
     let value = price.muln(amount).toString();
     let accounts = await this._web3!.eth.getAccounts();
 
-    console.log("Mint with value", {
-      value: value,
-      from: accounts[0],
-    });
-
     let trx = await this.contract!.methods.mint(id, amount).send({
       value: value,
       from: accounts[0],
     });
-
-    console.log("Trx:", trx);
   }
 }
