@@ -16,7 +16,7 @@ export const SmartContractServiceProvider = (
     address: string,
     abi: string
   ): Promise<ISmartContractClientModel> => {
-    return await SmartContractService.instance.createSmartContract(
+    return SmartContractService.instance.createSmartContract(
       chianName,
       address,
       abi

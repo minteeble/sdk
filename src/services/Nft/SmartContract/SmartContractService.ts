@@ -36,7 +36,7 @@ export class SmartContractService extends BaseService {
       abi,
     };
 
-    let data = await this.apiCaller.post("/smart-contract", {
+    let data = await this.apiCaller.post("/contract", {
       responseType: "text",
       body: bodyPayload,
     });
