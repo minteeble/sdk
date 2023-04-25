@@ -33,6 +33,10 @@ export interface NftCollectionServiceContent {
     collectionId: string,
     connect: boolean
   ) => Promise<NftCollectionInstance | null>;
+
+  updateCollectionInfo: (
+    collection: NftCollectionInfoClientModel
+  ) => Promise<void>;
 }
 
 export const NftCollectionServiceContext =
@@ -63,4 +67,6 @@ export const NftCollectionServiceContext =
       // @ts-ignore
       connect: boolean
     ) => new Promise(() => {}),
+
+    updateCollectionInfo: () => new Promise(() => {}),
   });

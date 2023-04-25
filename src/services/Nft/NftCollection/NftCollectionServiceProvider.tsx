@@ -169,6 +169,12 @@ export const NftCollectionServiceProvider = (
     );
   };
 
+  const updateCollectionInfo = async (
+    collection: NftCollectionInfoClientModel
+  ): Promise<void> => {
+    return nftCollectionService?.updateCollectionInfo(collection);
+  };
+
   return (
     <NftCollectionServiceContext.Provider
       value={{
@@ -178,6 +184,7 @@ export const NftCollectionServiceProvider = (
         getCollectionInstance,
         deleteNftCollection,
         setCustomABI,
+        updateCollectionInfo,
       }}
     >
       {props.children}

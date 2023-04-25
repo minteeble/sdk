@@ -12,6 +12,7 @@ import {
   CreateNftCollectionRequestDto,
   ICreateNftCollectionRequestDto,
   INftCollectionInfoClientModel,
+  IUpdateCollectionInfoRequestDto,
   NftCollectionInfoClientModel,
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
@@ -103,6 +104,32 @@ class NftCollectionService extends BaseService {
       throw err;
     }
   };
+
+  public async updateCollectionInfo(
+    collection: NftCollectionInfoClientModel
+  ): Promise<void> {
+    let bodyObject: IUpdateCollectionInfoRequestDto = {
+      name: collection.collectionName,
+      description: collection.description,
+      // @ts-ignore
+      rendererId: collection.rendererId,
+      // @ts-ignore
+      generationId: collection.generationId,
+    };
+
+    try {
+      await this.apiCaller.put(
+        `/collection/chain/${collection.chainName}/id/${collection.collectionId}`,
+        {
+          responseType: "text",
+          body: bodyObject,
+        }
+      );
+    } catch (err) {
+      console.log("Error on updating collection:", err);
+      throw err;
+    }
+  }
 
   public getUserNftCollections = async (
     user: string,
