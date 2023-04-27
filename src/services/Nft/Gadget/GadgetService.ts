@@ -30,21 +30,25 @@ export class GadgetService extends BaseService {
       name: name,
     };
 
-    let group = await this.apiCaller.post(`/group`, {
-      responseType: "text",
-      body: body,
-    });
+    let res = await this.apiCaller.post(
+      `/group`,
+      {
+        responseType: "text",
+        body: body,
+      },
+      false
+    );
 
-    // let id = res.id;
+    let id = res.id;
 
-    // if (!id) return null;
+    if (!id) return null;
 
-    // let group = new GadgetGroupClientModel();
-    // group.id = id;
-    // group.name = res.name;
-    // group.resourceOwner = res.resourceOwner;
+    let group = new GadgetGroupClientModel();
+    group.id = id;
+    group.name = res.name;
+    group.resourceOwner = res.resourceOwner;
 
-    return (group as GadgetGroupClientModel) || null;
+    return group || null;
   }
 
   public async getGadgetGroup(
