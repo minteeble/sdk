@@ -36,7 +36,7 @@ export class GadgetService extends BaseService {
         responseType: "text",
         body: body,
       },
-      false
+      true
     );
 
     let id = res.id;
@@ -54,7 +54,7 @@ export class GadgetService extends BaseService {
   public async getGadgetGroup(
     groupId: string
   ): Promise<GadgetGroupClientModel | null> {
-    let data = await this.apiCaller.get(`/group/${groupId}/gadgets`, {}, true);
+    let data = await this.apiCaller.get(`/group/${groupId}/`, {}, true);
 
     let group = serializer.deserializeObject<GadgetGroupClientModel>(
       data,
@@ -77,9 +77,14 @@ export class GadgetService extends BaseService {
       tokenId: tokenId,
     };
 
-    let res = await this.apiCaller.post(`/group/${groupId}/gadget`, {
-      body,
-    });
+    let res = await this.apiCaller.post(
+      `/group/${groupId}/gadget`,
+      {
+        responseType: "text",
+        body: body,
+      },
+      true
+    );
 
     let id = res.id;
 
@@ -105,7 +110,14 @@ export class GadgetService extends BaseService {
       imageString: imageString,
     };
 
-    await this.apiCaller.post(`/group/${groupId}/token/${tokenId}`, body);
+    await this.apiCaller.post(
+      `/group/${groupId}/token/${tokenId}`,
+      {
+        responseType: "text",
+        body: body,
+      },
+      true
+    );
   }
 
   public async getGadgetImage(
@@ -119,5 +131,23 @@ export class GadgetService extends BaseService {
     );
 
     return image || null;
+  }
+
+  public async getGadgetsGroupByOwner(): Promise<Array<GadgetGroupClientModel> | null> {
+    let groups = await this.apiCaller.get(`/resourceOwner`, {}, true);
+
+    return groups.items || null;
+  }
+
+  public async getGroupGadgets(
+    groupId: string
+  ): Promise<Array<GadgetInfoClientModel> | null> {
+    let gadgets = await this.apiCaller.get(
+      `/group/${groupId}/gadgets`,
+      {},
+      true
+    );
+
+    return gadgets.items || null;
   }
 }

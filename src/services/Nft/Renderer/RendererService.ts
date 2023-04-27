@@ -41,7 +41,7 @@ export class RendererService extends BaseService {
       attributes: attributes,
     };
 
-    let res = await this.apiCaller.post(`/renderer`, {
+    let res = await this.apiCaller.post(`/renderers`, {
       responseType: "text",
       body: body,
     });
