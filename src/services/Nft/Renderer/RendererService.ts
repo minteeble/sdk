@@ -41,7 +41,7 @@ export class RendererService extends BaseService {
       attributes: attributes,
     };
 
-    let res = await this.apiCaller.post(`renderers`, {
+    let res = await this.apiCaller.post(`/renderers`, {
       responseType: "text",
       body: body,
     });
@@ -67,7 +67,7 @@ export class RendererService extends BaseService {
   public async getRenderer(
     rendererId: string
   ): Promise<RendererDataClientModel | null> {
-    let res = await this.apiCaller.post(`renderer/${rendererId}`, {
+    let res = await this.apiCaller.get(`/renderer/${rendererId}`, {
       responseType: "text",
     });
 
@@ -86,7 +86,7 @@ export class RendererService extends BaseService {
    * @returns User renderers
    */
   public async getRenderers(): Promise<Array<RendererDataClientModel>> {
-    let res = await this.apiCaller.post(`renderers`, {
+    let res = await this.apiCaller.get(`/renderers`, {
       responseType: "text",
     });
 
