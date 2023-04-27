@@ -1,6 +1,7 @@
 import {
   GadgetGroupClientModel,
   GadgetInfoClientModel,
+  IGadgetGroupClientModel,
 } from "@minteeble/utils";
 import { createContext } from "react";
 
@@ -19,6 +20,10 @@ export interface GadgetServiceContent {
     imageString: string
   ) => Promise<void>;
   getGadgetImage: (groupId: string, tokenId: string) => Promise<string | null>;
+  getGadgetsGroupByOwner: () => Promise<Array<IGadgetGroupClientModel> | null>;
+  getGroupGadgets: (
+    groupId: string
+  ) => Promise<Array<GadgetInfoClientModel> | null>;
 }
 
 export const GadgetServiceContext = createContext<GadgetServiceContent>({
@@ -27,4 +32,6 @@ export const GadgetServiceContext = createContext<GadgetServiceContent>({
   createGadget: () => new Promise(() => {}),
   createGadgetImage: () => new Promise(() => {}),
   getGadgetImage: () => new Promise(() => {}),
+  getGadgetsGroupByOwner: () => new Promise(() => {}),
+  getGroupGadgets: () => new Promise(() => {}),
 });

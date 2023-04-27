@@ -3,6 +3,7 @@ import { GadgetServiceProviderProps } from "./GadgetService.types";
 import { GadgetServiceContext } from "./GadgetServiceContext";
 import {
   GadgetGroupClientModel,
+  GadgetInfoClientModel,
   IGadgetGroupClientModel,
   IGadgetInfoClientModel,
 } from "@minteeble/utils";
@@ -77,6 +78,39 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     });
   };
 
+  const getGadgetsGroupByOwner =
+    (): Promise<Array<IGadgetGroupClientModel> | null> => {
+      return new Promise<Array<IGadgetGroupClientModel> | null>(
+        async (resolve, reject) => {
+          try {
+            let groups = await GadgetService.instance.getGadgetsGroupByOwner();
+
+            resolve(groups);
+          } catch (err) {
+            console.log(err);
+            reject(err);
+          }
+        }
+      );
+    };
+
+  const getGroupGadgets = (
+    groupId: string
+  ): Promise<Array<GadgetInfoClientModel> | null> => {
+    return new Promise<Array<GadgetInfoClientModel> | null>(
+      async (resolve, reject) => {
+        try {
+          let gadgets = await GadgetService.instance.getGroupGadgets(groupId);
+
+          resolve(gadgets);
+        } catch (err) {
+          console.log(err);
+          reject(err);
+        }
+      }
+    );
+  };
+
   return (
     <GadgetServiceContext.Provider
       value={{
@@ -85,6 +119,8 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         createGadget,
         createGadgetImage,
         getGadgetImage,
+        getGadgetsGroupByOwner,
+        getGroupGadgets,
       }}
     >
       {props.children}
