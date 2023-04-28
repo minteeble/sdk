@@ -124,13 +124,22 @@ export class GadgetService extends BaseService {
     groupId: string,
     tokenId: string
   ): Promise<string | null> {
-    let image = await this.apiCaller.get(
-      `/group/${groupId}/token/${tokenId}`,
-      {},
-      true
-    );
+    try {
+      let image = await this.apiCaller.get(
+        `/group/${groupId}/token/${tokenId}`,
+        {
+          responseType: "text",
+        },
+        true
+      );
+      if (image.success === false) {
+        return null;
+      }
 
-    return image || null;
+      return image || null;
+    } catch (err) {
+      return null;
+    }
   }
 
   public async getGadgetsGroupByOwner(): Promise<Array<GadgetGroupClientModel> | null> {

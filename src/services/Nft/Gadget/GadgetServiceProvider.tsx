@@ -70,7 +70,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
           tokenId
         );
 
-        resolve(image);
+        resolve(image || "");
       } catch (err) {
         console.log(err);
         reject(err);
