@@ -3,6 +3,7 @@ import {
   ICreateRendererRequestDto,
   NftRendererType,
   RendererDataClientModel,
+  UpdateRendererRequestDto,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../../shared/BaseService";
@@ -97,5 +98,23 @@ export class RendererService extends BaseService {
       ) || []) as RendererDataClientModel[];
 
     return renderers;
+  }
+
+  /**
+   * Updates a renderer
+   *
+   * @param renderer Renderer client model object to be updated
+   */
+  public async updateRenderer(
+    renderer: RendererDataClientModel
+  ): Promise<void> {
+    let body = {
+      attributes: renderer.attributes,
+    };
+
+    await this.apiCaller.put(`/renderer/${renderer.id}`, {
+      responseType: "text",
+      body,
+    });
   }
 }
