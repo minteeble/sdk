@@ -104,17 +104,20 @@ export class GadgetService extends BaseService {
     tokenId: string,
     imageString: string
   ): Promise<void> {
-    let body: ICreateGadgetImageRequestDto = {
-      groupId: groupId,
-      tokenId: tokenId,
-      imageString: imageString,
-    };
+    let body = new Blob([Buffer.from(imageString, "base64")], {
+      type: "image/png",
+    });
+
+    console.log("BLOB:", body.size, imageString.length);
 
     await this.apiCaller.post(
       `/group/${groupId}/token/${tokenId}`,
       {
         responseType: "text",
-        body: body,
+        body: imageString,
+        headers: {
+          "Content-Type": "image/png",
+        },
       },
       true
     );
