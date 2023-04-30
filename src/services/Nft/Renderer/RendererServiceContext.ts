@@ -10,6 +10,8 @@ export interface RendererServiceContent {
   getRenderer(rendererId: string): Promise<RendererDataClientModel | null>;
 
   getRenderers(): Promise<Array<RendererDataClientModel>>;
+
+  updateRenderer(renderer: RendererDataClientModel): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -18,4 +20,6 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   getRenderer: () => new Promise(() => {}),
 
   getRenderers: () => new Promise(() => {}),
+
+  updateRenderer: () => new Promise(() => {}),
 });

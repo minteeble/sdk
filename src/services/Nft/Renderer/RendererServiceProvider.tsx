@@ -1,4 +1,8 @@
-import { NftRendererType, RendererDataClientModel } from "@minteeble/utils";
+import {
+  NftRendererType,
+  RendererDataClientModel,
+  UpdateRendererRequestDto,
+} from "@minteeble/utils";
 import React from "react";
 import { RendererService } from "./RendererService";
 import { RendererServiceProviderProps } from "./RendererService.types";
@@ -24,9 +28,15 @@ export const RendererServiceProvider = (
     return RendererService.instance.getRenderers();
   };
 
+  const updateRenderer = async (
+    renderer: RendererDataClientModel
+  ): Promise<void> => {
+    return RendererService.instance.updateRenderer(renderer);
+  };
+
   return (
     <RendererServiceContext.Provider
-      value={{ createRenderer, getRenderer, getRenderers }}
+      value={{ createRenderer, getRenderer, getRenderers, updateRenderer }}
     >
       {props.children}
     </RendererServiceContext.Provider>
