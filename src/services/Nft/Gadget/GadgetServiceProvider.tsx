@@ -33,7 +33,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
-  const createGadget = (
+  const createGadget = async (
     groupId: string,
     traitName: string,
     value: string,
@@ -47,7 +47,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
-  const createGadgetImage = (
+  const createGadgetImage = async (
     groupId: string,
     tokenId: string,
     imageString: string
@@ -59,7 +59,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
-  const getGadgetImage = (
+  const getGadgetImage = async (
     groupId: string,
     tokenId: string
   ): Promise<string | null> => {
@@ -78,8 +78,8 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     });
   };
 
-  const getGadgetsGroupByOwner =
-    (): Promise<Array<IGadgetGroupClientModel> | null> => {
+  const getGadgetsGroupByOwner = 
+  async (): Promise<Array<IGadgetGroupClientModel> | null> => {
       return new Promise<Array<IGadgetGroupClientModel> | null>(
         async (resolve, reject) => {
           try {
@@ -94,7 +94,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
       );
     };
 
-  const getGroupGadgets = (
+  const getGroupGadgets = async (
     groupId: string
   ): Promise<Array<GadgetInfoClientModel> | null> => {
     return new Promise<Array<GadgetInfoClientModel> | null>(
@@ -111,6 +111,14 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
+  const deleteGadgetGroup = async (groupId: string): Promise<void>=>{
+    return GadgetService.instance.deleteGadgetGroup(groupId)
+  }
+
+  const deleteGadget = async (groupId: string, tokenId: number): Promise<void>=>{
+    return GadgetService.instance.deleteGadget(groupId,tokenId)
+  }
+
   return (
     <GadgetServiceContext.Provider
       value={{
@@ -121,6 +129,8 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         getGadgetImage,
         getGadgetsGroupByOwner,
         getGroupGadgets,
+        deleteGadgetGroup,
+        deleteGadget
       }}
     >
       {props.children}

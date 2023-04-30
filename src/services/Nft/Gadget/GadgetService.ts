@@ -168,4 +168,26 @@ export class GadgetService extends BaseService {
 
     return gadgets.items || null;
   }
+
+  public async deleteGadgetGroup(groupId: string): Promise<void> {
+    let body = {
+      groupId: groupId,
+    };
+
+    await this.apiCaller.delete(`/group`, {
+      responseType: "text",
+      body: body,
+    });
+  }
+
+  public async deleteGadget(groupId: string, tokenId: number): Promise<void> {
+    let body = {
+      tokenId: tokenId,
+    };
+
+    await this.apiCaller.delete(`/group/${groupId}/gadget`, {
+      responseType: "text",
+      body: body,
+    });
+  }
 }

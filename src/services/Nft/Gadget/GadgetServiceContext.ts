@@ -24,6 +24,8 @@ export interface GadgetServiceContent {
   getGroupGadgets: (
     groupId: string
   ) => Promise<Array<GadgetInfoClientModel> | null>;
+  deleteGadgetGroup: (groupId: string) => Promise<void>;
+  deleteGadget: (groupId: string, tokenId: number) => Promise<void>;
 }
 
 export const GadgetServiceContext = createContext<GadgetServiceContent>({
@@ -34,4 +36,6 @@ export const GadgetServiceContext = createContext<GadgetServiceContent>({
   getGadgetImage: () => new Promise(() => {}),
   getGadgetsGroupByOwner: () => new Promise(() => {}),
   getGroupGadgets: () => new Promise(() => {}),
+  deleteGadgetGroup: () => new Promise(() => {}),
+  deleteGadget: () => new Promise(() => {}),
 });
