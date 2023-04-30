@@ -2532,10 +2532,10 @@
     typescript-json-serializer "^5.1.0"
     websocket "^1.0.34"
 
-"@minteeble/utils@^1.0.101":
-  version "1.0.101"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.101.tgz#aef022fc0d1cd58520153ad3cc3ffb9f9aa63144"
-  integrity sha512-NllGc6D4QnGykt2Vv3fAnIwL5YQgdl3AOLd1Rq9Qf3pG/vj/8oeW10UHIM1PJEGKxpV4nq64QB262TEXKAvZyg==
+"@minteeble/utils@^1.0.102":
+  version "1.0.102"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.102.tgz#73836f0935b132a3d1819fb86db8f01b9a46b159"
+  integrity sha512-zBxSMgu7qI3sP5WGhMirr6Seg/RvKozWikIqYog4O5zAAcCg1TsMy7fG9DqKz3RpY58fUpc3dWndfpzt99F1Rg==
   dependencies:
     typescript-json-serializer "^4.2.0"
 
