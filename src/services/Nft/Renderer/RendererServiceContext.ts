@@ -1,4 +1,9 @@
-import { NftRendererType, RendererDataClientModel } from "@minteeble/utils";
+import {
+  GenerationDataClientModel,
+  NftGenerationType,
+  NftRendererType,
+  RendererDataClientModel,
+} from "@minteeble/utils";
 import { createContext } from "react";
 
 export interface RendererServiceContent {
@@ -12,6 +17,19 @@ export interface RendererServiceContent {
   getRenderers(): Promise<Array<RendererDataClientModel>>;
 
   updateRenderer(renderer: RendererDataClientModel): Promise<void>;
+
+  createGeneration(
+    type: NftGenerationType,
+    maxSupply: number
+  ): Promise<GenerationDataClientModel | null>;
+
+  getGeneration(
+    generationId: string
+  ): Promise<GenerationDataClientModel | null>;
+
+  // getRenderers(): Promise<Array<RendererDataClientModel>>;
+
+  // updateRenderer(renderer: RendererDataClientModel): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -22,4 +40,11 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   getRenderers: () => new Promise(() => {}),
 
   updateRenderer: () => new Promise(() => {}),
+  createGeneration: () => new Promise(() => {}),
+
+  getGeneration: () => new Promise(() => {}),
+
+  // getRenderers: () => new Promise(() => {}),
+
+  // updateRenderer: () => new Promise(() => {}),
 });
