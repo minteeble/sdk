@@ -45,10 +45,14 @@ export class RendererService extends BaseService {
       attributes: attributes,
     };
 
-    let res = await this.apiCaller.post(`/renderer`, {
-      responseType: "text",
-      body: body,
-    });
+    let res = await this.apiCaller.post(
+      `/renderer`,
+      {
+        responseType: "text",
+        body: body,
+      },
+      true
+    );
 
     let id = res.id;
 
@@ -139,10 +143,14 @@ export class RendererService extends BaseService {
       attributes: attributes,
     };
 
-    let res = await this.apiCaller.post(`/generation`, {
-      responseType: "text",
-      body: body,
-    });
+    let res = await this.apiCaller.post(
+      `/generation`,
+      {
+        responseType: "text",
+        body: body,
+      },
+      true
+    );
 
     let id = res.id;
 
@@ -216,5 +224,8 @@ export class RendererService extends BaseService {
 
   public async deleteGeneration(generationId: string): Promise<void> {
     await this.apiCaller.delete(`/generation/${generationId}`, {});
+  }
+  public async deleteRenderer(rendererId: string): Promise<void> {
+    await this.apiCaller.delete(`/renderer/${rendererId}`, {});
   }
 }

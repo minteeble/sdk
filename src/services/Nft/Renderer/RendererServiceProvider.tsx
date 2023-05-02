@@ -69,6 +69,9 @@ export const RendererServiceProvider = (
   const deleteGeneration = async (generationId: string): Promise<void> => {
     return RendererService.instance.deleteGeneration(generationId);
   };
+  const deleteRenderer = async (rendererId: string): Promise<void> => {
+    return RendererService.instance.deleteRenderer(rendererId);
+  };
 
   return (
     <RendererServiceContext.Provider
@@ -82,6 +85,7 @@ export const RendererServiceProvider = (
         getGenerations,
         updateGeneration,
         deleteGeneration,
+        deleteRenderer,
       }}
     >
       {props.children}

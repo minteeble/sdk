@@ -39,6 +39,7 @@ export interface RendererServiceContent {
   ): Promise<void>;
 
   deleteGeneration(generationId: string): Promise<void>;
+  deleteRenderer(rendererId: string): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -58,4 +59,5 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   updateGeneration: () => new Promise(() => {}),
 
   deleteGeneration: () => new Promise(() => {}),
+  deleteRenderer: () => new Promise(() => {}),
 });
