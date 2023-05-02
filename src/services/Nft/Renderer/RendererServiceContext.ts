@@ -20,16 +20,25 @@ export interface RendererServiceContent {
 
   createGeneration(
     type: NftGenerationType,
-    maxSupply: number
+    attributes: {
+      [key: string]: string;
+    }
   ): Promise<GenerationDataClientModel | null>;
 
   getGeneration(
     generationId: string
   ): Promise<GenerationDataClientModel | null>;
 
-  // getRenderers(): Promise<Array<RendererDataClientModel>>;
+  getGenerations(): Promise<Array<GenerationDataClientModel>>;
 
-  // updateRenderer(renderer: RendererDataClientModel): Promise<void>;
+  updateGeneration(
+    generationId: string,
+    attributes: {
+      [key: string]: string;
+    }
+  ): Promise<void>;
+
+  deleteGeneration(generationId: string): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -44,7 +53,9 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
 
   getGeneration: () => new Promise(() => {}),
 
-  // getRenderers: () => new Promise(() => {}),
+  getGenerations: () => new Promise(() => {}),
 
-  // updateRenderer: () => new Promise(() => {}),
+  updateGeneration: () => new Promise(() => {}),
+
+  deleteGeneration: () => new Promise(() => {}),
 });

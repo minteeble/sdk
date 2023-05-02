@@ -38,9 +38,11 @@ export const RendererServiceProvider = (
 
   const createGeneration = async (
     type: NftGenerationType,
-    maxSupply: number
+    attributes: {
+      [key: string]: string;
+    }
   ): Promise<GenerationDataClientModel | null> => {
-    return RendererService.instance.createGeneration(type, maxSupply);
+    return RendererService.instance.createGeneration(type, attributes);
   };
 
   const getGeneration = async (
@@ -49,15 +51,24 @@ export const RendererServiceProvider = (
     return RendererService.instance.getGeneration(generationId);
   };
 
-  // const getRenderers = async (): Promise<Array<RendererDataClientModel>> => {
-  //   return RendererService.instance.getRenderers();
-  // };
+  const getGenerations = async (): Promise<
+    Array<GenerationDataClientModel>
+  > => {
+    return RendererService.instance.getGenerations();
+  };
 
-  // const updateRenderer = async (
-  //   renderer: RendererDataClientModel
-  // ): Promise<void> => {
-  //   return RendererService.instance.updateRenderer(renderer);
-  // };
+  const updateGeneration = async (
+    generationId: string,
+    attributes: {
+      [key: string]: string;
+    }
+  ): Promise<void> => {
+    return RendererService.instance.updateGeneration(generationId, attributes);
+  };
+
+  const deleteGeneration = async (generationId: string): Promise<void> => {
+    return RendererService.instance.deleteGeneration(generationId);
+  };
 
   return (
     <RendererServiceContext.Provider
@@ -68,6 +79,9 @@ export const RendererServiceProvider = (
         updateRenderer,
         createGeneration,
         getGeneration,
+        getGenerations,
+        updateGeneration,
+        deleteGeneration,
       }}
     >
       {props.children}
