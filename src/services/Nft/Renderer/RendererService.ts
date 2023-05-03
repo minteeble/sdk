@@ -1,6 +1,9 @@
 import {
   CreateRendererRequestDto,
+  GenerationDataClientModel,
+  ICreateGenerationRequestDto,
   ICreateRendererRequestDto,
+  NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
   UpdateRendererRequestDto,
@@ -42,10 +45,14 @@ export class RendererService extends BaseService {
       attributes: attributes,
     };
 
-    let res = await this.apiCaller.post(`/renderer`, {
-      responseType: "text",
-      body: body,
-    });
+    let res = await this.apiCaller.post(
+      `/renderer`,
+      {
+        responseType: "text",
+        body: body,
+      },
+      true
+    );
 
     let id = res.id;
 
@@ -116,5 +123,109 @@ export class RendererService extends BaseService {
       responseType: "text",
       body,
     });
+  }
+
+  /**
+   * Creates a Generation
+   *
+   * @param type Generation type
+   * @param attributes Generation attributes
+   * @returns Created Generation object
+   */
+  public async createGeneration(
+    type: NftGenerationType,
+    attributes: {
+      [key: string]: string;
+    }
+  ): Promise<GenerationDataClientModel | null> {
+    let body: ICreateGenerationRequestDto = {
+      type: type,
+      attributes: attributes,
+    };
+
+    let res = await this.apiCaller.post(
+      `/generation`,
+      {
+        responseType: "text",
+        body: body,
+      },
+      true
+    );
+
+    let id = res.id;
+
+    if (!id) return null;
+
+    let generation = new GenerationDataClientModel();
+    generation.id = id;
+    generation.attributes = attributes;
+    generation.type = type;
+    generation.resourceOwner = res.resourceOwner;
+
+    return generation;
+  }
+
+  /**
+   * Gets a Generation by specifying its id
+   *
+   * @param generationId Generation ID
+   * @returns Generation object if found, null otherwise
+   */
+  public async getGeneration(
+    generationId: string
+  ): Promise<GenerationDataClientModel | null> {
+    let res = await this.apiCaller.get(`/generation/${generationId}`, {
+      responseType: "text",
+    });
+
+    let generation: GenerationDataClientModel | null =
+      serializer.deserializeObject<GenerationDataClientModel>(
+        res,
+        GenerationDataClientModel
+      ) || null;
+
+    return generation;
+  }
+
+  /**
+   * Get user generations
+   *
+   * @returns User generations
+   */
+  public async getGenerations(): Promise<Array<GenerationDataClientModel>> {
+    let res = await this.apiCaller.get(`/generations`, {
+      responseType: "text",
+    });
+
+    let generations: GenerationDataClientModel[] =
+      (serializer.deserializeObjectArray<GenerationDataClientModel>(
+        res,
+        GenerationDataClientModel
+      ) || []) as GenerationDataClientModel[];
+
+    return generations;
+  }
+
+  public async updateGeneration(
+    generationId: string,
+    attributes: {
+      [key: string]: string;
+    }
+  ): Promise<void> {
+    let body = {
+      attributes: attributes,
+    };
+
+    await this.apiCaller.put(`/generation/${generationId}}`, {
+      responseType: "text",
+      body,
+    });
+  }
+
+  public async deleteGeneration(generationId: string): Promise<void> {
+    await this.apiCaller.delete(`/generation/${generationId}`, {});
+  }
+  public async deleteRenderer(rendererId: string): Promise<void> {
+    await this.apiCaller.delete(`/renderer/${rendererId}`, {});
   }
 }
