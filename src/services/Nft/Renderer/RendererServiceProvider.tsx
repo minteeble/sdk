@@ -15,9 +15,10 @@ export const RendererServiceProvider = (
 ) => {
   const createRenderer = async (
     type: NftRendererType,
+    name: string,
     attributes: { [key: string]: string }
   ): Promise<RendererDataClientModel | null> => {
-    return RendererService.instance.createRenderer(type, attributes);
+    return RendererService.instance.createRenderer(type, name, attributes);
   };
 
   const getRenderer = async (
@@ -38,11 +39,12 @@ export const RendererServiceProvider = (
 
   const createGeneration = async (
     type: NftGenerationType,
+    name: string,
     attributes: {
       [key: string]: string;
     }
   ): Promise<GenerationDataClientModel | null> => {
-    return RendererService.instance.createGeneration(type, attributes);
+    return RendererService.instance.createGeneration(type, name, attributes);
   };
 
   const getGeneration = async (

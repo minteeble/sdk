@@ -38,10 +38,12 @@ export class RendererService extends BaseService {
    */
   public async createRenderer(
     type: NftRendererType,
+    name: string,
     attributes: { [key: string]: string }
   ): Promise<RendererDataClientModel | null> {
     let body: ICreateRendererRequestDto = {
       type: type,
+      name: name,
       attributes: attributes,
     };
 
@@ -134,12 +136,14 @@ export class RendererService extends BaseService {
    */
   public async createGeneration(
     type: NftGenerationType,
+    name: string,
     attributes: {
       [key: string]: string;
     }
   ): Promise<GenerationDataClientModel | null> {
     let body: ICreateGenerationRequestDto = {
       type: type,
+      name: name,
       attributes: attributes,
     };
 

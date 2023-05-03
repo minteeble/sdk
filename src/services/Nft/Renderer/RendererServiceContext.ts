@@ -9,6 +9,7 @@ import { createContext } from "react";
 export interface RendererServiceContent {
   createRenderer(
     type: NftRendererType,
+    name: string,
     attributes: { [key: string]: string }
   ): Promise<RendererDataClientModel | null>;
 
@@ -20,6 +21,7 @@ export interface RendererServiceContent {
 
   createGeneration(
     type: NftGenerationType,
+    name: string,
     attributes: {
       [key: string]: string;
     }
@@ -50,6 +52,7 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   getRenderers: () => new Promise(() => {}),
 
   updateRenderer: () => new Promise(() => {}),
+
   createGeneration: () => new Promise(() => {}),
 
   getGeneration: () => new Promise(() => {}),
@@ -59,5 +62,6 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   updateGeneration: () => new Promise(() => {}),
 
   deleteGeneration: () => new Promise(() => {}),
+
   deleteRenderer: () => new Promise(() => {}),
 });
