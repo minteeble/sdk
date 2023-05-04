@@ -220,7 +220,7 @@ export class RendererService extends BaseService {
       attributes: attributes,
     };
 
-    await this.apiCaller.put(`/generation/${generationId}}`, {
+    await this.apiCaller.put(`/generation/${generationId}`, {
       responseType: "text",
       body,
     });
