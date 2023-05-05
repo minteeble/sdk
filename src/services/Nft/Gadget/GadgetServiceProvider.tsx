@@ -11,9 +11,10 @@ import { GadgetService } from "./GadgetService";
 
 export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
   const createGadgetGroup = (
-    name: string
+    name: string,
+    collectionId?: string
   ): Promise<IGadgetGroupClientModel | null> => {
-    return GadgetService.instance.createGadgetGroup(name);
+    return GadgetService.instance.createGadgetGroup(name, collectionId);
   };
 
   const getGadgetGroup = async (
@@ -78,8 +79,8 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     });
   };
 
-  const getGadgetsGroupByOwner = 
-  async (): Promise<Array<IGadgetGroupClientModel> | null> => {
+  const getGadgetsGroupByOwner =
+    async (): Promise<Array<IGadgetGroupClientModel> | null> => {
       return new Promise<Array<IGadgetGroupClientModel> | null>(
         async (resolve, reject) => {
           try {
@@ -111,13 +112,16 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
-  const deleteGadgetGroup = async (groupId: string): Promise<void>=>{
-    return GadgetService.instance.deleteGadgetGroup(groupId)
-  }
+  const deleteGadgetGroup = async (groupId: string): Promise<void> => {
+    return GadgetService.instance.deleteGadgetGroup(groupId);
+  };
 
-  const deleteGadget = async (groupId: string, tokenId: number): Promise<void>=>{
-    return GadgetService.instance.deleteGadget(groupId,tokenId)
-  }
+  const deleteGadget = async (
+    groupId: string,
+    tokenId: number
+  ): Promise<void> => {
+    return GadgetService.instance.deleteGadget(groupId, tokenId);
+  };
 
   return (
     <GadgetServiceContext.Provider
@@ -130,7 +134,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         getGadgetsGroupByOwner,
         getGroupGadgets,
         deleteGadgetGroup,
-        deleteGadget
+        deleteGadget,
       }}
     >
       {props.children}

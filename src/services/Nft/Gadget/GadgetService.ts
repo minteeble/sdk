@@ -24,10 +24,12 @@ export class GadgetService extends BaseService {
   }
 
   public async createGadgetGroup(
-    name: string
+    name: string,
+    collectionId?: string
   ): Promise<GadgetGroupClientModel | null> {
     let body: ICreateGadgetGroupRequestDto = {
       name: name,
+      collectionId: collectionId || "",
     };
 
     let res = await this.apiCaller.post(
