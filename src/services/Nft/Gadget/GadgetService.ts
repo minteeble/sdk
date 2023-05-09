@@ -7,6 +7,7 @@ import {
 } from "@minteeble/utils";
 import { BaseService } from "../../../shared/BaseService";
 import { JsonSerializer } from "typescript-json-serializer";
+import axios from "axios";
 
 const serializer = new JsonSerializer();
 
@@ -25,10 +26,12 @@ export class GadgetService extends BaseService {
 
   public async createGadgetGroup(
     name: string,
+    chainName?: string,
     collectionId?: string
   ): Promise<GadgetGroupClientModel | null> {
     let body: ICreateGadgetGroupRequestDto = {
       name: name,
+      chainName: chainName || "",
       collectionId: collectionId || "",
     };
 
@@ -106,28 +109,54 @@ export class GadgetService extends BaseService {
     tokenId: string,
     imageString: string
   ): Promise<void> {
-    let body = new Blob([
-      Buffer.from(imageString.split(",").at(1) || "", "base64"),
-    ]);
+    // let body = new Blob([
+    //   Buffer.from(imageString.split(",").at(1) || "", "base64"),
+    // ]);
 
-    console.log(
-      "BLOB:",
-      body.size,
-      imageString.length,
-      imageString.slice(0, 30),
-      imageString.split(",").at(1)!.length
-    );
+    // console.log(
+    //   "BLOB:",
+    //   body.size,
+    //   imageString,
+    //   imageString.slice(0, 30),
+    //   imageString.split(",").at(1)!.length
+    // );
 
     await this.apiCaller.post(
       `/group/${groupId}/token/${tokenId}`,
       {
         responseType: "blob",
-        body: body,
+        body: imageString.split(",").at(1) || "",
         headers: {
           "Content-Type": "image/png",
         },
       },
-      false
+      true
+    );
+  }
+
+  public async getGadgetImageUploadUrl(
+    groupId: string,
+    tokenId: string
+  ): Promise<string | null> {
+    let res = await this.apiCaller.post(
+      `/group/${groupId}/token/${tokenId}/upload`,
+      {
+        responseType: "text",
+      }
+    );
+
+    return res?.url ? res.url : null;
+  }
+
+  public async uploadGadgetImage(
+    url: string,
+    imageString: string
+  ): Promise<void> {
+    console.log(url, imageString.length);
+
+    await axios.put(
+      url,
+      new Blob([Buffer.from(imageString.split(",").at(1) || "", "base64")])
     );
   }
 

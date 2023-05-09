@@ -12,9 +12,14 @@ import { GadgetService } from "./GadgetService";
 export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
   const createGadgetGroup = (
     name: string,
+    chainName?: string,
     collectionId?: string
   ): Promise<IGadgetGroupClientModel | null> => {
-    return GadgetService.instance.createGadgetGroup(name, collectionId);
+    return GadgetService.instance.createGadgetGroup(
+      name,
+      chainName,
+      collectionId
+    );
   };
 
   const getGadgetGroup = async (
@@ -58,6 +63,20 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
       tokenId,
       imageString
     );
+  };
+
+  const getGadgetImageUploadUrl = async (
+    groupId: string,
+    tokenId: string
+  ): Promise<string | null> => {
+    return GadgetService.instance.getGadgetImageUploadUrl(groupId, tokenId);
+  };
+
+  const uploadGadgetImage = async (
+    url: string,
+    imageString: string
+  ): Promise<void> => {
+    return GadgetService.instance.uploadGadgetImage(url, imageString);
   };
 
   const getGadgetImage = async (
@@ -135,6 +154,8 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         getGroupGadgets,
         deleteGadgetGroup,
         deleteGadget,
+        getGadgetImageUploadUrl,
+        uploadGadgetImage,
       }}
     >
       {props.children}

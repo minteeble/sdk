@@ -1,4 +1,8 @@
-import { NftCollectionInfoClientModel } from "@minteeble/utils";
+import {
+  CollectionType,
+  NetworkUtils,
+  NftCollectionInfoClientModel,
+} from "@minteeble/utils";
 import { useEffect, useState } from "react";
 import NftCollectionService from "./NftCollectionService";
 import { NftCollectionServiceContext } from "./NftCollectionServiceContext";
@@ -10,6 +14,7 @@ import {
 } from "./NftCollectionInstance";
 import { useWalletService } from "../../WalletService";
 import { SmartContractInstance } from "../SmartContract";
+import { EnvManager, EnvironmentType } from "@minteeble/sdk";
 
 export interface NftCollectionServiceProviderProps {
   children: any;
@@ -96,23 +101,42 @@ export const NftCollectionServiceProvider = (
 
   const getUserNftCollections = async (
     user: string,
-    chainName: string
+    chainName?: string
   ): Promise<Array<NftCollectionInfoClientModel>> => {
-    return new Promise<Array<NftCollectionInfoClientModel>>(
-      async (resolve, reject) => {
-        try {
-          let collections = await nftCollectionService?.getUserNftCollections(
-            user,
-            chainName
-          );
+    if (chainName) {
+      return new Promise<Array<NftCollectionInfoClientModel>>(
+        async (resolve, reject) => {
+          try {
+            let collections = await nftCollectionService?.getUserNftCollections(
+              user,
+              chainName
+            );
 
-          resolve(collections || []);
-        } catch (err) {
-          console.log(err);
-          reject(err);
+            resolve(collections || []);
+          } catch (err) {
+            console.log(err);
+            reject(err);
+          }
         }
-      }
-    );
+      );
+    } else {
+      let chains =
+        EnvManager.environment === EnvironmentType.Prod
+          ? NetworkUtils.getMainnetNetworks()
+          : NetworkUtils.getTestnetNetworks();
+
+      let results = await Promise.all(
+        chains.map((chain) => getUserNftCollections(user, chain.urlName))
+      );
+
+      let tot: any[] = [];
+
+      results.forEach((items) => {
+        tot = [...tot, ...items];
+      });
+
+      return tot;
+    }
   };
 
   const getCollectionInstance = async (
@@ -144,19 +168,30 @@ export const NftCollectionServiceProvider = (
                 collectionModel,
                 web3
               );
-
-              if (connect && collectionInstance) {
-                await collectionInstance.connect();
-              }
             } else if (collectionModel.type === "MINTEEBLE_ERC1155") {
               collectionInstance = new MinteebleERC1155CollectionInstance(
                 collectionModel,
                 web3
               );
+            } else if (
+              collectionModel.type === CollectionType.MINTEEBLE_GADGETS
+            ) {
+              collectionInstance = new MinteebleERC1155CollectionInstance(
+                collectionModel,
+                web3
+              );
+            } else if (
+              collectionModel.type ===
+              CollectionType.MINTEEBLE_DYNAMIC_COLLECTION
+            ) {
+              collectionInstance = new MinteebleERC721CollectionInstance(
+                collectionModel,
+                web3
+              );
+            }
 
-              if (connect && collectionInstance) {
-                await collectionInstance.connect();
-              }
+            if (connect && collectionInstance) {
+              await collectionInstance.connect();
             }
           }
 
