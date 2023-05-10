@@ -11,9 +11,15 @@ import { GadgetService } from "./GadgetService";
 
 export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
   const createGadgetGroup = (
-    name: string
+    name: string,
+    chainName?: string,
+    collectionId?: string
   ): Promise<IGadgetGroupClientModel | null> => {
-    return GadgetService.instance.createGadgetGroup(name);
+    return GadgetService.instance.createGadgetGroup(
+      name,
+      chainName,
+      collectionId
+    );
   };
 
   const getGadgetGroup = async (
@@ -33,7 +39,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
-  const createGadget = (
+  const createGadget = async (
     groupId: string,
     traitName: string,
     value: string,
@@ -47,7 +53,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
-  const createGadgetImage = (
+  const createGadgetImage = async (
     groupId: string,
     tokenId: string,
     imageString: string
@@ -59,7 +65,21 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
-  const getGadgetImage = (
+  const getGadgetImageUploadUrl = async (
+    groupId: string,
+    tokenId: string
+  ): Promise<string | null> => {
+    return GadgetService.instance.getGadgetImageUploadUrl(groupId, tokenId);
+  };
+
+  const uploadGadgetImage = async (
+    url: string,
+    imageString: string
+  ): Promise<void> => {
+    return GadgetService.instance.uploadGadgetImage(url, imageString);
+  };
+
+  const getGadgetImage = async (
     groupId: string,
     tokenId: string
   ): Promise<string | null> => {
@@ -70,7 +90,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
           tokenId
         );
 
-        resolve(image);
+        resolve(image || "");
       } catch (err) {
         console.log(err);
         reject(err);
@@ -79,7 +99,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
   };
 
   const getGadgetsGroupByOwner =
-    (): Promise<Array<IGadgetGroupClientModel> | null> => {
+    async (): Promise<Array<IGadgetGroupClientModel> | null> => {
       return new Promise<Array<IGadgetGroupClientModel> | null>(
         async (resolve, reject) => {
           try {
@@ -94,7 +114,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
       );
     };
 
-  const getGroupGadgets = (
+  const getGroupGadgets = async (
     groupId: string
   ): Promise<Array<GadgetInfoClientModel> | null> => {
     return new Promise<Array<GadgetInfoClientModel> | null>(
@@ -111,6 +131,17 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
+  const deleteGadgetGroup = async (groupId: string): Promise<void> => {
+    return GadgetService.instance.deleteGadgetGroup(groupId);
+  };
+
+  const deleteGadget = async (
+    groupId: string,
+    tokenId: number
+  ): Promise<void> => {
+    return GadgetService.instance.deleteGadget(groupId, tokenId);
+  };
+
   return (
     <GadgetServiceContext.Provider
       value={{
@@ -121,6 +152,10 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         getGadgetImage,
         getGadgetsGroupByOwner,
         getGroupGadgets,
+        deleteGadgetGroup,
+        deleteGadget,
+        getGadgetImageUploadUrl,
+        uploadGadgetImage,
       }}
     >
       {props.children}

@@ -108,13 +108,11 @@ class NftCollectionService extends BaseService {
   public async updateCollectionInfo(
     collection: NftCollectionInfoClientModel
   ): Promise<void> {
-    let bodyObject: IUpdateCollectionInfoRequestDto = {
+    let bodyObject = {
       name: collection.collectionName,
       description: collection.description,
-      // @ts-ignore
-      rendererId: collection.rendererId,
-      // @ts-ignore
-      generationId: collection.generationId,
+      rendererId: collection.rendererId || [],
+      generationId: collection.generationId || "",
     };
 
     try {

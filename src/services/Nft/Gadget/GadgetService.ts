@@ -7,6 +7,7 @@ import {
 } from "@minteeble/utils";
 import { BaseService } from "../../../shared/BaseService";
 import { JsonSerializer } from "typescript-json-serializer";
+import axios from "axios";
 
 const serializer = new JsonSerializer();
 
@@ -24,10 +25,14 @@ export class GadgetService extends BaseService {
   }
 
   public async createGadgetGroup(
-    name: string
+    name: string,
+    chainName?: string,
+    collectionId?: string
   ): Promise<GadgetGroupClientModel | null> {
     let body: ICreateGadgetGroupRequestDto = {
       name: name,
+      chainName: chainName || "",
+      collectionId: collectionId || "",
     };
 
     let res = await this.apiCaller.post(
@@ -104,19 +109,54 @@ export class GadgetService extends BaseService {
     tokenId: string,
     imageString: string
   ): Promise<void> {
-    let body: ICreateGadgetImageRequestDto = {
-      groupId: groupId,
-      tokenId: tokenId,
-      imageString: imageString,
-    };
+    // let body = new Blob([
+    //   Buffer.from(imageString.split(",").at(1) || "", "base64"),
+    // ]);
+
+    // console.log(
+    //   "BLOB:",
+    //   body.size,
+    //   imageString,
+    //   imageString.slice(0, 30),
+    //   imageString.split(",").at(1)!.length
+    // );
 
     await this.apiCaller.post(
       `/group/${groupId}/token/${tokenId}`,
       {
-        responseType: "text",
-        body: body,
+        responseType: "blob",
+        body: imageString.split(",").at(1) || "",
+        headers: {
+          "Content-Type": "image/png",
+        },
       },
       true
+    );
+  }
+
+  public async getGadgetImageUploadUrl(
+    groupId: string,
+    tokenId: string
+  ): Promise<string | null> {
+    let res = await this.apiCaller.post(
+      `/group/${groupId}/token/${tokenId}/upload`,
+      {
+        responseType: "text",
+      }
+    );
+
+    return res?.url ? res.url : null;
+  }
+
+  public async uploadGadgetImage(
+    url: string,
+    imageString: string
+  ): Promise<void> {
+    console.log(url, imageString.length);
+
+    await axios.put(
+      url,
+      new Blob([Buffer.from(imageString.split(",").at(1) || "", "base64")])
     );
   }
 
@@ -124,13 +164,22 @@ export class GadgetService extends BaseService {
     groupId: string,
     tokenId: string
   ): Promise<string | null> {
-    let image = await this.apiCaller.get(
-      `/group/${groupId}/token/${tokenId}`,
-      {},
-      true
-    );
+    try {
+      let image = await this.apiCaller.get(
+        `/group/${groupId}/token/${tokenId}`,
+        {
+          responseType: "text",
+        },
+        true
+      );
+      if (image.success === false) {
+        return null;
+      }
 
-    return image || null;
+      return image || null;
+    } catch (err) {
+      return null;
+    }
   }
 
   public async getGadgetsGroupByOwner(): Promise<Array<GadgetGroupClientModel> | null> {
@@ -149,5 +198,27 @@ export class GadgetService extends BaseService {
     );
 
     return gadgets.items || null;
+  }
+
+  public async deleteGadgetGroup(groupId: string): Promise<void> {
+    let body = {
+      groupId: groupId,
+    };
+
+    await this.apiCaller.delete(`/group`, {
+      responseType: "text",
+      body: body,
+    });
+  }
+
+  public async deleteGadget(groupId: string, tokenId: number): Promise<void> {
+    let body = {
+      tokenId: tokenId,
+    };
+
+    await this.apiCaller.delete(`/group/${groupId}/gadget`, {
+      responseType: "text",
+      body: body,
+    });
   }
 }

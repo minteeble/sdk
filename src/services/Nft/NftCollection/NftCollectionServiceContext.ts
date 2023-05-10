@@ -25,7 +25,7 @@ export interface NftCollectionServiceContent {
 
   getUserNftCollections: (
     user: string,
-    chainName: string
+    chainName?: string
   ) => Promise<Array<NftCollectionInfoClientModel>>;
 
   getCollectionInstance: (
