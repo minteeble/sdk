@@ -163,7 +163,10 @@ export const NftCollectionServiceProvider = (
           let collectionInstance: NftCollectionInstance | null = null;
 
           if (collectionModel) {
-            if (collectionModel.type === "MINTEEBLE_ERC721") {
+            if (
+              collectionModel.type === "MINTEEBLE_ERC721" ||
+              collectionModel.type === "MinteebleERC721A"
+            ) {
               collectionInstance = new MinteebleERC721CollectionInstance(
                 collectionModel,
                 web3
