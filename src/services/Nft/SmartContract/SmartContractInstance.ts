@@ -184,6 +184,15 @@ export interface IMinteebleERC1155SmartContractInstance
   estimatedMintTrxFees(id: number, mintAmount: number): Promise<BN>;
 
   mintToken(id: number, amount: number): Promise<void>;
+
+  balanceOf(account: string, id: number): Promise<number>;
+
+  balanceOfBatch(
+    accounts: Array<string>,
+    ids: Array<number>
+  ): Promise<Array<number>>;
+
+  balanceOfIds(account: string, ids: Array<number>): Promise<Array<number>>;
 }
 
 export class MinteebleERC1155SmartContractInstance
@@ -225,6 +234,37 @@ export class MinteebleERC1155SmartContractInstance
       value: value,
       from: accounts[0],
     });
+  }
+
+  public async balanceOf(account: string): Promise<number> {
+    this.requireActive();
+
+    let balance = await this.contract!.methods.balanceOf(account).call();
+
+    return parseInt(balance);
+  }
+
+  public async balanceOfIds(
+    account: string,
+    ids: Array<number>
+  ): Promise<Array<number>> {
+    this.requireActive();
+
+    return this.balanceOfBatch(Array(ids.length).fill(account), ids);
+  }
+
+  public async balanceOfBatch(
+    accounts: Array<String>,
+    ids: Array<number>
+  ): Promise<Array<number>> {
+    this.requireActive();
+
+    let balances: string[] = await this.contract!.methods.balanceOfBatch(
+      accounts,
+      ids
+    ).call();
+
+    return balances.map((balance) => parseInt(balance));
   }
 }
 
