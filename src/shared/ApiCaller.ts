@@ -3,13 +3,13 @@ import axios from "axios";
 import { AuthService } from "../services";
 
 export class ApiCaller {
-  private serviceSlug: string;
+  public serviceSlug: string;
 
-  private static apiName: string = "ApiGatewayRestApi";
+  public static apiName: string = "ApiGatewayRestApi";
 
   public appName: string;
 
-  private customBaseUrl?: string;
+  public customBaseUrl?: string;
 
   constructor(serviceSlug: string, appName: string = "Minteeble") {
     this.serviceSlug = serviceSlug;

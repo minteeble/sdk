@@ -221,4 +221,8 @@ export class GadgetService extends BaseService {
       body: body,
     });
   }
+
+  public getGadgetImageUrl(groupId: string, tokenId: number): string {
+    return `${this.apiCaller.apiBaseUrl}/${this.apiCaller.serviceSlug}/${this.apiCaller.appName}/group/${groupId}/token/${tokenId}`;
+  }
 }
