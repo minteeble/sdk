@@ -37,6 +37,10 @@ export interface NftCollectionServiceContent {
   updateCollectionInfo: (
     collection: NftCollectionInfoClientModel
   ) => Promise<void>;
+
+  getNftImageUrl: (collectionId: string, tokenId: number) => string;
+
+  getNftMetadataUrl: (collectionId: string, tokenId: number) => string;
 }
 
 export const NftCollectionServiceContext =
@@ -69,4 +73,8 @@ export const NftCollectionServiceContext =
     ) => new Promise(() => {}),
 
     updateCollectionInfo: () => new Promise(() => {}),
+
+    getNftImageUrl: () => "",
+
+    getNftMetadataUrl: () => "",
   });

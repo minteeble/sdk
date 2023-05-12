@@ -213,6 +213,14 @@ export const NftCollectionServiceProvider = (
     return nftCollectionService?.updateCollectionInfo(collection);
   };
 
+  const getNftImageUrl = (collectionId: string, tokenId: number): string => {
+    return nftCollectionService?.getNftImageUrl(collectionId, tokenId) || "";
+  };
+
+  const getNftMetadataUrl = (collectionId: string, tokenId: number): string => {
+    return nftCollectionService?.getNftImageUrl(collectionId, tokenId) || "";
+  };
+
   return (
     <NftCollectionServiceContext.Provider
       value={{
@@ -223,6 +231,8 @@ export const NftCollectionServiceProvider = (
         deleteNftCollection,
         setCustomABI,
         updateCollectionInfo,
+        getNftImageUrl,
+        getNftMetadataUrl,
       }}
     >
       {props.children}

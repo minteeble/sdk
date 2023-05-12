@@ -7,7 +7,7 @@ export class ApiCaller {
 
   private static apiName: string = "ApiGatewayRestApi";
 
-  private appName: string;
+  public appName: string;
 
   private customBaseUrl?: string;
 
