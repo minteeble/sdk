@@ -8,8 +8,10 @@ import NftCollectionService from "./NftCollectionService";
 import { NftCollectionServiceContext } from "./NftCollectionServiceContext";
 import React from "react";
 import {
+  MinteebleDynamiCollectionInstance,
   MinteebleERC1155CollectionInstance,
   MinteebleERC721CollectionInstance,
+  MinteebleGadgetsCollectionInstance,
   NftCollectionInstance,
 } from "./NftCollectionInstance";
 import { useWalletService } from "../../WalletService";
@@ -179,7 +181,7 @@ export const NftCollectionServiceProvider = (
             } else if (
               collectionModel.type === CollectionType.MINTEEBLE_GADGETS
             ) {
-              collectionInstance = new MinteebleERC1155CollectionInstance(
+              collectionInstance = new MinteebleGadgetsCollectionInstance(
                 collectionModel,
                 web3
               );
@@ -187,7 +189,7 @@ export const NftCollectionServiceProvider = (
               collectionModel.type ===
               CollectionType.MINTEEBLE_DYNAMIC_COLLECTION
             ) {
-              collectionInstance = new MinteebleERC721CollectionInstance(
+              collectionInstance = new MinteebleDynamiCollectionInstance(
                 collectionModel,
                 web3
               );
