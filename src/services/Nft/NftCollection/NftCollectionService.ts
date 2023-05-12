@@ -193,11 +193,11 @@ class NftCollectionService extends BaseService {
   };
 
   public getNftImageUrl(collectionId: string, tokenId: number): string {
-    return `${this.apiCaller.apiBaseUrl}/${this.apiCaller.serviceSlug}/${this.apiCaller.appName}/renderer/${this.apiCaller.appName}/collection/${collectionId}/image/${tokenId}.png`;
+    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/collection/${collectionId}/image/${tokenId}.png`;
   }
 
   public getNftMetadataUrl(collectionId: string, tokenId: number): string {
-    return `${this.apiCaller.apiBaseUrl}/${this.apiCaller.serviceSlug}/${this.apiCaller.appName}/renderer/${this.apiCaller.appName}/collection/${collectionId}/metadata/${tokenId}.json`;
+    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/collection/${collectionId}/metadata/${tokenId}.json`;
   }
 }
 
