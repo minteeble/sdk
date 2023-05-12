@@ -227,3 +227,17 @@ export class MinteebleERC1155SmartContractInstance
     });
   }
 }
+
+export interface IMinteebleDynamicCollectionSmartContractInstance
+  extends IMinteebleErc721SmartContractInstance {}
+
+export class MinteebleDynamicCollectionSmartContractInstance
+  extends MinteebleErc721SmartContractInstance
+  implements IMinteebleDynamicCollectionSmartContractInstance {}
+
+export interface IMinteebleGadgetsSmartContractInstance
+  extends IMinteebleERC1155SmartContractInstance {}
+
+export class MinteebleGadgetsSmartContractInstance
+  extends MinteebleERC1155SmartContractInstance
+  implements IMinteebleGadgetsSmartContractInstance {}

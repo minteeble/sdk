@@ -10,8 +10,10 @@ import {
   IMinteebleERC1155SmartContractInstance,
   IMinteebleErc721SmartContractInstance,
   ISmartContractInstance,
+  MinteebleDynamicCollectionSmartContractInstance,
   MinteebleERC1155SmartContractInstance,
   MinteebleErc721SmartContractInstance,
+  MinteebleGadgetsSmartContractInstance,
   SmartContractInstance,
 } from "../SmartContract";
 import { SmartContractService } from "../SmartContract/SmartContractService";
@@ -217,6 +219,84 @@ export class MinteebleERC1155CollectionInstance
 
     if (smartContractInfo && this._web3) {
       let smartContract = new MinteebleERC1155SmartContractInstance(
+        smartContractInfo,
+        this._web3
+      );
+
+      this._smartContract = smartContract;
+
+      return this._smartContract;
+    } else throw new Error("Cannot load smart contract");
+  }
+}
+
+export interface IMinteebleDynamiCollectionInstance
+  extends IMintebleERC721CollectionInstance {
+  loadSmartContract(): Promise<MinteebleDynamicCollectionSmartContractInstance | null>;
+}
+
+export class MinteebleDynamiCollectionInstance
+  extends MinteebleERC721CollectionInstance
+  implements IMinteebleDynamiCollectionInstance
+{
+  protected _smartContract: MinteebleDynamicCollectionSmartContractInstance;
+
+  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
+    super(collectionModel, web3);
+  }
+
+  public get smartContract() {
+    return this._smartContract;
+  }
+
+  public async loadSmartContract(): Promise<MinteebleDynamicCollectionSmartContractInstance | null> {
+    let smartContractInfo =
+      await SmartContractService.instance.getSmartContractInfo(
+        this.chainName,
+        this.smartContractId
+      );
+
+    if (smartContractInfo && this._web3) {
+      let smartContract = new MinteebleDynamicCollectionSmartContractInstance(
+        smartContractInfo,
+        this._web3
+      );
+
+      this._smartContract = smartContract;
+
+      return this._smartContract;
+    } else throw new Error("Cannot load smart contract");
+  }
+}
+
+export interface IMinteebleGadgetsCollectionInstance
+  extends IMinteebleERC1155CollectionInstance {
+  loadSmartContract(): Promise<MinteebleGadgetsSmartContractInstance | null>;
+}
+
+export class MinteebleGadgetsCollectionInstance
+  extends MinteebleERC1155CollectionInstance
+  implements IMinteebleGadgetsCollectionInstance
+{
+  protected _smartContract: MinteebleGadgetsSmartContractInstance;
+
+  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
+    super(collectionModel, web3);
+  }
+
+  public get smartContract() {
+    return this._smartContract;
+  }
+
+  public async loadSmartContract(): Promise<MinteebleGadgetsSmartContractInstance | null> {
+    let smartContractInfo =
+      await SmartContractService.instance.getSmartContractInfo(
+        this.chainName,
+        this.smartContractId
+      );
+
+    if (smartContractInfo && this._web3) {
+      let smartContract = new MinteebleGadgetsSmartContractInstance(
         smartContractInfo,
         this._web3
       );
