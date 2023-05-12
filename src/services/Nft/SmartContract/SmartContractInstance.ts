@@ -193,6 +193,10 @@ export interface IMinteebleERC1155SmartContractInstance
   ): Promise<Array<number>>;
 
   balanceOfIds(account: string, ids: Array<number>): Promise<Array<number>>;
+
+  isApprovedForAll(account: string, operator: string): Promise<boolean>;
+
+  setApprovalForAll(operator: string, approved: boolean): Promise<void>;
 }
 
 export class MinteebleERC1155SmartContractInstance
@@ -266,18 +270,96 @@ export class MinteebleERC1155SmartContractInstance
 
     return balances.map((balance) => parseInt(balance));
   }
+
+  public async isApprovedForAll(
+    account: string,
+    operator: string
+  ): Promise<boolean> {
+    this.requireActive();
+
+    return await this.contract?.methods
+      .isApprovedForAll(account, operator)
+      .call();
+  }
+
+  public async setApprovalForAll(
+    operator: string,
+    approved: boolean
+  ): Promise<void> {
+    this.requireActive();
+    let accounts = await this._web3!.eth.getAccounts();
+
+    await this.contract?.methods
+      .setApprovalForAll(operator, approved)
+      .send({ from: accounts[0] });
+  }
 }
 
 export interface IMinteebleDynamicCollectionSmartContractInstance
-  extends IMinteebleErc721SmartContractInstance {}
+  extends IMinteebleErc721SmartContractInstance {
+  gadgetCollection(): Promise<string>;
+  pairGadget(id: string, groupId: number, variationId: number): Promise<void>;
+}
 
 export class MinteebleDynamicCollectionSmartContractInstance
   extends MinteebleErc721SmartContractInstance
-  implements IMinteebleDynamicCollectionSmartContractInstance {}
+  implements IMinteebleDynamicCollectionSmartContractInstance
+{
+  public async gadgetCollection(): Promise<string> {
+    this.requireActive();
+
+    return this.contract?.methods.gadgetCollection().call() || "";
+  }
+
+  public async pairGadget(
+    id: string,
+    groupId: number,
+    variationId: number
+  ): Promise<void> {
+    let accounts = await this._web3!.eth.getAccounts();
+
+    await this.contract?.methods
+      .pairGadget(id, groupId, variationId)
+      .send({ from: accounts[0] });
+  }
+}
 
 export interface IMinteebleGadgetsSmartContractInstance
-  extends IMinteebleERC1155SmartContractInstance {}
+  extends IMinteebleERC1155SmartContractInstance {
+  groupIdToTokenId(groupId: number, variationId: number): Promise<number>;
+
+  tokenIdToGroupId(
+    tokenId: number
+  ): Promise<{ groupId: number; variationId: number }>;
+}
 
 export class MinteebleGadgetsSmartContractInstance
   extends MinteebleERC1155SmartContractInstance
-  implements IMinteebleGadgetsSmartContractInstance {}
+  implements IMinteebleGadgetsSmartContractInstance
+{
+  public async groupIdToTokenId(
+    groupId: number,
+    variationId: number
+  ): Promise<number> {
+    this.requireActive();
+
+    let tokenId = await this.contract?.methods
+      .groupIdToTokenId(groupId, variationId)
+      .call();
+
+    return parseInt(tokenId);
+  }
+
+  public async tokenIdToGroupId(
+    tokenId: number
+  ): Promise<{ groupId: number; variationId: number }> {
+    this.requireActive();
+
+    let groupInfo = await this.contract?.methods.tokenIdToGroupId(tokenId);
+
+    return {
+      groupId: parseInt(groupInfo.groupId),
+      variationId: parseInt(groupInfo.variationId),
+    };
+  }
+}
