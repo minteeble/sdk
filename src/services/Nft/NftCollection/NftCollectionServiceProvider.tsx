@@ -218,7 +218,7 @@ export const NftCollectionServiceProvider = (
   };
 
   const getNftMetadataUrl = (collectionId: string, tokenId: number): string => {
-    return nftCollectionService?.getNftImageUrl(collectionId, tokenId) || "";
+    return nftCollectionService?.getNftMetadataUrl(collectionId, tokenId) || "";
   };
 
   return (
