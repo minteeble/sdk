@@ -2519,30 +2519,10 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@minteeble/sdk@^1.0.46":
-  version "1.0.46"
-  resolved "https://registry.yarnpkg.com/@minteeble/sdk/-/sdk-1.0.46.tgz#3b44af35d5603b16b5e91a4bb49188fb558b6bcb"
-  integrity sha512-RNaI85hRHTFAqCN1qaGw/cW2BIfa+i2xG6reY05kvrbYYektmhva5tIoA+pQa90mzdvyRxw1Q8Ot/qt02CHbOg==
-  dependencies:
-    "@minteeble/utils" "^1.0.84"
-    "@walletconnect/web3-provider" "^1.7.8"
-    aws-amplify "^4.3.37"
-    axios "^1.3.3"
-    core-js "^3.24.1"
-    typescript-json-serializer "^5.1.0"
-    websocket "^1.0.34"
-
-"@minteeble/utils@^1.0.116":
-  version "1.0.116"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.116.tgz#3acc8f07a73d83c720585bb664560c906cf37b3c"
-  integrity sha512-r9WkNWib/Ga+IP351OVoHEebmPSbo0VIp4Z2wifuyIDzbs5wqD/3U8MhbpCRZqX2zD6eNXn5HsMrCeTCkfOoEQ==
-  dependencies:
-    typescript-json-serializer "^4.2.0"
-
-"@minteeble/utils@^1.0.84":
-  version "1.0.94"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.94.tgz#8b05dd5163868964cf7732887d2a50ba6ba51847"
-  integrity sha512-KsoKzFZ0M8Fz+XOidhwTtrxFbJJTKopCbaabLLw1yQVwFqDU9k1NsQozx/RP3vRSBvAiWHVttAeHlG5sR8HCeQ==
+"@minteeble/utils@^1.0.117":
+  version "1.0.117"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.117.tgz#64a48231c1ab4109ec37beea7feb0ce2e96e49b8"
+  integrity sha512-ACGqiMLOaaTq6P94itllTX+UmZQtgwZ2vwlYUiT0hbOXE4n6BvdBSQTqnnNf7s18tH1ckgqbvxhkJx78F5bwiQ==
   dependencies:
     typescript-json-serializer "^4.2.0"
 
