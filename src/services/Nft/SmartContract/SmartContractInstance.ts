@@ -318,6 +318,7 @@ export class MinteebleDynamicCollectionSmartContractInstance
   ): Promise<void> {
     let accounts = await this._web3!.eth.getAccounts();
 
+    console.log("Input data", id, groupId, variationId);
     await this.contract?.methods
       .pairGadget(id, groupId, variationId)
       .send({ from: accounts[0] });
@@ -355,11 +356,14 @@ export class MinteebleGadgetsSmartContractInstance
   ): Promise<{ groupId: number; variationId: number }> {
     this.requireActive();
 
-    let groupInfo = await this.contract?.methods.tokenIdToGroupId(tokenId);
+    let groupInfo = await this.contract?.methods
+      .tokenIdToGroupId(tokenId)
+      .call();
+    console.log("GroupInfo:", groupInfo);
 
     return {
-      groupId: parseInt(groupInfo.groupId),
-      variationId: parseInt(groupInfo.variationId),
+      groupId: parseInt(groupInfo[0]),
+      variationId: parseInt(groupInfo[1]),
     };
   }
 }
