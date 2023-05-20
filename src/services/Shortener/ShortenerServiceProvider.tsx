@@ -1,6 +1,6 @@
 import { ShorteningType } from "@minteeble/utils";
 import React from "react";
-import { ShortenerService } from "./shortenerService";
+import { ShortenerService } from "./ShortenerService";
 import { ShortenerServiceProviderProps } from "./ShortenerService.types";
 import { ShortenerServiceContext } from "./ShortenerServiceContext";
 
