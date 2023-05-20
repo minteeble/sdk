@@ -64,15 +64,23 @@ class ShortenerService extends BaseService {
     } else throw new Error("Fail on creating shortener.");
   }
 
+  /**
+   * Shortens a string
+   *
+   * @param shortenerId Shortener to be used
+   * @param type Shornening approach
+   * @param stringToShorten Input string to be shortened
+   * @returns Id of the shortened string
+   */
   public async createShortened(
     shortenerId: string,
     type: ShortenedType,
-    object: any
+    stringToShorten: string
   ): Promise<string> {
     let body: ICreateShortenedRequestDto = {
       shortenerId,
       type,
-      object,
+      object: stringToShorten,
     };
 
     let reqInit: any = {
@@ -87,6 +95,13 @@ class ShortenerService extends BaseService {
     } else throw new Error("Fail on creating shortened.");
   }
 
+  /**
+   * Gets the shortened full string by passing its id
+   *
+   * @param shortenerId Shortener Id
+   * @param shortenedObjectId Shortened id to be fetched
+   * @returns Shortened object if exists, null otherwise
+   */
   public async getShortened(
     shortenerId: string,
     shortenedObjectId: string
@@ -105,6 +120,12 @@ class ShortenerService extends BaseService {
     return shortened || null;
   }
 
+  /**
+   * Gets Shortener info
+   *
+   * @param shortenerId Id of the shortener to be fetched
+   * @returns Shortener object if found, null otherwise
+   */
   public async getShortener(
     shortenerId: string
   ): Promise<ShortenerClientModel | null> {
@@ -122,14 +143,13 @@ class ShortenerService extends BaseService {
     return shortener || null;
   }
 
-  public async getShorteners(
-    shortenerId: string
-  ): Promise<ShortenerPreviewClientModel[] | null> {
-    let data = await this.apiCaller.get(
-      `/shortener/${shortenerId}/shortener`,
-      {},
-      true
-    );
+  /**
+   * Gets list of owned shorteners
+   *
+   * @returns List of shorteners
+   */
+  public async getShorteners(): Promise<ShortenerPreviewClientModel[] | null> {
+    let data = await this.apiCaller.get(`/shortener/shorteners`, {}, true);
 
     let shorteners =
       (serializer.deserializeObjectArray<ShortenerPreviewClientModel>(

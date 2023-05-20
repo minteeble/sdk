@@ -1,4 +1,4 @@
-import { ShorteningType } from "@minteeble/utils";
+import { ShortenedType, ShorteningType } from "@minteeble/utils";
 import React from "react";
 import { ShortenerService } from "./ShortenerService";
 import { ShortenerServiceProviderProps } from "./ShortenerService.types";
@@ -15,8 +15,46 @@ export const ShortenerServiceProvider = (
     return ShortenerService.instance.createShortener(name, type, TTLDelta);
   };
 
+  const createShortened = async (
+    shortenerId: string,
+    type: ShortenedType,
+    stringToShorten: string
+  ) => {
+    return ShortenerService.instance.createShortened(
+      shortenerId,
+      type,
+      stringToShorten
+    );
+  };
+
+  const getShortened = async (
+    shortenerId: string,
+    shortenedObjectId: string
+  ) => {
+    return ShortenerService.instance.getShortened(
+      shortenerId,
+      shortenedObjectId
+    );
+  };
+
+  const getShortener = async (shortenerId: string) => {
+    return ShortenerService.instance.getShortener(shortenerId);
+  };
+
+  const getShorteners = async () => {
+    return ShortenerService.instance.getShorteners();
+  };
+
   return (
-    <ShortenerServiceContext.Provider value={{ createShortener }}>
+    <ShortenerServiceContext.Provider
+      value={{
+        createShortener,
+        createShortened,
+        getShortened,
+        getShortener,
+        getShorteners,
+      }}
+    >
       {props.children}
     </ShortenerServiceContext.Provider>
   );
