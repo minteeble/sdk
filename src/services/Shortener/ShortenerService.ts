@@ -158,6 +158,19 @@ class ShortenerService extends BaseService {
 
     return shorteners || null;
   }
+
+  /**
+   * Deletes a shortener
+   *
+   * @param shortenerId Id of the shortener to be deleted
+   */
+  public async deleteShortener(shortenerId: string): Promise<void> {
+    let reqInit: any = {
+      responseType: "text",
+    };
+
+    await this.apiCaller.delete(`/shortener/${shortenerId}/shortener`, reqInit);
+  }
 }
 
 export { ShortenerService };

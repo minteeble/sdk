@@ -63,6 +63,13 @@ export interface ShortenerServiceContent {
    * @returns List of shorteners
    */
   getShorteners(): Promise<ShortenerClientModel[] | null>;
+
+  /**
+   * Deletes a shortener
+   *
+   * @param shortenerId Id of the shortener to be deleted
+   */
+  deleteShortener(shortenerId: string): Promise<void>;
 }
 
 export const ShortenerServiceContext = createContext<ShortenerServiceContent>({
@@ -71,4 +78,5 @@ export const ShortenerServiceContext = createContext<ShortenerServiceContent>({
   getShortened: () => new Promise(() => {}),
   getShortener: () => new Promise(() => {}),
   getShorteners: () => new Promise(() => {}),
+  deleteShortener: () => new Promise(() => {}),
 });

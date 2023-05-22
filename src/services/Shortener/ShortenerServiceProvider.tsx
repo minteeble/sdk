@@ -45,6 +45,10 @@ export const ShortenerServiceProvider = (
     return ShortenerService.instance.getShorteners();
   };
 
+  const deleteShortener = async (shortenerId: string) => {
+    return ShortenerService.instance.deleteShortener(shortenerId);
+  };
+
   return (
     <ShortenerServiceContext.Provider
       value={{
@@ -53,6 +57,7 @@ export const ShortenerServiceProvider = (
         getShortened,
         getShortener,
         getShorteners,
+        deleteShortener,
       }}
     >
       {props.children}
