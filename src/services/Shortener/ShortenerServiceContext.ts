@@ -62,7 +62,7 @@ export interface ShortenerServiceContent {
    *
    * @returns List of shorteners
    */
-  getShorteners(): Promise<ShortenerPreviewClientModel[] | null>;
+  getShorteners(): Promise<ShortenerClientModel[] | null>;
 }
 
 export const ShortenerServiceContext = createContext<ShortenerServiceContent>({

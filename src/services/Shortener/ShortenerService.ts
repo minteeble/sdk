@@ -148,14 +148,13 @@ class ShortenerService extends BaseService {
    *
    * @returns List of shorteners
    */
-  public async getShorteners(): Promise<ShortenerPreviewClientModel[] | null> {
+  public async getShorteners(): Promise<ShortenerClientModel[] | null> {
     let data = await this.apiCaller.get(`/shortener/shorteners`, {}, true);
 
-    let shorteners =
-      (serializer.deserializeObjectArray<ShortenerPreviewClientModel>(
-        data.shorteners,
-        ShortenerPreviewClientModel
-      ) || []) as [];
+    let shorteners = (serializer.deserializeObjectArray<ShortenerClientModel>(
+      data.shorteners,
+      ShortenerClientModel
+    ) || []) as [];
 
     return shorteners || null;
   }
