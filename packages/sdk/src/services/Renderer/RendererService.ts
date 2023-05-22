@@ -9,7 +9,7 @@ import {
   UpdateRendererRequestDto,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
-import { BaseService } from "../../../shared/BaseService";
+import { BaseService } from "../../models";
 
 const serializer = new JsonSerializer();
 

@@ -17,7 +17,7 @@ import {
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
 import { JsonSerializer } from "typescript-json-serializer";
-import { BaseService } from "../../../shared/BaseService";
+import { BaseService } from "../../models";
 
 const serializer = new JsonSerializer();
 

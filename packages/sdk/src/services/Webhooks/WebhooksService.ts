@@ -7,7 +7,7 @@ import {
   WebhookListenerClientModel,
 } from "@minteeble/utils";
 import { API } from "aws-amplify";
-import { BaseService } from "../../../shared/BaseService";
+import { BaseService } from "../../models";
 
 /**
  * Service class fro Webhooks
