@@ -2519,12 +2519,12 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@minteeble/utils@^1.0.119":
-  version "1.0.119"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.119.tgz#6e6b24e15b3e6d1445bd1920e15eae8319740824"
-  integrity sha512-0DeKf0PMh5rTaeyiZMVBfRa4A6m7OY2dSrVF/SNdFbZ8bNk2oJ2yC0i/UXLE5gEBqW+C9qQb/xBmT0N3X+wajQ==
+"@minteeble/utils@^1.0.125":
+  version "1.0.125"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.125.tgz#0066dc3df1ffad293440b9603408b915846b9c53"
+  integrity sha512-M8aVr3GSY6XsJFsGHCDMbVo3ZIzScWsnMNEPq/RzJb7K+wczig6dzZVqTCP/KDN084B4HS4kr2lG2GBPjbs9EA==
   dependencies:
-    typescript-json-serializer "^4.2.0"
+    typescript-json-serializer "^5.1.0"
 
 "@sindresorhus/is@^4.6.0":
   version "4.6.0"
@@ -6293,14 +6293,6 @@ typedarray-to-buffer@3.1.5, typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
-
-typescript-json-serializer@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/typescript-json-serializer/-/typescript-json-serializer-4.2.0.tgz#0ded6bc9e19bd2b0fcf02c4725c53a8a9a0dd2d6"
-  integrity sha512-o/rgBfbtOO1PC/8YeNBenl53WlZKE7GxL2E7Pvnvsv1NhSUWbGLchtfMMjPUHhqNYVkHj1FL5XHFJS3ZeR0Gsw==
-  dependencies:
-    reflect-metadata "^0.1.13"
-    tslib "^2.3.0"
 
 typescript-json-serializer@^5.1.0:
   version "5.1.0"
