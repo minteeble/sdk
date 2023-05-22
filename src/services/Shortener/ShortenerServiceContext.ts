@@ -66,19 +66,9 @@ export interface ShortenerServiceContent {
 }
 
 export const ShortenerServiceContext = createContext<ShortenerServiceContent>({
-  createShortener() {
-    throw new Error("Not initialized");
-  },
-  createShortened() {
-    throw new Error("Not initialized");
-  },
-  getShortened() {
-    throw new Error("Not initialized");
-  },
-  getShortener() {
-    throw new Error("Not initialized");
-  },
-  getShorteners() {
-    throw new Error("Not initialized");
-  },
+  createShortener: () => new Promise(() => {}),
+  createShortened: () => new Promise(() => {}),
+  getShortened: () => new Promise(() => {}),
+  getShortener: () => new Promise(() => {}),
+  getShorteners: () => new Promise(() => {}),
 });
