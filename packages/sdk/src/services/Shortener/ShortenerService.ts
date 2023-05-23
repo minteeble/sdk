@@ -9,7 +9,7 @@ import {
   ShortenerPreviewClientModel,
   ShorteningType,
 } from "@minteeble/utils";
-import { BaseService } from "../../shared/BaseService";
+import { BaseService } from "../../models";
 import { JsonSerializer } from "typescript-json-serializer";
 
 const serializer = new JsonSerializer();
