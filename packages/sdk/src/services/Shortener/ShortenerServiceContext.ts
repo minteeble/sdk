@@ -63,22 +63,20 @@ export interface ShortenerServiceContent {
    * @returns List of shorteners
    */
   getShorteners(): Promise<ShortenerClientModel[] | null>;
+
+  /**
+   * Deletes a shortener
+   *
+   * @param shortenerId Id of the shortener to be deleted
+   */
+  deleteShortener(shortenerId: string): Promise<void>;
 }
 
 export const ShortenerServiceContext = createContext<ShortenerServiceContent>({
-  createShortener() {
-    throw new Error("Not initialized");
-  },
-  createShortened() {
-    throw new Error("Not initialized");
-  },
-  getShortened() {
-    throw new Error("Not initialized");
-  },
-  getShortener() {
-    throw new Error("Not initialized");
-  },
-  getShorteners() {
-    throw new Error("Not initialized");
-  },
+  createShortener: () => new Promise(() => {}),
+  createShortened: () => new Promise(() => {}),
+  getShortened: () => new Promise(() => {}),
+  getShortener: () => new Promise(() => {}),
+  getShorteners: () => new Promise(() => {}),
+  deleteShortener: () => new Promise(() => {}),
 });

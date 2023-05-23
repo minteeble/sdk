@@ -9,7 +9,7 @@ import {
   ShortenerPreviewClientModel,
   ShorteningType,
 } from "@minteeble/utils";
-import { BaseService } from "../../models/BaseService";
+import { BaseService } from "../../models";
 import { JsonSerializer } from "typescript-json-serializer";
 
 const serializer = new JsonSerializer();
@@ -157,6 +157,19 @@ class ShortenerService extends BaseService {
     ) || []) as [];
 
     return shorteners || null;
+  }
+
+  /**
+   * Deletes a shortener
+   *
+   * @param shortenerId Id of the shortener to be deleted
+   */
+  public async deleteShortener(shortenerId: string): Promise<void> {
+    let reqInit: any = {
+      responseType: "text",
+    };
+
+    await this.apiCaller.delete(`/shortener/${shortenerId}/shortener`, reqInit);
   }
 }
 
