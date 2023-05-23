@@ -5,5 +5,6 @@ export * from "./NftCollection";
 export * from "./Renderer";
 export * from "./Shortener";
 export * from "./SmartContract";
+export * from "./Users";
 export * from "./WalletService";
 export * from "./Webhooks";

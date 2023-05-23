@@ -1,12 +1,9 @@
 import {
-  CreateShortenedRequestDto,
-  CreateShortenerRequestDto,
   ICreateShortenedRequestDto,
   ICreateShortenerRequestDto,
   ShortenedClientModel,
   ShortenedType,
   ShortenerClientModel,
-  ShortenerPreviewClientModel,
   ShorteningType,
 } from "@minteeble/utils";
 import { BaseService } from "../../models";
