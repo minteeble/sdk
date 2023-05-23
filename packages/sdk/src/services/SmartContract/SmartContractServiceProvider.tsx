@@ -1,6 +1,6 @@
 import { ISmartContractClientModel } from "@minteeble/utils";
 import React, { useEffect } from "react";
-import { useWalletService } from "../../WalletService";
+import { useWalletService } from "../WalletService";
 import { SmartContractInstance } from "./SmartContractInstance";
 import { SmartContractService } from "./SmartContractService";
 import { SmartContractServiceProviderProps } from "./SmartContractService.types";

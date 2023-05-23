@@ -4,7 +4,7 @@ import {
   SmartContractClientModel,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
-import { BaseService } from "../../../shared/BaseService";
+import { BaseService } from "../../models";
 import { SmartContractInstance } from "./SmartContractInstance";
 
 const serializer = new JsonSerializer();

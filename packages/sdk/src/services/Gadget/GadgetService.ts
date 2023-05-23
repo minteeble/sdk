@@ -5,7 +5,7 @@ import {
   ICreateGadgetImageRequestDto,
   ICreateGadgetRequestDto,
 } from "@minteeble/utils";
-import { BaseService } from "../../../shared/BaseService";
+import { BaseService } from "../../models";
 import { JsonSerializer } from "typescript-json-serializer";
 import axios from "axios";
 

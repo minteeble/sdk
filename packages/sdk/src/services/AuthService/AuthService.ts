@@ -16,7 +16,7 @@ import awsmobileDev from "./aws-exports-d1";
 
 // @ts-ignore
 import awsmobileProd from "./aws-exports-p1";
-import { EnvironmentType, EnvManager } from "../../EnvManager";
+import { EnvironmentType, EnvManager } from "../../models/EnvManager";
 
 /**
  * Service for Authentication and Authorization on Minteeble platform

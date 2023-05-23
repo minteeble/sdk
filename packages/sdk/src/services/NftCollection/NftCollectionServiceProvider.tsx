@@ -14,9 +14,9 @@ import {
   MinteebleGadgetsCollectionInstance,
   NftCollectionInstance,
 } from "./NftCollectionInstance";
-import { useWalletService } from "../../WalletService";
+import { useWalletService } from "../WalletService";
 import { SmartContractInstance } from "../SmartContract";
-import { EnvironmentType, EnvManager } from "../../../EnvManager";
+import { EnvironmentType, EnvManager } from "../../models";
 
 export interface NftCollectionServiceProviderProps {
   children: any;
