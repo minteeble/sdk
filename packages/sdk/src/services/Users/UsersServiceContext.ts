@@ -18,6 +18,20 @@ export interface UsersServiceContext {
   getProfile: () => Promise<UserClientModel | null>;
 
   /**
+   * Gets Users profiles
+   *
+   * @param paginationToken token string paginating all users
+   * @returns object containing a list of Users wallet addresses and a pagination token serving as a paginator
+   */
+  getProfiles: (paginationToken?: string) => Promise<object>;
+
+  /**
+   * Gets User's profile's image URL
+   *
+   */
+  getProfileImageUrl: () => Promise<string>;
+
+  /**
    * Updates a User profile's username
    *
    * @param userName new username
@@ -33,6 +47,8 @@ export interface UsersServiceContext {
 export const UsersServiceContext = createContext<UsersServiceContext>({
   createProfile: () => new Promise(() => {}),
   getProfile: () => new Promise(() => {}),
+  getProfiles: () => new Promise(() => {}),
+  getProfileImageUrl: () => new Promise(() => {}),
   updateProfile: () => new Promise(() => {}),
   deleteProfile: () => new Promise(() => {}),
 });

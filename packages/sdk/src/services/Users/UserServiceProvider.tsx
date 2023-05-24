@@ -13,6 +13,14 @@ export const UsersServiceProvider = (props: UsersServiceProviderProps) => {
     return UsersService.instance.getProfile();
   };
 
+  const getProfiles = async (): Promise<object> => {
+    return UsersService.instance.getProfiles();
+  };
+
+  const getProfileImageUrl = async (): Promise<string> => {
+    return UsersService.instance.getProfileImageUrl();
+  };
+
   const updateProfile = async (userName: string): Promise<void> => {
     return UsersService.instance.updateProfile(userName);
   };
@@ -26,6 +34,8 @@ export const UsersServiceProvider = (props: UsersServiceProviderProps) => {
       value={{
         createProfile,
         getProfile,
+        getProfiles,
+        getProfileImageUrl,
         updateProfile,
         deleteProfile,
       }}

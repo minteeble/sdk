@@ -67,6 +67,39 @@ class UsersService extends BaseService {
   }
 
   /**
+   * Gets Users profiles
+   *
+   * @param paginationToken token string paginating all users
+   * @returns object containing a list of Users wallet addresses and a pagination token serving as a paginator
+   */
+  public async getProfiles(paginationToken?: string): Promise<object> {
+    let path;
+    if (paginationToken) path = `/users?paginationToken=${paginationToken}`;
+    else path = `/users`;
+    let data = await this.apiCaller.get(path, {}, true);
+
+    let users = (serializer.deserializeObject<{
+      users: Array<string>;
+      paginationToken?: string;
+    }>(data, { users: data.users, paginationToken: data.paginationToken }) ||
+      []) as [];
+
+    return users;
+  }
+
+  /**
+   * Gets User's profile's image URL
+   *
+   */
+  public async getProfileImageUrl() {
+    let res = await this.apiCaller.get(`/image`, {}, true);
+
+    if (res && res.url && typeof res.url === "string") {
+      return res.url;
+    } else throw new Error("Fail on getting user image url.");
+  }
+
+  /**
    * Deletes a User profile
    */
   public async deleteProfile(): Promise<void> {
