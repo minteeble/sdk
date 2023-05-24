@@ -27,6 +27,12 @@ class UsersService extends BaseService {
     return this._instance;
   }
 
+  /**
+   * Creates a new User's Profile
+   *
+   * @param userName User's username
+   * @returns Username of the created Profile
+   */
   public async createProfile(userName: string) {
     let body: ICreateUserProfileRequestDto = {
       userName,
@@ -44,6 +50,11 @@ class UsersService extends BaseService {
     } else throw new Error("Fail on creating user.");
   }
 
+  /**
+   * Gets username and wallet address of a User profile
+   *
+   * @returns User Client model if found, null otherwise
+   */
   public async getProfile(): Promise<UserClientModel | null> {
     let data = await this.apiCaller.get(`/user`, {}, true);
 
@@ -55,6 +66,9 @@ class UsersService extends BaseService {
     return user || null;
   }
 
+  /**
+   * Deletes a User profile
+   */
   public async deleteProfile(): Promise<void> {
     let reqInit: any = {
       responseType: "text",
@@ -63,6 +77,11 @@ class UsersService extends BaseService {
     await this.apiCaller.delete(`/user`, reqInit);
   }
 
+  /**
+   * Updates a User profile's username
+   *
+   * @param userName new username
+   */
   public async updateProfile(userName: string) {
     let body: IUpdateUserProfileRequestDto = {
       userName,
