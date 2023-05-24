@@ -37,7 +37,7 @@ class UsersService extends BaseService {
       body,
     };
 
-    let res = await this.apiCaller.post(`/users`, reqInit);
+    let res = await this.apiCaller.post(`/users`, reqInit, true);
 
     if (res && res.userName && typeof res.userName === "string") {
       return res.userName;
@@ -73,7 +73,7 @@ class UsersService extends BaseService {
       body,
     };
 
-    await this.apiCaller.put(`/user`, reqInit);
+    await this.apiCaller.put(`/user`, reqInit, true);
   }
 }
 

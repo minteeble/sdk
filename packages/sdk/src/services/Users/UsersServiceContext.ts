@@ -1,5 +1,4 @@
 import { createContext } from "react";
-import React from "react";
 import { UserClientModel } from "@minteeble/utils";
 
 export interface UsersServiceContext {
