@@ -1,6 +1,7 @@
 import {
   ICreateUserProfileRequestDto,
   IUpdateUserProfileRequestDto,
+  UserPreviewClientModel,
 } from "@minteeble/utils";
 import { UserClientModel } from "@minteeble/utils";
 import { BaseService } from "../../models";
@@ -70,20 +71,28 @@ class UsersService extends BaseService {
    * Gets Users profiles
    *
    * @param paginationToken token string paginating all users
-   * @returns object containing a list of Users wallet addresses and a pagination token serving as a paginator
+   * @returns object containing a list of Users wallet addresses
    */
-  public async getProfiles(paginationToken?: string): Promise<object> {
-    let path;
-    if (paginationToken) path = `/users?paginationToken=${paginationToken}`;
-    else path = `/users`;
-    let data = await this.apiCaller.get(path, {}, true);
-
-    let users = (serializer.deserializeObject<{
-      users: Array<string>;
-      paginationToken?: string;
-    }>(data, { users: data.users, paginationToken: data.paginationToken }) ||
-      []) as [];
-
+  public async getProfiles(): Promise<Array<UserPreviewClientModel>> {
+    let data = await this.apiCaller.get(`/users`, {}, true);
+    let users: any[] =
+      (serializer.deserializeObjectArray<UserPreviewClientModel>(
+        data.users,
+        UserPreviewClientModel
+      ) || []) as [];
+    let nextPage;
+    while (data.paginationToken) {
+      data = await this.apiCaller.get(
+        `/users?paginationToken=${encodeURIComponent(data.paginationToken)}`,
+        {},
+        true
+      );
+      nextPage = (serializer.deserializeObjectArray<UserPreviewClientModel>(
+        data.users,
+        UserPreviewClientModel
+      ) || []) as [];
+      users = users.concat(nextPage);
+    }
     return users;
   }
 

@@ -2,7 +2,7 @@ import React from "react";
 import { UsersService } from "./UsersService";
 import { UsersServiceContext } from "./UsersServiceContext";
 import { UsersServiceProviderProps } from "./UsersService.types";
-import { UserClientModel } from "@minteeble/utils";
+import { UserClientModel, UserPreviewClientModel } from "@minteeble/utils";
 
 export const UsersServiceProvider = (props: UsersServiceProviderProps) => {
   const createProfile = async (userName: string): Promise<string> => {
@@ -13,11 +13,11 @@ export const UsersServiceProvider = (props: UsersServiceProviderProps) => {
     return UsersService.instance.getProfile();
   };
 
-  const getProfiles = async (): Promise<object> => {
+  const getProfiles = async (): Promise<Array<UserPreviewClientModel>> => {
     return UsersService.instance.getProfiles();
   };
 
-  const getProfileImageUrl = async (): Promise<string> => {
+  const getProfileImageUrl = async (): Promise<string | null> => {
     return UsersService.instance.getProfileImageUrl();
   };
 

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { UserClientModel } from "@minteeble/utils";
+import { UserClientModel, UserPreviewClientModel } from "@minteeble/utils";
 
 export interface UsersServiceContext {
   /**
@@ -23,13 +23,15 @@ export interface UsersServiceContext {
    * @param paginationToken token string paginating all users
    * @returns object containing a list of Users wallet addresses and a pagination token serving as a paginator
    */
-  getProfiles: (paginationToken?: string) => Promise<object>;
+  getProfiles: (
+    paginationToken?: string
+  ) => Promise<Array<UserPreviewClientModel>>;
 
   /**
    * Gets User's profile's image URL
    *
    */
-  getProfileImageUrl: () => Promise<string>;
+  getProfileImageUrl: () => Promise<string | null>;
 
   /**
    * Updates a User profile's username
