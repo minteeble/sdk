@@ -11,7 +11,8 @@
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir lib/cjs",
     "prepublishOnly": "yarn build",
-    "set-dev": "./scripts/set-dev-env.sh"
+    "set-dev": "./scripts/set-dev-env.sh",
+    "pub": "yarn build && lerna publish"
   },
   "devDependencies": {
     "@types/react": "^18.0.15",
