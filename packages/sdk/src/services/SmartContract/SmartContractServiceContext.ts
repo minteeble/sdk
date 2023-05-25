@@ -15,10 +15,24 @@ export interface SmartContractServiceContent {
     address: string,
     abi: string
   ): Promise<ISmartContractClientModel>;
+
+  /**
+   * Set new smart contract abi
+   *
+   * @param chainName Netowrk chain name
+   * @param id Smart contract id
+   * @param abi Smart contract abi
+   */
+  updateSmartContractAbi(
+    chainName: string,
+    id: string,
+    abi: any
+  ): Promise<void>;
 }
 
 export const SmartContractServiceContext =
   createContext<SmartContractServiceContent>({
     getSmartContractInstance: () => new Promise(() => {}),
     createSmartContract: () => new Promise(() => {}),
+    updateSmartContractAbi: () => new Promise(() => {}),
   });

@@ -65,4 +65,32 @@ export class SmartContractService extends BaseService {
 
     return smartContract || null;
   }
+
+  /**
+   * Set new smart contract abi
+   *
+   * @param chainName Netowrk chain name
+   * @param id Smart contract id
+   * @param abi Smart contract abi
+   */
+  public async updateSmartContractAbi(
+    chainName: string,
+    id: string,
+    abi: any
+  ): Promise<void> {
+    let body = {
+      abi: abi,
+    };
+
+    let reqInit: any = {
+      responseType: "text",
+      body: body,
+    };
+
+    await this.apiCaller.put(
+      `/contract/chain/${chainName}/id/${id}/abi`,
+      reqInit,
+      true
+    );
+  }
 }
