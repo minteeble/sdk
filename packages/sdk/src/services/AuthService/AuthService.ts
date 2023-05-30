@@ -36,6 +36,9 @@ class AuthService {
     Amplify.configure(customConfig || awsmobile);
   }
 
+  public static customApiBaseUrlDev = "";
+  public static customApiBaseUrlProd = "";
+
   public signIn = async (walletAddress: string): Promise<CognitoUser> => {
     try {
       // console.log("Request sign in", {
@@ -115,9 +118,13 @@ class AuthService {
     let url = "";
 
     if (EnvManager.environment === EnvironmentType.Dev) {
-      url = awsmobileDev.aws_cloud_logic_custom[0].endpoint;
+      url =
+        this.customApiBaseUrlDev ||
+        awsmobileDev.aws_cloud_logic_custom[0].endpoint;
     } else if (EnvManager.environment === EnvironmentType.Prod) {
-      url = awsmobileProd.aws_cloud_logic_custom[0].endpoint;
+      url =
+        this.customApiBaseUrlProd ||
+        awsmobileProd.aws_cloud_logic_custom[0].endpoint;
     }
 
     return url;
