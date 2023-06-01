@@ -21,6 +21,10 @@ export const UsersServiceProvider = (props: UsersServiceProviderProps) => {
     return UsersService.instance.getProfileImageUrl();
   };
 
+  const getProfileImage = async (): Promise<string | null> => {
+    return UsersService.instance.getProfileImage();
+  };
+
   const updateProfile = async (userName: string): Promise<void> => {
     return UsersService.instance.updateProfile(userName);
   };
@@ -35,6 +39,7 @@ export const UsersServiceProvider = (props: UsersServiceProviderProps) => {
         createProfile,
         getProfile,
         getProfiles,
+        getProfileImage,
         getProfileImageUrl,
         updateProfile,
         deleteProfile,

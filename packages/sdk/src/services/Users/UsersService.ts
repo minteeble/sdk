@@ -99,13 +99,40 @@ class UsersService extends BaseService {
   /**
    * Gets User's profile's image URL
    *
+   * @returns URL string
    */
-  public async getProfileImageUrl() {
+  public async getProfileImageUrl(): Promise<string> {
     let res = await this.apiCaller.get(`/image`, {}, true);
 
     if (res && res.url && typeof res.url === "string") {
       return res.url;
     } else throw new Error("Fail on getting user image url.");
+  }
+
+  /**
+   * Gets User's profile's image
+   *
+   *
+   * @returns Image as string or null if an error is encountered
+   */
+  public async getProfileImage(): Promise<string | null> {
+    try {
+      let image = await this.apiCaller.get(
+        `image`,
+        {
+          responseType: "text",
+        },
+        true
+      );
+      if (image.success === false) {
+        return null;
+      }
+
+      return image || null;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
   }
 
   /**

@@ -30,8 +30,16 @@ export interface UsersServiceContext {
   /**
    * Gets User's profile's image URL
    *
+   * @returns a URL string
    */
   getProfileImageUrl: () => Promise<string | null>;
+
+  /**
+   * Gets User's profile's image
+   *
+   * @returns Image as string or null if an error is encountered
+   */
+  getProfileImage: () => Promise<string | null>;
 
   /**
    * Updates a User profile's username
@@ -51,6 +59,7 @@ export const UsersServiceContext = createContext<UsersServiceContext>({
   getProfile: () => new Promise(() => {}),
   getProfiles: () => new Promise(() => {}),
   getProfileImageUrl: () => new Promise(() => {}),
+  getProfileImage: () => new Promise(() => {}),
   updateProfile: () => new Promise(() => {}),
   deleteProfile: () => new Promise(() => {}),
 });
