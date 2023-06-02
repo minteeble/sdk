@@ -3,11 +3,13 @@ import { BaseService } from "../../models";
 import {
   CreateFormRequestDto,
   FormClientModel,
+  FormAnswerClientModel,
   GetFormRequestDto,
   GetFormResponseDto,
   GetFormsResponseDto,
   ICreateFormRequestDto,
   IGetFormRequestDto,
+  GetFormAnswersResponseDto,
 } from "@minteeble/utils";
 
 const serializer = new JsonSerializer();
@@ -17,7 +19,7 @@ export class FormsService extends BaseService {
   static apiCaller: any;
 
   constructor() {
-    super("gadgets");
+    super("form");
   }
 
   public static get instance(): FormsService {
@@ -54,14 +56,11 @@ export class FormsService extends BaseService {
     return form;
   };
 
-  public getForm = async (
-    formId: string
-  ): Promise<GetFormResponseDto | null> => {
+  public getForm = async (formId: string): Promise<FormClientModel | null> => {
     const res: FormClientModel = await this.apiCaller.get(
-      `/form/${formId}/form`,
+      `/form/${formId}`,
       {
         responseType: "text",
-        body: {},
       },
       true
     );
@@ -78,7 +77,6 @@ export class FormsService extends BaseService {
       `/forms`,
       {
         responseType: "text",
-        body: {},
       },
       true
     );
@@ -90,5 +88,32 @@ export class FormsService extends BaseService {
       ) || []) as FormClientModel[]) || [];
 
     return forms;
+  };
+
+  public deleteForm = async (formId: string): Promise<void> => {
+    await this.apiCaller.delete(`/form/${formId}`, {
+      responseType: "text",
+      body: {},
+    });
+  };
+
+  public getFormAnswers = async (
+    formId: string
+  ): Promise<Array<FormAnswerClientModel>> => {
+    const res: GetFormAnswersResponseDto = await this.apiCaller.get(
+      `/form/${formId}`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    const answers =
+      ((serializer.deserializeObjectArray<FormAnswerClientModel>(
+        res.answers || [],
+        FormAnswerClientModel
+      ) || []) as FormAnswerClientModel[]) || [];
+
+    return answers;
   };
 }

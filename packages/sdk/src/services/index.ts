@@ -7,3 +7,4 @@ export * from "./Shortener";
 export * from "./SmartContract";
 export * from "./WalletService";
 export * from "./Webhooks";
+export * from "./Forms";
