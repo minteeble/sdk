@@ -106,7 +106,7 @@ class ShortenerService extends BaseService {
     let data = await this.apiCaller.get(
       `/shortener/${shortenerId}/shortened/${shortenedObjectId}/shortened`,
       {},
-      true
+      false
     );
 
     let shortened = serializer.deserializeObject<ShortenedClientModel>(

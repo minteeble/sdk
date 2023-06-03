@@ -58,9 +58,25 @@ export const SmartContractServiceProvider = (
     );
   };
 
+  const updateSmartContractAbi = (
+    chainName: string,
+    id: string,
+    abi: any
+  ): Promise<void> => {
+    return SmartContractService.instance.updateSmartContractAbi(
+      chainName,
+      id,
+      abi
+    );
+  };
+
   return (
     <SmartContractServiceContext.Provider
-      value={{ getSmartContractInstance, createSmartContract }}
+      value={{
+        getSmartContractInstance,
+        createSmartContract,
+        updateSmartContractAbi,
+      }}
     >
       {props.children}
     </SmartContractServiceContext.Provider>

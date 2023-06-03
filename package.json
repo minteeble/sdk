@@ -12,7 +12,7 @@
     "clean-all": "yarn clean && yarn clean-modules",
     "test": "lerna exec \"yarn run test\" --concurrency=1 --no-bail",
     "prepublishOnly": "yarn build",
-    "set-dev": "./packages/sdk/scripts/set-dev-env.sh"
+    "set-dev": "lerna run set-dev"
   },
   "devDependencies": {
     "lerna": "^6.5.1"
