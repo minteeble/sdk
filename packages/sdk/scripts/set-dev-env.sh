@@ -2,6 +2,8 @@
 yarn
 yarn build
 
+# Internal package
+
 yarn unlink
 
 yarn unlink react
@@ -10,6 +12,8 @@ yarn link react
 yarn link react-dom
 
 yarn link
+
+# External package
 
 cd ../..
 
