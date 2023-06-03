@@ -8,6 +8,7 @@ import {
   IUpdateAppRequestDto,
   IGetAppUsersResponseDto,
   UserPreviewClientModel,
+  IGetUserAppsResponseDto,
 } from "@minteeble/utils";
 
 const serializer = new JsonSerializer();
@@ -130,6 +131,24 @@ export class AppsService extends BaseService {
     }
 
     return users;
+  };
+
+  public getUserApps = async (): Promise<AppInfoClientModel[]> => {
+    const res: IGetUserAppsResponseDto = await this.apiCaller.get(
+      `/apps`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    let apps: AppInfoClientModel[] =
+      (serializer.deserializeObjectArray<AppInfoClientModel>(
+        res.apps,
+        AppInfoClientModel
+      ) || []) as [];
+
+    return apps;
   };
 
   public addAppAdmin = async (

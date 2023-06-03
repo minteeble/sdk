@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 import {
+  AppInfoClientModel,
   ICreateAppResponseDto,
   IGetAppResponseDto,
   UserPreviewClientModel,
@@ -19,6 +20,8 @@ export interface AppsServiceContent {
   updateApp: (urlName: string, displayName: string) => Promise<void>;
 
   getAppUsers: (urlName: string) => Promise<Array<UserPreviewClientModel>>;
+
+  getUserApps: () => Promise<AppInfoClientModel[]>;
 
   addAppAdmin: (urlName: string, adminUserWallet: string) => Promise<void>;
 
@@ -39,6 +42,8 @@ export const appServiceContext = createContext<AppsServiceContent>({
   updateApp: () => new Promise(() => {}),
 
   getAppUsers: () => new Promise(() => {}),
+
+  getUserApps: () => new Promise(() => {}),
 
   addAppAdmin: () => new Promise(() => {}),
 

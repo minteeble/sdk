@@ -3,6 +3,7 @@ import { AppsServiceProviderProps } from "./AppsServiceProvider.types";
 import React from "react";
 
 import {
+  AppInfoClientModel,
   ICreateAppResponseDto,
   IGetAppResponseDto,
   UserPreviewClientModel,
@@ -40,6 +41,10 @@ const AppsServiceProvider = (props: AppsServiceProviderProps) => {
     return await AppsService.instance.getAppUsers(urlName);
   };
 
+  const getUserApps = async (): Promise<AppInfoClientModel[]> => {
+    return await AppsService.instance.getUserApps();
+  };
+
   const addAppAdmin = async (
     urlName: string,
     adminUserWallet: string
@@ -70,6 +75,7 @@ const AppsServiceProvider = (props: AppsServiceProviderProps) => {
         deleteApp,
         updateApp,
         getAppUsers,
+        getUserApps,
         addAppAdmin,
         removeAppAdmin,
         joinApp,
