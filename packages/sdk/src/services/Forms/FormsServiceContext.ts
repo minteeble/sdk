@@ -13,7 +13,8 @@ export interface FormsServiceContent {
   getFormAnswers: (formId: string) => Promise<Array<FormAnswerClientModel>>;
   sendFormAnswer: (
     formId: string,
-    fields: { [key: string]: any }
+    fields: { [key: string]: any },
+    authenticated: boolean
   ) => Promise<void>;
 }
 

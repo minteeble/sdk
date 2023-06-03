@@ -35,9 +35,10 @@ const FormsServiceProvider = (props: FormsServiceProviderProps) => {
 
   const sendFormAnswer = async (
     formId: string,
-    fields: { [key: string]: any }
+    fields: { [key: string]: any },
+    authenticated: boolean
   ): Promise<void> => {
-    return FormsService.instance.sendAnswer(formId, fields);
+    return FormsService.instance.sendAnswer(formId, fields, authenticated);
   };
 
   return (

@@ -117,16 +117,20 @@ export class FormsService extends BaseService {
     return answers;
   };
 
-  public async sendAnswer(formId: string, fields: { [key: string]: any }) {
+  public async sendAnswer(
+    formId: string,
+    fields: { [key: string]: any },
+    authenticated: boolean
+  ) {
     await this.apiCaller.post(
-      `/form/${formId}/answer/noauth`,
+      `/form/${formId}/answer${authenticated ? "" : "/noauth"}`,
       {
         responseType: "text",
         body: {
           fields: fields,
         },
       },
-      false
+      authenticated
     );
   }
 }
