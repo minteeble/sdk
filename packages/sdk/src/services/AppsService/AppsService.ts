@@ -1,5 +1,14 @@
 import { BaseService } from "../../models";
 import { JsonSerializer } from "typescript-json-serializer";
+import {
+  ICreateAppRequestDto,
+  ICreateAppResponseDto,
+  AppInfoClientModel,
+  IGetAppResponseDto,
+  IUpdateAppRequestDto,
+  IGetAppUsersResponseDto,
+  UserPreviewClientModel,
+} from "@minteeble/utils";
 
 const serializer = new JsonSerializer();
 
@@ -19,13 +28,13 @@ export class AppsService extends BaseService {
   public createApp = async (
     urlName: string,
     displayName: string
-  ): Promise<any | null> => {
-    const body = {
+  ): Promise<ICreateAppResponseDto | null> => {
+    const body: ICreateAppRequestDto = {
       urlName,
       displayName,
     };
 
-    const res = await this.apiCaller.post(
+    const res: AppInfoClientModel = await this.apiCaller.post(
       `/app`,
       {
         responseType: "text",
@@ -34,12 +43,19 @@ export class AppsService extends BaseService {
       true
     );
 
-    if (!res || !res.id) return null;
+    if (!res || !res.urlName) return null;
 
-    // const form = new AppDataClientModel
+    const form = new AppInfoClientModel();
+
+    form.displayName = res.displayName;
+    form.urlName = res.urlName;
+
+    return form;
   };
 
-  public getApp = async (urlName: string): Promise<any | null> => {
+  public getApp = async (
+    urlName: string
+  ): Promise<IGetAppResponseDto | null> => {
     const res = await this.apiCaller.get(
       `/${urlName}/app`,
       {
@@ -49,9 +65,10 @@ export class AppsService extends BaseService {
     );
 
     const app =
-      //    serializer.deserializeObject()
-      //   ||
-      null;
+      serializer.deserializeObject<AppInfoClientModel>(
+        res,
+        AppInfoClientModel
+      ) || null;
 
     return app;
   };
@@ -62,28 +79,113 @@ export class AppsService extends BaseService {
     });
   };
 
-  public updateApp = async (displayName: string, newDisplayName: string) => {
-    const body = {
+  public updateApp = async (
+    urlName: string,
+    displayName: string
+  ): Promise<void> => {
+    const body: IUpdateAppRequestDto = {
+      urlName,
       displayName,
-      newDisplayName,
     };
 
-    // const res = await this.apiCaller.get(
-    //     `/${urlName}/app`,
-    //     {
-    //       responseType: "text",
-    //     },
-    //     true
-    //   );
+    this.apiCaller.put(
+      `/${urlName}/app`,
+      {
+        responseType: "text",
+      },
+      true
+    );
   };
 
-  //   public getAppUsers = async()
+  public getAppUsers = async (
+    urlName: string
+  ): Promise<Array<UserPreviewClientModel>> => {
+    let res: IGetAppUsersResponseDto = await this.apiCaller.get(
+      `/${urlName}/users`,
+      {
+        responseType: "text",
+      },
+      true
+    );
 
-  // public addAppAdmin = async()
+    let users: UserPreviewClientModel[] =
+      (serializer.deserializeObjectArray<UserPreviewClientModel>(
+        res.users,
+        UserPreviewClientModel
+      ) || []) as [];
 
-  // public removeAppAdmin = async()
+    let nextPage;
 
-  // public joinApp = async()
+    while (res.paginationToken) {
+      res = await this.apiCaller.get(
+        `/users?paginationToken=${encodeURIComponent(res.paginationToken)}`,
+        {},
+        true
+      );
+      nextPage = (serializer.deserializeObjectArray<UserPreviewClientModel>(
+        res.users,
+        UserPreviewClientModel
+      ) || []) as [];
+      users = users.concat(nextPage);
+    }
 
-  // public leaveApp = async()
+    return users;
+  };
+
+  public addAppAdmin = async (
+    urlName: string,
+    newAdminUserWallet: string
+  ): Promise<void> => {
+    const body = {
+      newAdminUserWallet,
+    };
+
+    await this.apiCaller.put(
+      `/${urlName}/admin/app`,
+      {
+        responseType: "text",
+        body,
+      },
+
+      true
+    );
+  };
+
+  public removeAppAdmin = async (
+    urlName: string,
+    adminUserWallet: string
+  ): Promise<void> => {
+    const body = {
+      adminUserWallet,
+    };
+
+    await this.apiCaller.delete(`/${urlName}/admin/app`, {
+      responseType: "text",
+      body,
+    });
+  };
+
+  public joinApp = async (
+    urlName: string
+  ): Promise<{ urlName: string } | null> => {
+    const res: { urlName: string } = await this.apiCaller.post(
+      `/${urlName}/join/app`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    return res || null;
+  };
+
+  public leaveApp = async (urlName: string): Promise<void> => {
+    await this.apiCaller.post(
+      `/${urlName}/leave/app`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+  };
 }
