@@ -1,42 +1,23 @@
 {
-  "name": "@minteeble/sdk",
-  "version": "1.0.54",
-  "description": "Minteeble React.js SDK package.",
-  "main": "./lib/cjs/index.js",
-  "module": "./lib/esm/index.js",
-  "types": "./lib/esm/index.d.ts",
+  "name": "@minteeble/sdk-lib",
+  "private": true,
+  "main": "./packages/lib/cjs/index.js",
+  "module": "./packages/lib/esm/index.js",
+  "types": "./packages/lib/esm/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "build": "yarn build:esm && yarn build:cjs",
-    "build:esm": "tsc",
-    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
+    "build": "lerna run build",
+    "clean": "lerna run clean",
+    "clean-modules": "lerna clean -y && rm -rf node_modules",
+    "clean-all": "yarn clean && yarn clean-modules",
+    "test": "lerna exec \"yarn run test\" --concurrency=1 --no-bail",
     "prepublishOnly": "yarn build",
-    "set-dev": "./scripts/set-dev-env.sh"
-  },
-  "peerDependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "web3": "^1.7.4",
-    "web3modal": "^1.9.8"
+    "set-dev": "lerna run set-dev"
   },
   "devDependencies": {
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "@types/websocket": "^1.0.5",
-    "typescript": "^4.7.4",
-    "web3": "^1.8.0",
-    "web3modal": "^1.9.8"
+    "lerna": "^6.5.1"
   },
-  "files": [
-    "/lib"
-  ],
-  "dependencies": {
-    "@minteeble/utils": "^1.0.117",
-    "@walletconnect/web3-provider": "^1.7.8",
-    "aws-amplify": "^4.3.37",
-    "axios": "^1.3.3",
-    "core-js": "^3.24.1",
-    "typescript-json-serializer": "^5.1.0",
-    "websocket": "^1.0.34"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }
