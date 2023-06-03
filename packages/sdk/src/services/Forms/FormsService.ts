@@ -101,7 +101,7 @@ export class FormsService extends BaseService {
     formId: string
   ): Promise<Array<FormAnswerClientModel>> => {
     const res: GetFormAnswersResponseDto = await this.apiCaller.get(
-      `/form/${formId}`,
+      `/form/${formId}/answers`,
       {
         responseType: "text",
       },
