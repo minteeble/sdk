@@ -8,3 +8,4 @@ export * from "./SmartContract";
 export * from "./Users";
 export * from "./WalletService";
 export * from "./Webhooks";
+export * from "./Forms";
