@@ -33,6 +33,13 @@ const FormsServiceProvider = (props: FormsServiceProviderProps) => {
     return await FormsService.instance.getFormAnswers(formId);
   };
 
+  const sendFormAnswer = async (
+    formId: string,
+    fields: { [key: string]: any }
+  ): Promise<void> => {
+    return FormsService.instance.sendAnswer(formId, fields);
+  };
+
   return (
     <formsServiceContext.Provider
       value={{
@@ -41,6 +48,7 @@ const FormsServiceProvider = (props: FormsServiceProviderProps) => {
         getForms,
         deleteForm,
         getFormAnswers,
+        sendFormAnswer,
       }}
     >
       {props.children}

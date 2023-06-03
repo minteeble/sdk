@@ -116,4 +116,17 @@ export class FormsService extends BaseService {
 
     return answers;
   };
+
+  public async sendAnswer(formId: string, fields: { [key: string]: any }) {
+    await this.apiCaller.post(
+      `/form/${formId}/answer/noauth`,
+      {
+        responseType: "text",
+        body: {
+          fields: fields,
+        },
+      },
+      false
+    );
+  }
 }
