@@ -1,4 +1,7 @@
-import { ISmartContractClientModel } from "@minteeble/utils";
+import {
+  ISmartContractClientModel,
+  SmartContractClientModel,
+} from "@minteeble/utils";
 import React, { useEffect } from "react";
 import { useWalletService } from "../WalletService";
 import { SmartContractInstance } from "./SmartContractInstance";
@@ -70,12 +73,32 @@ export const SmartContractServiceProvider = (
     );
   };
 
+  const deleteSmartContract = async (
+    id: string,
+    chainName: string
+  ): Promise<void> => {
+    return await SmartContractService.instance.deleteSmartContract(
+      id,
+      chainName
+    );
+  };
+
+  const getOwnedSmartContracts = async (
+    chainName: string
+  ): Promise<Array<SmartContractClientModel>> => {
+    return await SmartContractService.instance.getOwnedSmartContracts(
+      chainName
+    );
+  };
+
   return (
     <SmartContractServiceContext.Provider
       value={{
         getSmartContractInstance,
         createSmartContract,
         updateSmartContractAbi,
+        deleteSmartContract,
+        getOwnedSmartContracts,
       }}
     >
       {props.children}
