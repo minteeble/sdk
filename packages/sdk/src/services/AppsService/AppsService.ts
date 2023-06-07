@@ -5,7 +5,6 @@ import {
   ICreateAppResponseDto,
   AppInfoClientModel,
   IGetAppResponseDto,
-  IUpdateAppRequestDto,
   IGetAppUsersResponseDto,
   UserPreviewClientModel,
   IGetUserAppsResponseDto,
@@ -47,12 +46,12 @@ export class AppsService extends BaseService {
 
     if (!res || !res.urlName) return null;
 
-    const form = new AppInfoClientModel();
+    const app = new AppInfoClientModel();
 
-    form.displayName = res.displayName;
-    form.urlName = res.urlName;
+    app.displayName = res.displayName;
+    app.urlName = res.urlName;
 
-    return form;
+    return app;
   };
 
   public getApp = async (
@@ -85,8 +84,7 @@ export class AppsService extends BaseService {
     urlName: string,
     displayName: string
   ): Promise<void> => {
-    const body: IUpdateAppRequestDto = {
-      urlName,
+    const body = {
       displayName,
     };
 
@@ -94,6 +92,7 @@ export class AppsService extends BaseService {
       `/${urlName}/app`,
       {
         responseType: "text",
+        body: body,
       },
       true
     );
