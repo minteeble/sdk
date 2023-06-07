@@ -57,7 +57,7 @@ class PredicatesService extends BaseService {
   }
 
   public async getPredicates(): Promise<PredicateClientModel[] | null> {
-    let data = await this.apiCaller.get(`/predicate/predicates`, {}, true);
+    let data = await this.apiCaller.get(`/predicates`, {}, true);
 
     let predicates = (serializer.deserializeObjectArray<PredicateClientModel>(
       data.items,
