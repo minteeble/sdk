@@ -15,9 +15,9 @@ export interface PredicatesServiceContent {
   getPredicates(): Promise<PredicateClientModel[] | null>;
   updatePredicate(
     id: string,
-    code: string,
-    parameters: Array<PredicateParameter>,
-    name: string
+    code?: string,
+    parameters?: Array<PredicateParameter>,
+    name?: string
   ): Promise<void>;
   deletePredicate(id: string): Promise<void>;
   executePredicate(

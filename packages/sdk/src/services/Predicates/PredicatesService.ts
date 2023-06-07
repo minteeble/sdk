@@ -96,9 +96,9 @@ class PredicatesService extends BaseService {
    */
   public async updatePredicate(
     id: string,
-    code: string,
-    parameters: Array<PredicateParameter>,
-    name: string
+    code?: string,
+    parameters?: Array<PredicateParameter>,
+    name?: string
   ) {
     let body = {
       code: code,

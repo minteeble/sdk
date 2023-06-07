@@ -31,9 +31,9 @@ export const PredicatesServiceProvider = (
 
   const updatePredicate = async (
     id: string,
-    code: string,
-    parameters: Array<PredicateParameter>,
-    name: string
+    code?: string,
+    parameters?: Array<PredicateParameter>,
+    name?: string
   ): Promise<void> => {
     return PredicatesService.instance.updatePredicate(
       id,
