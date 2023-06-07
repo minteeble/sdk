@@ -46,7 +46,7 @@ class PredicatesService extends BaseService {
       body,
     };
 
-    let res = await this.apiCaller.post(`/predicates`, reqInit, true);
+    let res = await this.apiCaller.post(`/predicate`, reqInit, true);
 
     if (res && res.id && typeof res.id === "string") {
       return res.id;
@@ -111,7 +111,7 @@ class PredicatesService extends BaseService {
       body,
     };
 
-    await this.apiCaller.put(`predicate/${id}/predicate`, reqInit, true);
+    await this.apiCaller.put(`/predicate/${id}/predicate`, reqInit, true);
   }
 
   /**
@@ -123,7 +123,7 @@ class PredicatesService extends BaseService {
     let reqInit: any = {
       responseType: "text",
     };
-    await this.apiCaller.delete(`predicate/${id}/predicate`, reqInit);
+    await this.apiCaller.delete(`/predicate/${id}/predicate`, reqInit);
   }
 
   /**
