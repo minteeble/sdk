@@ -9,6 +9,7 @@ import {
   IGetAppUsersResponseDto,
   UserPreviewClientModel,
   IGetUserAppsResponseDto,
+  IGetAppAdminsResponseDto,
 } from "@minteeble/utils";
 
 const serializer = new JsonSerializer();
@@ -98,6 +99,41 @@ export class AppsService extends BaseService {
     );
   };
 
+  public getAppAdmins = async (
+    urlName: string
+  ): Promise<Array<UserPreviewClientModel>> => {
+    let res: IGetAppAdminsResponseDto = await this.apiCaller.get(
+      `/${urlName}/admins/app`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    let admins: UserPreviewClientModel[] =
+      (serializer.deserializeObjectArray<UserPreviewClientModel>(
+        res.users,
+        UserPreviewClientModel
+      ) || []) as [];
+
+    let nextPage;
+    while (res.paginationToken) {
+      res = await this.apiCaller.get(
+        `/${urlName}/admins?paginationToken=${encodeURIComponent(
+          res.paginationToken
+        )}`,
+        {},
+        true
+      );
+      nextPage = (serializer.deserializeObjectArray<UserPreviewClientModel>(
+        res.users,
+        UserPreviewClientModel
+      ) || []) as [];
+      admins = admins.concat(nextPage);
+    }
+    return admins;
+  };
+
   public getAppUsers = async (
     urlName: string
   ): Promise<Array<UserPreviewClientModel>> => {
@@ -119,7 +155,9 @@ export class AppsService extends BaseService {
 
     while (res.paginationToken) {
       res = await this.apiCaller.get(
-        `/users?paginationToken=${encodeURIComponent(res.paginationToken)}`,
+        `/${urlName}/users?paginationToken=${encodeURIComponent(
+          res.paginationToken
+        )}`,
         {},
         true
       );
@@ -180,6 +218,20 @@ export class AppsService extends BaseService {
 
     await this.apiCaller.delete(`/${urlName}/admin/app`, {
       responseType: "text",
+      body,
+    });
+  };
+
+  public removeAppUser = async (
+    urlName: string,
+    userWallet: string
+  ): Promise<void> => {
+    const body = {
+      userWallet,
+    };
+
+    await this.apiCaller.delete(`/${urlName}/user/app`, {
+      responeType: "text",
       body,
     });
   };
