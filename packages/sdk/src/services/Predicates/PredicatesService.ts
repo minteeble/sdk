@@ -22,6 +22,14 @@ class PredicatesService extends BaseService {
     return this._instance;
   }
 
+  /**
+   * Creates a Predicate
+   *
+   * @param code Predicate's code
+   * @param parameters Predicate's formal parameters
+   * @param name Predicate's name
+   * @returns created Predicate's id
+   */
   public async createPredicate(
     code: string,
     parameters: Array<PredicateParameter>,
@@ -45,6 +53,12 @@ class PredicatesService extends BaseService {
     } else throw new Error("Fail on creating predicate.");
   }
 
+  /**
+   * Gets a Predicate
+   *
+   * @param id Predicate's id
+   * @returns Predicate object or null if an error is encountered
+   */
   public async getPredicate(id: string): Promise<PredicateClientModel | null> {
     let data = await this.apiCaller.get(`/predicate/${id}/predicate`, {}, true);
 
@@ -56,6 +70,11 @@ class PredicatesService extends BaseService {
     return predicate || null;
   }
 
+  /**
+   * Gets all Predicates owned by an owner
+   *
+   * @returns Array of Predicate objects or an empty array if an error is encountered
+   */
   public async getPredicates(): Promise<PredicateClientModel[] | null> {
     let data = await this.apiCaller.get(`/predicates`, {}, true);
 
@@ -67,6 +86,14 @@ class PredicatesService extends BaseService {
     return predicates || null;
   }
 
+  /**
+   * Updates a Predicate
+   *
+   * @param id Predicate's id
+   * @param name Predicate's new name
+   * @param code Predicate's new code
+   * @param parameters Predicate's new parameters
+   */
   public async updatePredicate(
     id: string,
     code: string,
@@ -87,6 +114,11 @@ class PredicatesService extends BaseService {
     await this.apiCaller.put(`predicate/${id}/predicate`, reqInit, true);
   }
 
+  /**
+   * Deletes a Predicate
+   *
+   * @param id Predicate's id
+   */
   public async deletePredicate(id: string): Promise<void> {
     let reqInit: any = {
       responseType: "text",
@@ -94,6 +126,13 @@ class PredicatesService extends BaseService {
     await this.apiCaller.delete(`predicate/${id}/predicate`, reqInit);
   }
 
+  /**
+   * Executes a Predicate
+   *
+   * @param id Predicate's id
+   * @param parameters Actual Predicate's parameters
+   * @returns a string representing result or null if an error is encountered
+   */
   public async executePredicate(
     id: string,
     parameters: PredicateParameterValue[]
