@@ -35,6 +35,12 @@ const AppsServiceProvider = (props: AppsServiceProviderProps) => {
     await AppsService.instance.updateApp(urlName, displayName);
   };
 
+  const getAppAdmins = async (
+    urlName: string
+  ): Promise<Array<UserPreviewClientModel>> => {
+    return await AppsService.instance.getAppAdmins(urlName);
+  };
+
   const getAppUsers = async (
     urlName: string
   ): Promise<Array<UserPreviewClientModel>> => {
@@ -48,13 +54,22 @@ const AppsServiceProvider = (props: AppsServiceProviderProps) => {
   const addAppAdmin = async (
     urlName: string,
     adminUserWallet: string
-  ): Promise<void> => {};
+  ): Promise<void> => {
+    await AppsService.instance.addAppAdmin(urlName, adminUserWallet);
+  };
 
   const removeAppAdmin = async (
     urlName: string,
     adminUserWallet: string
   ): Promise<void> => {
     await AppsService.instance.removeAppAdmin(urlName, adminUserWallet);
+  };
+
+  const removeAppUser = async (
+    urlName: string,
+    userWallet: string
+  ): Promise<void> => {
+    await AppsService.instance.removeAppUser(urlName, userWallet);
   };
 
   const joinApp = async (
@@ -74,10 +89,12 @@ const AppsServiceProvider = (props: AppsServiceProviderProps) => {
         getApp,
         deleteApp,
         updateApp,
+        getAppAdmins,
         getAppUsers,
         getUserApps,
         addAppAdmin,
         removeAppAdmin,
+        removeAppUser,
         joinApp,
         leaveApp,
       }}

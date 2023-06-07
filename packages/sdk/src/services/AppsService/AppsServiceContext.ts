@@ -19,6 +19,8 @@ export interface AppsServiceContent {
 
   updateApp: (urlName: string, displayName: string) => Promise<void>;
 
+  getAppAdmins: (urlName: string) => Promise<Array<UserPreviewClientModel>>;
+
   getAppUsers: (urlName: string) => Promise<Array<UserPreviewClientModel>>;
 
   getUserApps: () => Promise<AppInfoClientModel[]>;
@@ -26,6 +28,8 @@ export interface AppsServiceContent {
   addAppAdmin: (urlName: string, adminUserWallet: string) => Promise<void>;
 
   removeAppAdmin: (urlName: string, adminUserWallet: string) => Promise<void>;
+
+  removeAppUser: (urlName: string, userWallet: string) => Promise<void>;
 
   joinApp: (urlName: string) => Promise<{ urlName: string } | null>;
 
@@ -41,6 +45,8 @@ export const appServiceContext = createContext<AppsServiceContent>({
 
   updateApp: () => new Promise(() => {}),
 
+  getAppAdmins: () => new Promise(() => {}),
+
   getAppUsers: () => new Promise(() => {}),
 
   getUserApps: () => new Promise(() => {}),
@@ -48,6 +54,8 @@ export const appServiceContext = createContext<AppsServiceContent>({
   addAppAdmin: () => new Promise(() => {}),
 
   removeAppAdmin: () => new Promise(() => {}),
+
+  removeAppUser: () => new Promise(() => {}),
 
   joinApp: () => new Promise(() => {}),
 
