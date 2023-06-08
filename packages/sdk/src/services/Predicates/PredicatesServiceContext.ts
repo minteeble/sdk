@@ -13,12 +13,7 @@ export interface PredicatesServiceContent {
   ): Promise<string>;
   getPredicate(id: string): Promise<PredicateClientModel | null>;
   getPredicates(): Promise<PredicateClientModel[] | null>;
-  updatePredicate(
-    id: string,
-    code?: string,
-    parameters?: Array<PredicateParameter>,
-    name?: string
-  ): Promise<void>;
+  updatePredicate(predicate: PredicateClientModel): Promise<void>;
   deletePredicate(id: string): Promise<void>;
   executePredicate(
     id: string,

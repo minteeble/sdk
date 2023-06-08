@@ -94,16 +94,11 @@ class PredicatesService extends BaseService {
    * @param code Predicate's new code
    * @param parameters Predicate's new parameters
    */
-  public async updatePredicate(
-    id: string,
-    code?: string,
-    parameters?: Array<PredicateParameter>,
-    name?: string
-  ) {
+  public async updatePredicate(newPredicate: PredicateClientModel) {
     let body = {
-      code: code,
-      parameters: parameters,
-      name: name,
+      code: newPredicate.code,
+      name: newPredicate.name,
+      parameters: newPredicate.parameters,
     };
 
     let reqInit: any = {
@@ -111,7 +106,11 @@ class PredicatesService extends BaseService {
       body,
     };
 
-    await this.apiCaller.put(`/predicate/${id}/predicate`, reqInit, true);
+    await this.apiCaller.put(
+      `/predicate/${newPredicate.id}/predicate`,
+      reqInit,
+      true
+    );
   }
 
   /**
@@ -142,7 +141,7 @@ class PredicatesService extends BaseService {
       responseType: "text",
     };
     let result = await this.apiCaller.post(
-      `predicate/${id}/predicate`,
+      `/predicate/${id}/predicate`,
       reqInit
     );
 

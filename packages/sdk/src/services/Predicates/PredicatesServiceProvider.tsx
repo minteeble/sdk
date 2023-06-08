@@ -30,17 +30,9 @@ export const PredicatesServiceProvider = (
   };
 
   const updatePredicate = async (
-    id: string,
-    code?: string,
-    parameters?: Array<PredicateParameter>,
-    name?: string
+    predicate: PredicateClientModel
   ): Promise<void> => {
-    return PredicatesService.instance.updatePredicate(
-      id,
-      code,
-      parameters,
-      name
-    );
+    return PredicatesService.instance.updatePredicate(predicate);
   };
 
   const deletePredicate = async (id: string): Promise<void> => {
