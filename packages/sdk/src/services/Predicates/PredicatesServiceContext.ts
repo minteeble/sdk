@@ -18,7 +18,7 @@ export interface PredicatesServiceContent {
   executePredicate(
     id: string,
     parameters: PredicateParameterValue[]
-  ): Promise<string | null>;
+  ): Promise<any>;
 }
 
 export const PredicatesServiceContext = createContext<PredicatesServiceContent>(

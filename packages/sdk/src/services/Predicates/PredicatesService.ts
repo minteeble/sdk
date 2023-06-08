@@ -135,9 +135,12 @@ class PredicatesService extends BaseService {
   public async executePredicate(
     id: string,
     parameters: PredicateParameterValue[]
-  ): Promise<string | null> {
+  ): Promise<any> {
+    const body = {
+      context: parameters,
+    };
     let reqInit: any = {
-      parameters: parameters,
+      body,
       responseType: "text",
     };
     let result = await this.apiCaller.post(

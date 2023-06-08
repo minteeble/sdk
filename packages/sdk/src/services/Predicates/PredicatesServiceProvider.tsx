@@ -42,7 +42,7 @@ export const PredicatesServiceProvider = (
   const executePredicate = async (
     id: string,
     parameters: PredicateParameterValue[]
-  ): Promise<string | null> => {
+  ): Promise<any> => {
     return PredicatesService.instance.executePredicate(id, parameters);
   };
 
