@@ -93,4 +93,32 @@ export class SmartContractService extends BaseService {
       true
     );
   }
+
+  public async deleteSmartContract(
+    id: string,
+    chainName: string
+  ): Promise<void> {
+    await this.apiCaller.delete(`/contract/chain/${chainName}/id/${id}`, {});
+  }
+
+  public async getOwnedSmartContracts(
+    chainName: string
+  ): Promise<Array<SmartContractClientModel>> {
+    let reqInit: any = {
+      responseType: "text",
+    };
+    const res = await this.apiCaller.get(
+      `/contract/chain/${chainName}`,
+      reqInit,
+      true
+    );
+
+    const contracts: SmartContractClientModel[] =
+      (serializer.deserializeObjectArray<SmartContractClientModel>(
+        res.items,
+        SmartContractClientModel
+      ) || []) as SmartContractClientModel[];
+
+    return contracts || [];
+  }
 }
