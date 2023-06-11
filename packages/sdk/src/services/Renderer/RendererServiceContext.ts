@@ -41,7 +41,14 @@ export interface RendererServiceContent {
   ): Promise<void>;
 
   deleteGeneration(generationId: string): Promise<void>;
+
   deleteRenderer(rendererId: string): Promise<void>;
+
+  revealItem(
+    chainName: string,
+    collectionId: string,
+    nftId: number
+  ): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -64,4 +71,6 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   deleteGeneration: () => new Promise(() => {}),
 
   deleteRenderer: () => new Promise(() => {}),
+
+  revealItem: () => new Promise(() => {}),
 });
