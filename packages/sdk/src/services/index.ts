@@ -2,6 +2,7 @@ export * from "./AuthService";
 export * from "./Gadget";
 export * from "./NavigationService";
 export * from "./NftCollection";
+export * from "./Predicates";
 export * from "./Renderer";
 export * from "./Shortener";
 export * from "./SmartContract";
