@@ -1,7 +1,10 @@
 import { createContext } from "react";
 import React from "react";
 import { SmartContractInstance } from "./SmartContractInstance";
-import { ISmartContractClientModel } from "@minteeble/utils";
+import {
+  ISmartContractClientModel,
+  SmartContractClientModel,
+} from "@minteeble/utils";
 
 export interface SmartContractServiceContent {
   getSmartContractInstance: (
@@ -28,6 +31,12 @@ export interface SmartContractServiceContent {
     id: string,
     abi: any
   ): Promise<void>;
+
+  deleteSmartContract(id: string, chainName: string): Promise<void>;
+
+  getOwnedSmartContracts(
+    chainName: string
+  ): Promise<Array<SmartContractClientModel>>;
 }
 
 export const SmartContractServiceContext =
@@ -35,4 +44,6 @@ export const SmartContractServiceContext =
     getSmartContractInstance: () => new Promise(() => {}),
     createSmartContract: () => new Promise(() => {}),
     updateSmartContractAbi: () => new Promise(() => {}),
+    deleteSmartContract: () => new Promise(() => {}),
+    getOwnedSmartContracts: () => new Promise(() => {}),
   });

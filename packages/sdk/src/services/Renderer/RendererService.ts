@@ -229,7 +229,28 @@ export class RendererService extends BaseService {
   public async deleteGeneration(generationId: string): Promise<void> {
     await this.apiCaller.delete(`/generation/${generationId}`, {});
   }
+
   public async deleteRenderer(rendererId: string): Promise<void> {
     await this.apiCaller.delete(`/renderer/${rendererId}`, {});
+  }
+
+  /**
+   * Reveals as NFT item
+   *
+   * @param chainName Network chain name
+   * @param collectionId Collection ID
+   * @param nftId NFT number ID
+   */
+  public async revealItem(
+    chainName: string,
+    collectionId: string,
+    nftId: number
+  ): Promise<void> {
+    await this.apiCaller.post(
+      `/chain/${chainName}/collection/${collectionId}/id/${nftId}/reveal`,
+      {
+        responseType: "text",
+      }
+    );
   }
 }
