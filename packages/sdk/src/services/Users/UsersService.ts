@@ -118,7 +118,7 @@ class UsersService extends BaseService {
   public async getProfileImage(): Promise<string | null> {
     try {
       let image = await this.apiCaller.get(
-        `image`,
+        `/image`,
         {
           responseType: "text",
         },
