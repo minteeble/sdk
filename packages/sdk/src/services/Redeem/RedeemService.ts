@@ -8,6 +8,7 @@ import {
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
+  RedeemType,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
@@ -29,9 +30,47 @@ export class RedeemService extends BaseService {
 
   public async addRedeemSystemProduct() {}
 
-  public async createRedeemRequest() {}
+  public async createRedeemRequest(redeemConfigId: string): Promise<string> {
+    let body: ICreateRedeemableRequestDto = {
+      redeemConfigId: redeemConfigId,
+    };
 
-  public async createRedeemSystemInfo() {}
+    let reqInit: any = {
+      responseType: "text",
+      body,
+    };
+
+    let res = await this.apiCaller.post(`/request`, reqInit, true);
+
+    if (res && res.id && typeof res.id === "string") {
+      return res.id;
+    } else throw new Error("Fail on creating Redeem Request.");
+  }
+
+  public async createRedeemSystemInfo(
+    chainName: string,
+    redeemType: RedeemType,
+    collectionId: string,
+    name: string
+  ): Promise<string> {
+    let body: ICreateRedeemSystemInfoRequestDto = {
+      chainName: chainName,
+      redeemType: redeemType,
+      collectionId: collectionId,
+      name: name,
+    };
+
+    let reqInit: any = {
+      responseType: "text",
+      body,
+    };
+
+    let res = await this.apiCaller.post(`/info`, reqInit, true);
+
+    if (res && res.id && typeof res.id === "string") {
+      return res.id;
+    } else throw new Error("Fail on creating Redeem System.");
+  }
 
   public async getRedeemRequest(
     id: string,
@@ -77,9 +116,31 @@ export class RedeemService extends BaseService {
     return redeemSystemsInfo || null;
   }
 
-  public async updateRedeemSystemInfo() {}
+  public async updateRedeemSystemInfo(
+    name: string,
+    collectionId: string,
+    chainName: string,
+    id: string
+  ): Promise<void> {
+    let body = {
+      name,
+      collectionId,
+      chainName,
+    };
 
-  public async deleteRedeemRequest() {}
+    let reqInit: any = {
+      responseType: "text",
+      body,
+    };
 
-  public async deleteRedeemSystemInfo() {}
+    await this.apiCaller.put(`/info/${id}`, reqInit, true);
+  }
+
+  public async deleteRedeemSystemInfo(id: string): Promise<void> {
+    let reqInit: any = {
+      responseType: "text",
+    };
+
+    await this.apiCaller.delete(`/info/${id}/info`, reqInit);
+  }
 }
