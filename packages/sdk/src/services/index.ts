@@ -3,6 +3,7 @@ export * from "./Gadget";
 export * from "./NavigationService";
 export * from "./NftCollection";
 export * from "./Predicates";
+export * from "./Redeem";
 export * from "./Renderer";
 export * from "./Shortener";
 export * from "./SmartContract";
