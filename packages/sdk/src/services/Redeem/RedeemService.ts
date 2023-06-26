@@ -1,11 +1,7 @@
-import { createContext } from "react";
 import {
   ICreateRedeemSystemInfoRequestDto,
   ICreateRedeemableRequestDto,
-  IRedeemItemRequestDto,
-  RedeemProductClientModel,
   RedeemRequestClientModel,
-  RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
@@ -30,9 +26,9 @@ export class RedeemService extends BaseService {
 
   public async addRedeemSystemProduct() {}
 
-  public async createRedeemRequest(redeemConfigId: string): Promise<string> {
+  public async createRedeemRequest(redeemSystemId: string): Promise<string> {
     let body: ICreateRedeemableRequestDto = {
-      redeemConfigId: redeemConfigId,
+      redeemSystemId: redeemSystemId,
     };
 
     let reqInit: any = {
@@ -74,10 +70,10 @@ export class RedeemService extends BaseService {
 
   public async getRedeemRequest(
     id: string,
-    redeemConfigId: string
+    redeemSystemId: string
   ): Promise<RedeemRequestClientModel | null> {
     let data = await this.apiCaller.get(
-      `/info/${redeemConfigId}/request/${id}/request`,
+      `/info/${redeemSystemId}/request/${id}/request`,
       {},
       true
     );
@@ -91,9 +87,9 @@ export class RedeemService extends BaseService {
   }
 
   public async getRedeemSystemInfo(
-    id: string
+    redeemSystemId: string
   ): Promise<RedeemSystemInfoClientModel | null> {
-    let data = await this.apiCaller.get(`/info/${id}`, {}, true);
+    let data = await this.apiCaller.get(`/info/${redeemSystemId}`, {}, true);
 
     let redeemSystemInfo =
       serializer.deserializeObject<RedeemSystemInfoClientModel>(
@@ -120,7 +116,7 @@ export class RedeemService extends BaseService {
     name: string,
     collectionId: string,
     chainName: string,
-    id: string
+    redeemSystemId: string
   ): Promise<void> {
     let body = {
       name,
@@ -133,14 +129,14 @@ export class RedeemService extends BaseService {
       body,
     };
 
-    await this.apiCaller.put(`/info/${id}`, reqInit, true);
+    await this.apiCaller.put(`/info/${redeemSystemId}`, reqInit, true);
   }
 
-  public async deleteRedeemSystemInfo(id: string): Promise<void> {
+  public async deleteRedeemSystemInfo(redeemSystemId: string): Promise<void> {
     let reqInit: any = {
       responseType: "text",
     };
 
-    await this.apiCaller.delete(`/info/${id}/info`, reqInit);
+    await this.apiCaller.delete(`/info/${redeemSystemId}/info`, reqInit);
   }
 }

@@ -1,14 +1,13 @@
 import { createContext } from "react";
 import {
   RedeemRequestClientModel,
-  RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
 } from "@minteeble/utils";
 
 export interface RedeemServiceContent {
-  createRedeemRequest(redeemConfigId: string): Promise<string>;
+  createRedeemRequest(redeemSystemId: string): Promise<string>;
   createRedeemSystemInfo(
     chainName: string,
     redeemType: RedeemType,
@@ -17,7 +16,7 @@ export interface RedeemServiceContent {
   ): Promise<string>;
   getRedeemRequest(
     id: string,
-    redeemConfigId: string
+    redeemSystemId: string
   ): Promise<RedeemRequestClientModel | null>;
   getRedeemSystemInfo(id: string): Promise<RedeemSystemInfoClientModel | null>;
   getRedeemSystemsInfo(): Promise<Array<RedeemSystemInfoPreviewClientModel> | null>;
@@ -25,9 +24,9 @@ export interface RedeemServiceContent {
     name: string,
     collectionId: string,
     chainName: string,
-    id: string
+    redeemSystemId: string
   ): Promise<void>;
-  deleteRedeemSystemInfo(id: string): Promise<void>;
+  deleteRedeemSystemInfo(redeemSystemId: string): Promise<void>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({

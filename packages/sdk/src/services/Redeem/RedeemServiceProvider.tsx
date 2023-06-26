@@ -12,9 +12,9 @@ import { RedeemServiceContext } from "./RedeemServiceContext";
 
 export const RedeemServiceProvider = (props: RedeemProviderProps) => {
   const createRedeemRequest = async (
-    redeemConfigId: string
+    redeemSystemId: string
   ): Promise<string> => {
-    return RedeemService.instance.createRedeemRequest(redeemConfigId);
+    return RedeemService.instance.createRedeemRequest(redeemSystemId);
   };
 
   const createRedeemSystemInfo = async (
@@ -33,15 +33,15 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
 
   const getRedeemRequest = async (
     id: string,
-    redeemConfigId: string
+    redeemSystemId: string
   ): Promise<RedeemRequestClientModel | null> => {
-    return RedeemService.instance.getRedeemRequest(id, redeemConfigId);
+    return RedeemService.instance.getRedeemRequest(id, redeemSystemId);
   };
 
   const getRedeemSystemInfo = async (
-    id: string
+    redeemSystemId: string
   ): Promise<RedeemSystemInfoClientModel | null> => {
-    return RedeemService.instance.getRedeemSystemInfo(id);
+    return RedeemService.instance.getRedeemSystemInfo(redeemSystemId);
   };
 
   const getRedeemSystemsInfo =
@@ -53,18 +53,20 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     name: string,
     collectionId: string,
     chainName: string,
-    id: string
+    redeemSystemId: string
   ): Promise<void> => {
     return RedeemService.instance.updateRedeemSystemInfo(
       name,
       collectionId,
       chainName,
-      id
+      redeemSystemId
     );
   };
 
-  const deleteRedeemSystemInfo = async (id: string): Promise<void> => {
-    return RedeemService.instance.deleteRedeemSystemInfo(id);
+  const deleteRedeemSystemInfo = async (
+    redeemSystemId: string
+  ): Promise<void> => {
+    return RedeemService.instance.deleteRedeemSystemInfo(redeemSystemId);
   };
 
   return (
