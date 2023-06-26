@@ -89,25 +89,17 @@ export class RedeemService extends BaseService {
   public async getRedeemSystemInfo(
     redeemSystemId: string
   ): Promise<RedeemSystemInfoClientModel | null> {
-    let data = await this.apiCaller.get(`/info/${redeemSystemId}`, {}, true);
-
-    let redeemSystemInfo =
-      serializer.deserializeObject<RedeemSystemInfoClientModel>(
-        data,
-        RedeemSystemInfoClientModel
-      );
+    let redeemSystemInfo = await this.apiCaller.get(
+      `/info/${redeemSystemId}`,
+      {},
+      true
+    );
 
     return redeemSystemInfo || null;
   }
 
   public async getRedeemSystemsInfo(): Promise<Array<RedeemSystemInfoPreviewClientModel> | null> {
-    let data = await this.apiCaller.get(`/infos`, {}, true);
-
-    let redeemSystemsInfo =
-      (serializer.deserializeObjectArray<RedeemSystemInfoPreviewClientModel>(
-        data,
-        RedeemSystemInfoPreviewClientModel
-      ) || []) as [];
+    let redeemSystemsInfo = await this.apiCaller.get(`/infos`, {}, true);
 
     return redeemSystemsInfo || null;
   }
