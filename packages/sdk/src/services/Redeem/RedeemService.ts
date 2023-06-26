@@ -15,7 +15,7 @@ export class RedeemService extends BaseService {
   private static _instance: RedeemService;
 
   constructor() {
-    super("predicates");
+    super("redeem");
   }
 
   public static get instance(): RedeemService {
