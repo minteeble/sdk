@@ -11,6 +11,7 @@ export interface FormsServiceContent {
   getForms: () => Promise<FormClientModel[]>;
   deleteForm: (formId: string) => Promise<void>;
   getFormAnswers: (formId: string) => Promise<Array<FormAnswerClientModel>>;
+  getCsvFormAnswers: (formId: string) => Promise<string | null>;
   sendFormAnswer: (
     formId: string,
     fields: { [key: string]: any },
@@ -24,5 +25,6 @@ export const formsServiceContext = createContext<FormsServiceContent>({
   getForms: () => new Promise(() => {}),
   deleteForm: () => new Promise(() => {}),
   getFormAnswers: () => new Promise(() => {}),
+  getCsvFormAnswers: () => new Promise(() => {}),
   sendFormAnswer: () => new Promise(() => {}),
 });

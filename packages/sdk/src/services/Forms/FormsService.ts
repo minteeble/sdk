@@ -68,6 +68,26 @@ export class FormsService extends BaseService {
     return form;
   };
 
+  public getCsvFormAnswers = async (formId: string): Promise<string | null> => {
+    try {
+      const csv = await this.apiCaller.get(
+        `/form/${formId}/csv`,
+        {
+          responseType: "text",
+        },
+        true
+      );
+
+      if (csv.success === false) {
+        return null;
+      }
+
+      return csv || null;
+    } catch (err) {
+      return null;
+    }
+  };
+
   public getForms = async (): Promise<FormClientModel[]> => {
     const res: GetFormsResponseDto = await this.apiCaller.get(
       `/forms`,
