@@ -2,13 +2,13 @@ import {
   AddRedeemSystemProductRequestDto,
   ICreateRedeemSystemInfoRequestDto,
   ICreateRedeemableRequestDto,
-  RedeemRequestClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
+import axios from "axios";
 
 const serializer = new JsonSerializer();
 
@@ -57,21 +57,48 @@ export class RedeemService extends BaseService {
     return url || "";
   }
 
-  public async createRedeemRequest(redeemSystemId: string): Promise<string> {
-    let body: ICreateRedeemableRequestDto = {
-      redeemSystemId: redeemSystemId,
+  public async updateRedeemSystemProduct(
+    redeemSystemId: string,
+    productId: string,
+    name: string,
+    description: string,
+    supply?: number
+  ): Promise<string> {
+    const body = {
+      name,
+      description,
+      supply,
     };
 
-    let reqInit: any = {
-      responseType: "text",
-      body,
-    };
+    let res = await this.apiCaller.delete(
+      `/info/${redeemSystemId}/product/${productId}`,
+      { body }
+    );
 
-    let res = await this.apiCaller.post(`/request`, reqInit, true);
+    return res;
+  }
 
-    if (res && res.id && typeof res.id === "string") {
-      return res.id;
-    } else throw new Error("Fail on creating Redeem Request.");
+  public async updateRedeemSystemProductImage(
+    url: string,
+    imageString: string
+  ) {
+    await axios.put(
+      url,
+      new Blob([Buffer.from(imageString.split(",").at(1) || "", "base64")])
+    );
+  }
+
+  public async deleteRedeemSystemProduct(
+    redeemSystemId: string,
+    productId: string
+  ): Promise<string> {
+    let res = await this.apiCaller.put(
+      `/info/${redeemSystemId}/product/${productId}`,
+      {},
+      true
+    );
+
+    return res;
   }
 
   public async createRedeemSystemInfo(
@@ -97,24 +124,6 @@ export class RedeemService extends BaseService {
     if (res && res.id && typeof res.id === "string") {
       return res.id;
     } else throw new Error("Fail on creating Redeem System.");
-  }
-
-  public async getRedeemRequest(
-    id: string,
-    redeemSystemId: string
-  ): Promise<RedeemRequestClientModel | null> {
-    let data = await this.apiCaller.get(
-      `/info/${redeemSystemId}/request/${id}/request`,
-      {},
-      true
-    );
-
-    let redeemRequest = serializer.deserializeObject<RedeemRequestClientModel>(
-      data,
-      RedeemRequestClientModel
-    );
-
-    return redeemRequest || null;
   }
 
   public async getRedeemSystemInfo(

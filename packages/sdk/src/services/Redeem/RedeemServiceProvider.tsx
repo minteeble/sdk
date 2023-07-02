@@ -1,6 +1,4 @@
 import {
-  RedeemRequestClientModel,
-  RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
@@ -11,22 +9,6 @@ import { RedeemProviderProps } from "./RedeemService.types";
 import { RedeemServiceContext } from "./RedeemServiceContext";
 
 export const RedeemServiceProvider = (props: RedeemProviderProps) => {
-  const getRedeemProductImageUrl = async (
-    redeemSystemId: string,
-    productId: string
-  ): Promise<string> => {
-    return RedeemService.instance.getRedeemProductImageUrl(
-      redeemSystemId,
-      productId
-    );
-  };
-
-  const createRedeemRequest = async (
-    redeemSystemId: string
-  ): Promise<string> => {
-    return RedeemService.instance.createRedeemRequest(redeemSystemId);
-  };
-
   const createRedeemSystemInfo = async (
     chainName: string,
     redeemType: RedeemType,
@@ -39,13 +21,6 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
       collectionId,
       name
     );
-  };
-
-  const getRedeemRequest = async (
-    id: string,
-    redeemSystemId: string
-  ): Promise<RedeemRequestClientModel | null> => {
-    return RedeemService.instance.getRedeemRequest(id, redeemSystemId);
   };
 
   const getRedeemSystemInfo = async (
@@ -93,18 +68,65 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     );
   };
 
+  const getRedeemProductImageUrl = async (
+    redeemSystemId: string,
+    productId: string
+  ): Promise<string> => {
+    return await RedeemService.instance.getRedeemProductImageUrl(
+      redeemSystemId,
+      productId
+    );
+  };
+
+  const updateRedeemSystemProduct = async (
+    redeemSystemId: string,
+    productId: string,
+    name: string,
+    description: string,
+    supply?: number
+  ): Promise<string> => {
+    return await RedeemService.instance.updateRedeemSystemProduct(
+      redeemSystemId,
+      productId,
+      name,
+      description,
+      supply
+    );
+  };
+
+  const updateRedeemSystemProductImage = async (
+    url: string,
+    imageString: string
+  ): Promise<void> => {
+    return await RedeemService.instance.updateRedeemSystemProductImage(
+      url,
+      imageString
+    );
+  };
+
+  const deleteRedeemSystemProduct = async (
+    redeemSystemId: string,
+    productId: string
+  ): Promise<string> => {
+    return await RedeemService.instance.deleteRedeemSystemProduct(
+      redeemSystemId,
+      productId
+    );
+  };
+
   return (
     <RedeemServiceContext.Provider
       value={{
-        getRedeemProductImageUrl,
-        createRedeemRequest,
         createRedeemSystemInfo,
-        getRedeemRequest,
         getRedeemSystemInfo,
         getRedeemSystemsInfo,
         updateRedeemSystemInfo,
         deleteRedeemSystemInfo,
         addRedeemSystemProduct,
+        getRedeemProductImageUrl,
+        deleteRedeemSystemProduct,
+        updateRedeemSystemProduct,
+        updateRedeemSystemProductImage,
       }}
     >
       {props.children}
