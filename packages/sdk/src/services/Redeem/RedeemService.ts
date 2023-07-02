@@ -1,4 +1,5 @@
 import {
+  AddRedeemSystemProductRequestDto,
   ICreateRedeemSystemInfoRequestDto,
   ICreateRedeemableRequestDto,
   RedeemRequestClientModel,
@@ -24,7 +25,24 @@ export class RedeemService extends BaseService {
     return this._instance;
   }
 
-  public async addRedeemSystemProduct() {}
+  public addRedeemSystemProduct = async (
+    redeemSystemId: string,
+    name: string,
+    description: string,
+    supply?: number
+  ): Promise<void> => {
+    const body = {
+      name,
+      description,
+      supply,
+    };
+
+    await this.apiCaller.post(
+      `/info/${redeemSystemId}/product`,
+      { body },
+      true
+    );
+  };
 
   public async createRedeemRequest(redeemSystemId: string): Promise<string> {
     let body: ICreateRedeemableRequestDto = {
