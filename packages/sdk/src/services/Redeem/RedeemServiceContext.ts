@@ -31,6 +31,12 @@ export interface RedeemServiceContent {
     redeemSystemId: string
   ): Promise<void>;
   deleteRedeemSystemInfo(redeemSystemId: string): Promise<void>;
+  addRedeemSystemProduct(
+    redeemSystemId: string,
+    name: string,
+    description: string,
+    supply?: number
+  ): Promise<void>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -42,4 +48,5 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   getRedeemSystemsInfo: () => new Promise(() => {}),
   updateRedeemSystemInfo: () => new Promise(() => {}),
   deleteRedeemSystemInfo: () => new Promise(() => {}),
+  addRedeemSystemProduct: () => new Promise(() => {}),
 });

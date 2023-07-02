@@ -79,6 +79,20 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     return RedeemService.instance.deleteRedeemSystemInfo(redeemSystemId);
   };
 
+  const addRedeemSystemProduct = async (
+    redeemSystemId: string,
+    name: string,
+    description: string,
+    supply?: number
+  ): Promise<void> => {
+    return await RedeemService.instance.addRedeemSystemProduct(
+      redeemSystemId,
+      name,
+      description,
+      supply
+    );
+  };
+
   return (
     <RedeemServiceContext.Provider
       value={{
@@ -90,6 +104,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         getRedeemSystemsInfo,
         updateRedeemSystemInfo,
         deleteRedeemSystemInfo,
+        addRedeemSystemProduct,
       }}
     >
       {props.children}
