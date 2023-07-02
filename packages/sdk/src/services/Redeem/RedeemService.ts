@@ -26,6 +26,19 @@ export class RedeemService extends BaseService {
 
   public async addRedeemSystemProduct() {}
 
+  public async getRedeemProductImageUrl(
+    redeemSystemId: string,
+    productId: string
+  ): Promise<string> {
+    let url = await this.apiCaller.get(
+      `/info/${redeemSystemId}/product/${productId}/image`,
+      {},
+      true
+    );
+
+    return url || "";
+  }
+
   public async createRedeemRequest(redeemSystemId: string): Promise<string> {
     let body: ICreateRedeemableRequestDto = {
       redeemSystemId: redeemSystemId,

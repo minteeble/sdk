@@ -7,6 +7,10 @@ import {
 } from "@minteeble/utils";
 
 export interface RedeemServiceContent {
+  getRedeemProductImageUrl(
+    redeemSystemId: string,
+    productId: string
+  ): Promise<string>;
   createRedeemRequest(redeemSystemId: string): Promise<string>;
   createRedeemSystemInfo(
     chainName: string,
@@ -30,6 +34,7 @@ export interface RedeemServiceContent {
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
+  getRedeemProductImageUrl: () => new Promise(() => {}),
   createRedeemRequest: () => new Promise(() => {}),
   createRedeemSystemInfo: () => new Promise(() => {}),
   getRedeemRequest: () => new Promise(() => {}),

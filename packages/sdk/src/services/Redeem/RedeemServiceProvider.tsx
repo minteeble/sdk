@@ -11,6 +11,16 @@ import { RedeemProviderProps } from "./RedeemService.types";
 import { RedeemServiceContext } from "./RedeemServiceContext";
 
 export const RedeemServiceProvider = (props: RedeemProviderProps) => {
+  const getRedeemProductImageUrl = async (
+    redeemSystemId: string,
+    productId: string
+  ): Promise<string> => {
+    return RedeemService.instance.getRedeemProductImageUrl(
+      redeemSystemId,
+      productId
+    );
+  };
+
   const createRedeemRequest = async (
     redeemSystemId: string
   ): Promise<string> => {
@@ -72,6 +82,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
   return (
     <RedeemServiceContext.Provider
       value={{
+        getRedeemProductImageUrl,
         createRedeemRequest,
         createRedeemSystemInfo,
         getRedeemRequest,
