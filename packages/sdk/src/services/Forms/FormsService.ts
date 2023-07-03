@@ -72,10 +72,8 @@ export class FormsService extends BaseService {
     const csv: string = await this.apiCaller.get(
       `/form/${formId}/csv`,
       {},
-      false
+      true
     );
-
-    console.log("RESULT SDK", csv);
 
     return csv || null;
   };
