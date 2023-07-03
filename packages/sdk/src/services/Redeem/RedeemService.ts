@@ -55,7 +55,7 @@ export class RedeemService extends BaseService {
       true
     );
 
-    return url || "";
+    return url.url || "";
   }
 
   public async updateRedeemSystemProduct(
