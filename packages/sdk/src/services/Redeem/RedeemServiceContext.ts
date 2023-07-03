@@ -1,5 +1,6 @@
 import { createContext } from "react";
 import {
+  RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
@@ -21,7 +22,8 @@ export interface RedeemServiceContent {
     name: string,
     collectionId: string,
     chainName: string,
-    redeemSystemId: string
+    redeemSystemId: string,
+    config: RedeemSystemConfigClientModel
   ): Promise<void>;
 
   deleteRedeemSystemInfo(redeemSystemId: string): Promise<void>;
@@ -44,7 +46,7 @@ export interface RedeemServiceContent {
     name: string,
     description: string,
     supply?: number
-  ): Promise<string>;
+  ): Promise<void>;
 
   updateRedeemSystemProductImage(
     url: string,
@@ -54,7 +56,7 @@ export interface RedeemServiceContent {
   deleteRedeemSystemProduct(
     redeemSystemId: string,
     productId: string
-  ): Promise<string>;
+  ): Promise<void>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({

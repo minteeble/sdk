@@ -1,6 +1,7 @@
 import {
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
+  RedeemSystemConfigClientModel,
   RedeemType,
 } from "@minteeble/utils";
 import React from "react";
@@ -38,13 +39,15 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     name: string,
     collectionId: string,
     chainName: string,
-    redeemSystemId: string
+    redeemSystemId: string,
+    config: RedeemSystemConfigClientModel
   ): Promise<void> => {
-    return RedeemService.instance.updateRedeemSystemInfo(
+    RedeemService.instance.updateRedeemSystemInfo(
       name,
       collectionId,
       chainName,
-      redeemSystemId
+      redeemSystemId,
+      config
     );
   };
 
@@ -84,8 +87,8 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     name: string,
     description: string,
     supply?: number
-  ): Promise<string> => {
-    return await RedeemService.instance.updateRedeemSystemProduct(
+  ): Promise<void> => {
+    await RedeemService.instance.updateRedeemSystemProduct(
       redeemSystemId,
       productId,
       name,
@@ -107,8 +110,8 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
   const deleteRedeemSystemProduct = async (
     redeemSystemId: string,
     productId: string
-  ): Promise<string> => {
-    return await RedeemService.instance.deleteRedeemSystemProduct(
+  ): Promise<void> => {
+    await RedeemService.instance.deleteRedeemSystemProduct(
       redeemSystemId,
       productId
     );

@@ -2,6 +2,7 @@ import {
   AddRedeemSystemProductRequestDto,
   ICreateRedeemSystemInfoRequestDto,
   ICreateRedeemableRequestDto,
+  RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
@@ -63,19 +64,16 @@ export class RedeemService extends BaseService {
     name: string,
     description: string,
     supply?: number
-  ): Promise<string> {
+  ): Promise<void> {
     const body = {
       name,
       description,
       supply,
     };
 
-    let res = await this.apiCaller.put(
-      `/info/${redeemSystemId}/product/${productId}`,
-      { body }
-    );
-
-    return res;
+    await this.apiCaller.put(`/info/${redeemSystemId}/product/${productId}`, {
+      body,
+    });
   }
 
   public async updateRedeemSystemProductImage(
@@ -91,13 +89,11 @@ export class RedeemService extends BaseService {
   public async deleteRedeemSystemProduct(
     redeemSystemId: string,
     productId: string
-  ): Promise<string> {
-    let res = await this.apiCaller.delete(
+  ): Promise<void> {
+    await this.apiCaller.delete(
       `/info/${redeemSystemId}/product/${productId}`,
       {}
     );
-
-    return res;
   }
 
   public async createRedeemSystemInfo(
@@ -157,12 +153,14 @@ export class RedeemService extends BaseService {
     name: string,
     collectionId: string,
     chainName: string,
-    redeemSystemId: string
+    redeemSystemId: string,
+    config: RedeemSystemConfigClientModel
   ): Promise<void> {
     let body = {
       name,
       collectionId,
       chainName,
+      config,
     };
 
     let reqInit: any = {
