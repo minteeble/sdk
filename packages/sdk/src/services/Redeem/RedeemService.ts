@@ -70,7 +70,7 @@ export class RedeemService extends BaseService {
       supply,
     };
 
-    let res = await this.apiCaller.delete(
+    let res = await this.apiCaller.put(
       `/info/${redeemSystemId}/product/${productId}`,
       { body }
     );
