@@ -92,10 +92,9 @@ export class RedeemService extends BaseService {
     redeemSystemId: string,
     productId: string
   ): Promise<string> {
-    let res = await this.apiCaller.put(
+    let res = await this.apiCaller.delete(
       `/info/${redeemSystemId}/product/${productId}`,
-      {},
-      true
+      {}
     );
 
     return res;
