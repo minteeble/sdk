@@ -190,13 +190,15 @@ export class RedeemService extends BaseService {
     nftId: string,
     shippingInfo: ShippingInformation,
     contactInfo: ContactInformation,
-    redeemSystemId: string
+    redeemSystemId: string,
+    productId: string
   ): Promise<void> => {
     const body: IRedeemItemRequestDto = {
       nftId,
       shippingInfo,
       contactInfo,
       redeemSystemId,
+      productId,
     };
 
     try {
