@@ -207,4 +207,26 @@ export class RedeemService extends BaseService {
       console.log("Error on redeem item: ", err);
     }
   };
+
+  public getReedemableIds = async (
+    redeemSystemId: string
+  ): Promise<Array<number> | null> => {
+    try {
+      const res = await this.apiCaller.get(
+        `/info/${redeemSystemId}/redeemable-ids`,
+        {},
+        true
+      );
+
+      const ids = (serializer.deserializeObjectArray<Array<number>>(
+        res.ids,
+        Array<number>
+      ) || []) as [];
+
+      return ids || null;
+    } catch (err) {
+      console.log("Error on get redeemable ids: ", err);
+      return null;
+    }
+  };
 }

@@ -123,14 +123,22 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     nftId: string,
     shippingInfo: ShippingInformation,
     contactInfo: ContactInformation,
-    redeemSystemId: string
+    redeemSystemId: string,
+    productId: string
   ): Promise<void> => {
     return await RedeemService.instance.redeemItem(
       nftId,
       shippingInfo,
       contactInfo,
-      redeemSystemId
+      redeemSystemId,
+      productId
     );
+  };
+
+  const getReedemableIds = async (
+    redeemSystemId: string
+  ): Promise<Array<number> | null> => {
+    return await RedeemService.instance.getReedemableIds(redeemSystemId);
   };
 
   return (
@@ -147,6 +155,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         updateRedeemSystemProduct,
         updateRedeemSystemProductImage,
         redeemItem,
+        getReedemableIds,
       }}
     >
       {props.children}
