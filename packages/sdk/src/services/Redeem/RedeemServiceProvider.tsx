@@ -3,6 +3,8 @@ import {
   RedeemSystemInfoPreviewClientModel,
   RedeemSystemConfigClientModel,
   RedeemType,
+  ShippingInformation,
+  ContactInformation,
 } from "@minteeble/utils";
 import React from "react";
 import { RedeemService } from "./RedeemService";
@@ -117,6 +119,20 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     );
   };
 
+  const redeemItem = async (
+    nftId: string,
+    shippingInfo: ShippingInformation,
+    contactInfo: ContactInformation,
+    redeemSystemId: string
+  ): Promise<void> => {
+    return await RedeemService.instance.redeemItem(
+      nftId,
+      shippingInfo,
+      contactInfo,
+      redeemSystemId
+    );
+  };
+
   return (
     <RedeemServiceContext.Provider
       value={{
@@ -130,6 +146,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         deleteRedeemSystemProduct,
         updateRedeemSystemProduct,
         updateRedeemSystemProductImage,
+        redeemItem,
       }}
     >
       {props.children}

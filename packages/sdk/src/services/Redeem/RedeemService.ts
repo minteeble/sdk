@@ -1,15 +1,19 @@
 import {
   AddRedeemSystemProductRequestDto,
+  ContactInformation,
   ICreateRedeemSystemInfoRequestDto,
   ICreateRedeemableRequestDto,
+  IRedeemItemRequestDto,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
+  ShippingInformation,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
 import axios from "axios";
+import { RedeemItemRequestDto } from "@minteeble/utils";
 
 const serializer = new JsonSerializer();
 
@@ -45,10 +49,10 @@ export class RedeemService extends BaseService {
     );
   };
 
-  public async getRedeemProductImageUrl(
+  public getRedeemProductImageUrl = async (
     redeemSystemId: string,
     productId: string
-  ): Promise<string> {
+  ): Promise<string> => {
     let url = await this.apiCaller.get(
       `/info/${redeemSystemId}/product/${productId}/image`,
       {},
@@ -56,15 +60,15 @@ export class RedeemService extends BaseService {
     );
 
     return url.url || "";
-  }
+  };
 
-  public async updateRedeemSystemProduct(
+  public updateRedeemSystemProduct = async (
     redeemSystemId: string,
     productId: string,
     name: string,
     description: string,
     supply?: number
-  ): Promise<void> {
+  ): Promise<void> => {
     const body = {
       name,
       description,
@@ -74,34 +78,34 @@ export class RedeemService extends BaseService {
     await this.apiCaller.put(`/info/${redeemSystemId}/product/${productId}`, {
       body,
     });
-  }
+  };
 
-  public async updateRedeemSystemProductImage(
+  public updateRedeemSystemProductImage = async (
     url: string,
     imageString: string
-  ) {
+  ) => {
     await axios.put(
       url,
       new Blob([Buffer.from(imageString.split(",").at(1) || "", "base64")])
     );
-  }
+  };
 
-  public async deleteRedeemSystemProduct(
+  public deleteRedeemSystemProduct = async (
     redeemSystemId: string,
     productId: string
-  ): Promise<void> {
+  ): Promise<void> => {
     await this.apiCaller.delete(
       `/info/${redeemSystemId}/product/${productId}`,
       {}
     );
-  }
+  };
 
-  public async createRedeemSystemInfo(
+  public createRedeemSystemInfo = async (
     chainName: string,
     redeemType: RedeemType,
     collectionId: string,
     name: string
-  ): Promise<string> {
+  ): Promise<string> => {
     let body: ICreateRedeemSystemInfoRequestDto = {
       chainName: chainName,
       redeemType: redeemType,
@@ -119,11 +123,11 @@ export class RedeemService extends BaseService {
     if (res && res.id && typeof res.id === "string") {
       return res.id;
     } else throw new Error("Fail on creating Redeem System.");
-  }
+  };
 
-  public async getRedeemSystemInfo(
+  public getRedeemSystemInfo = async (
     redeemSystemId: string
-  ): Promise<RedeemSystemInfoClientModel | null> {
+  ): Promise<RedeemSystemInfoClientModel | null> => {
     let data = await this.apiCaller.get(`/info/${redeemSystemId}`, {}, true);
 
     let redeemSystemInfo =
@@ -133,29 +137,30 @@ export class RedeemService extends BaseService {
       );
 
     return redeemSystemInfo || null;
-  }
+  };
 
-  public async getRedeemSystemsInfo(): Promise<Array<RedeemSystemInfoPreviewClientModel> | null> {
-    let data = await this.apiCaller.get(`/infos`, {}, true);
+  public getRedeemSystemsInfo =
+    async (): Promise<Array<RedeemSystemInfoPreviewClientModel> | null> => {
+      let data = await this.apiCaller.get(`/infos`, {}, true);
 
-    console.log("DATA: ", data);
+      console.log("DATA: ", data);
 
-    let redeemSystemsInfo =
-      (serializer.deserializeObjectArray<RedeemSystemInfoPreviewClientModel>(
-        data.items,
-        RedeemSystemInfoPreviewClientModel
-      ) || []) as [];
+      let redeemSystemsInfo =
+        (serializer.deserializeObjectArray<RedeemSystemInfoPreviewClientModel>(
+          data.items,
+          RedeemSystemInfoPreviewClientModel
+        ) || []) as [];
 
-    return redeemSystemsInfo || null;
-  }
+      return redeemSystemsInfo || null;
+    };
 
-  public async updateRedeemSystemInfo(
+  public updateRedeemSystemInfo = async (
     name: string,
     collectionId: string,
     chainName: string,
     redeemSystemId: string,
     config: RedeemSystemConfigClientModel
-  ): Promise<void> {
+  ): Promise<void> => {
     let body = {
       name,
       collectionId,
@@ -169,13 +174,35 @@ export class RedeemService extends BaseService {
     };
 
     await this.apiCaller.put(`/info/${redeemSystemId}`, reqInit, true);
-  }
+  };
 
-  public async deleteRedeemSystemInfo(redeemSystemId: string): Promise<void> {
+  public deleteRedeemSystemInfo = async (
+    redeemSystemId: string
+  ): Promise<void> => {
     let reqInit: any = {
       responseType: "text",
     };
 
     await this.apiCaller.delete(`/info/${redeemSystemId}/info`, reqInit);
-  }
+  };
+
+  public redeemItem = async (
+    nftId: string,
+    shippingInfo: ShippingInformation,
+    contactInfo: ContactInformation,
+    redeemSystemId: string
+  ): Promise<void> => {
+    const body: IRedeemItemRequestDto = {
+      nftId,
+      shippingInfo,
+      contactInfo,
+      redeemSystemId,
+    };
+
+    try {
+      await this.apiCaller.post(`/redeem`, { body }, true);
+    } catch (err) {
+      console.log("Error on redeem item: ", err);
+    }
+  };
 }

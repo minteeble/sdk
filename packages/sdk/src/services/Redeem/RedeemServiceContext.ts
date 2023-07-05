@@ -1,9 +1,11 @@
 import { createContext } from "react";
 import {
+  ContactInformation,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
   RedeemType,
+  ShippingInformation,
 } from "@minteeble/utils";
 
 export interface RedeemServiceContent {
@@ -57,6 +59,13 @@ export interface RedeemServiceContent {
     redeemSystemId: string,
     productId: string
   ): Promise<void>;
+
+  redeemItem : (
+    nftId: string,
+    shippingInfo: ShippingInformation,
+    contactInfo: ContactInformation,
+    redeemSystemId: string
+  )=> Promise<void>
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -70,4 +79,5 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   updateRedeemSystemProduct: () => new Promise(() => {}),
   updateRedeemSystemProductImage: () => new Promise(() => {}),
   deleteRedeemSystemProduct: () => new Promise(() => {}),
+  redeemItem: () => new Promise(() => {}),
 });
