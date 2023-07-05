@@ -208,7 +208,7 @@ export class RedeemService extends BaseService {
     }
   };
 
-  public getReedemableIds = async (
+  public getRedeemableIds = async (
     redeemSystemId: string
   ): Promise<Array<number> | null> => {
     try {

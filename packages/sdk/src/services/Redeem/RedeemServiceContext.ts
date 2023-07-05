@@ -60,15 +60,15 @@ export interface RedeemServiceContent {
     productId: string
   ): Promise<void>;
 
-  redeemItem: (
+  redeemItem(
     nftId: string,
     shippingInfo: ShippingInformation,
     contactInfo: ContactInformation,
     redeemSystemId: string,
     productId: string
-  ) => Promise<void>;
+  ): Promise<void>;
 
-  getReedemableIds: (redeemSystemId: string) => Promise<Array<number> | null>;
+  getRedeemableIds(redeemSystemId: string): Promise<Array<number> | null>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -83,5 +83,5 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   updateRedeemSystemProductImage: () => new Promise(() => {}),
   deleteRedeemSystemProduct: () => new Promise(() => {}),
   redeemItem: () => new Promise(() => {}),
-  getReedemableIds: () => new Promise(() => {}),
+  getRedeemableIds: () => new Promise(() => {}),
 });

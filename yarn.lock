@@ -2656,12 +2656,12 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@minteeble/utils@1.0.142-redeem.0":
-  version "1.0.142-redeem.0"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.142-redeem.0.tgz#361a4151f5d89838e2288117e2c5e0a582c10389"
-  integrity sha512-b9gTaXIjNsJwpxwYluLrfJCHu0RdXt9eBEHeXnizqETn06QiA2uxCzdieTqIioNPHOxMHsYTcMdBJfJ9WBtVHQ==
+"@minteeble/utils@1.0.144":
+  version "1.0.144"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.144.tgz#2d5f4c0608950bdc775f630f47ee6566d9b1e06b"
+  integrity sha512-Kqs79YXltxOuXkwYRpyIufl557X9iId/Jgp+GqQ7Vv6gREuigUUhpkdY6nU1vcT93goaBSXX6OD49/c0gbChRg==
   dependencies:
-    typescript-json-serializer "^5.1.0"
+    typescript-json-serializer "^6.0.1"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -10173,6 +10173,14 @@ typescript-json-serializer@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/typescript-json-serializer/-/typescript-json-serializer-5.1.0.tgz#88e35eaa13b0d2edbf17863cfb7085d1e52fcb2f"
   integrity sha512-0q50ZQV5G+yKNJSZLRwTMAXXS8nx4LvDaNGp82FmLE3lXTKRcSaU+0+A8Ic0lKkqKLhj08OYwBGG6pVuCJImUw==
+  dependencies:
+    reflect-metadata "^0.1.13"
+    tslib "^2.3.0"
+
+typescript-json-serializer@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/typescript-json-serializer/-/typescript-json-serializer-6.0.1.tgz#dc9983c81d72a8cfe280105e936b89e173c885e9"
+  integrity sha512-95UQOeV3V+WIx5+7dBZd6/pN+cQSsGXxIdDvPmYhkHYH6VrIgQ3DK+IM3ixKVjFwvch8LnWhIY3F/Zhp4bNfSA==
   dependencies:
     reflect-metadata "^0.1.13"
     tslib "^2.3.0"

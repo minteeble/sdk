@@ -135,10 +135,10 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     );
   };
 
-  const getReedemableIds = async (
+  const getRedeemableIds = async (
     redeemSystemId: string
   ): Promise<Array<number> | null> => {
-    return await RedeemService.instance.getReedemableIds(redeemSystemId);
+    return await RedeemService.instance.getRedeemableIds(redeemSystemId);
   };
 
   return (
@@ -155,7 +155,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         updateRedeemSystemProduct,
         updateRedeemSystemProductImage,
         redeemItem,
-        getReedemableIds,
+        getRedeemableIds,
       }}
     >
       {props.children}
