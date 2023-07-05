@@ -8,6 +8,7 @@ import NftCollectionService from "./NftCollectionService";
 import { NftCollectionServiceContext } from "./NftCollectionServiceContext";
 import React from "react";
 import {
+  ERC721CollectionInstance,
   MinteebleDynamiCollectionInstance,
   MinteebleERC1155CollectionInstance,
   MinteebleERC721CollectionInstance,
@@ -190,6 +191,11 @@ export const NftCollectionServiceProvider = (
               CollectionType.MINTEEBLE_DYNAMIC_COLLECTION
             ) {
               collectionInstance = new MinteebleDynamiCollectionInstance(
+                collectionModel,
+                web3
+              );
+            } else if (collectionModel.type === CollectionType.ERC721) {
+              collectionInstance = new ERC721CollectionInstance(
                 collectionModel,
                 web3
               );
