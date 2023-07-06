@@ -218,12 +218,7 @@ export class RedeemService extends BaseService {
         true
       );
 
-      const ids = (serializer.deserializeObjectArray<Array<number>>(
-        res.ids,
-        Array<number>
-      ) || []) as [];
-
-      return ids || null;
+      return res.ids || null;
     } catch (err) {
       console.log("Error on get redeemable ids: ", err);
       return null;
