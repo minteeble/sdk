@@ -5,6 +5,7 @@ import {
   RedeemType,
   ShippingInformation,
   ContactInformation,
+  IProductVariationClientModel,
 } from "@minteeble/utils";
 import React from "react";
 import { RedeemService } from "./RedeemService";
@@ -63,12 +64,14 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     redeemSystemId: string,
     name: string,
     description: string,
+    variations: Array<IProductVariationClientModel>,
     supply?: number
   ): Promise<void> => {
     return await RedeemService.instance.addRedeemSystemProduct(
       redeemSystemId,
       name,
       description,
+      variations,
       supply
     );
   };
@@ -88,6 +91,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     productId: string,
     name: string,
     description: string,
+    variations: Array<IProductVariationClientModel>,
     supply?: number
   ): Promise<void> => {
     await RedeemService.instance.updateRedeemSystemProduct(
@@ -95,6 +99,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
       productId,
       name,
       description,
+      variations,
       supply
     );
   };
@@ -124,14 +129,16 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     shippingInfo: ShippingInformation,
     contactInfo: ContactInformation,
     redeemSystemId: string,
-    productId: string
+    productId: string,
+    variationName: string
   ): Promise<void> => {
     return await RedeemService.instance.redeemItem(
       nftId,
       shippingInfo,
       contactInfo,
       redeemSystemId,
-      productId
+      productId,
+      variationName
     );
   };
 

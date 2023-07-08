@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import {
   ContactInformation,
+  IProductVariationClientModel,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
@@ -34,6 +35,7 @@ export interface RedeemServiceContent {
     redeemSystemId: string,
     name: string,
     description: string,
+    variations: Array<IProductVariationClientModel>,
     supply?: number
   ): Promise<void>;
 
@@ -47,6 +49,7 @@ export interface RedeemServiceContent {
     productId: string,
     name: string,
     description: string,
+    variations: Array<IProductVariationClientModel>,
     supply?: number
   ): Promise<void>;
 
@@ -65,7 +68,8 @@ export interface RedeemServiceContent {
     shippingInfo: ShippingInformation,
     contactInfo: ContactInformation,
     redeemSystemId: string,
-    productId: string
+    productId: string,
+    variationName: string
   ): Promise<void>;
 
   getRedeemableIds(redeemSystemId: string): Promise<Array<number> | null>;

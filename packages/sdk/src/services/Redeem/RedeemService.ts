@@ -3,6 +3,7 @@ import {
   ContactInformation,
   ICreateRedeemSystemInfoRequestDto,
   ICreateRedeemableRequestDto,
+  IProductVariationClientModel,
   IRedeemItemRequestDto,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
@@ -34,11 +35,13 @@ export class RedeemService extends BaseService {
     redeemSystemId: string,
     name: string,
     description: string,
+    variations: Array<IProductVariationClientModel>,
     supply?: number
   ): Promise<void> => {
     const body = {
       name,
       description,
+      variations,
       supply,
     };
 
@@ -67,11 +70,14 @@ export class RedeemService extends BaseService {
     productId: string,
     name: string,
     description: string,
+    variations: Array<IProductVariationClientModel>,
+
     supply?: number
   ): Promise<void> => {
     const body = {
       name,
       description,
+      variations,
       supply,
     };
 
@@ -191,7 +197,8 @@ export class RedeemService extends BaseService {
     shippingInfo: ShippingInformation,
     contactInfo: ContactInformation,
     redeemSystemId: string,
-    productId: string
+    productId: string,
+    variationName: string
   ): Promise<void> => {
     const body: IRedeemItemRequestDto = {
       nftId,
@@ -199,6 +206,7 @@ export class RedeemService extends BaseService {
       contactInfo,
       redeemSystemId,
       productId,
+      variationName,
     };
 
     try {
