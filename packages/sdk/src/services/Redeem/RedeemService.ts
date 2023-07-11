@@ -1,8 +1,10 @@
 import {
   AddRedeemSystemProductRequestDto,
   ContactInformation,
+  GetRedeemedItemResponseDto,
   ICreateRedeemSystemInfoRequestDto,
   ICreateRedeemableRequestDto,
+  IGetRedeemedItemResponseDto,
   IProductVariationClientModel,
   IRedeemItemRequestDto,
   RedeemSystemConfigClientModel,
@@ -227,6 +229,29 @@ export class RedeemService extends BaseService {
       );
 
       return res.ids || null;
+    } catch (err) {
+      console.log("Error on get redeemable ids: ", err);
+      return null;
+    }
+  };
+
+  public getRedeemedItem = async (
+    nftId: string,
+    redeemSystemId: string
+  ): Promise<GetRedeemedItemResponseDto | null> => {
+    try {
+      const res = await this.apiCaller.get(
+        `/info/${redeemSystemId}/nftId/${nftId}/redeem`,
+        {},
+        true
+      );
+      if (!res) return null;
+      const item = serializer.deserializeObject<IGetRedeemedItemResponseDto>(
+        res,
+        GetRedeemedItemResponseDto
+      );
+
+      return item || null;
     } catch (err) {
       console.log("Error on get redeemable ids: ", err);
       return null;

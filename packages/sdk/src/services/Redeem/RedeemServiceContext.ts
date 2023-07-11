@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import {
   ContactInformation,
+  GetRedeemedItemResponseDto,
   IProductVariationClientModel,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
@@ -73,6 +74,11 @@ export interface RedeemServiceContent {
   ): Promise<void>;
 
   getRedeemableIds(redeemSystemId: string): Promise<Array<number> | null>;
+
+  getRedeemedItem: (
+    nftId: string,
+    redeemSystemId: string
+  ) => Promise<GetRedeemedItemResponseDto | null>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -88,4 +94,5 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   deleteRedeemSystemProduct: () => new Promise(() => {}),
   redeemItem: () => new Promise(() => {}),
   getRedeemableIds: () => new Promise(() => {}),
+  getRedeemedItem: () => new Promise(() => {}),
 });
