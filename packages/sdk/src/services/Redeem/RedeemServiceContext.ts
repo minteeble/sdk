@@ -51,6 +51,7 @@ export interface RedeemServiceContent {
     name: string,
     description: string,
     variations: Array<IProductVariationClientModel>,
+    attributes?: { [key: string]: any },
     supply?: number
   ): Promise<void>;
 

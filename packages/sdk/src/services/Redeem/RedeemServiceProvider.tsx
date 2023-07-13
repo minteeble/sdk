@@ -93,6 +93,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     name: string,
     description: string,
     variations: Array<IProductVariationClientModel>,
+    attributes?: { [key: string]: any },
     supply?: number
   ): Promise<void> => {
     await RedeemService.instance.updateRedeemSystemProduct(
@@ -101,6 +102,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
       name,
       description,
       variations,
+      attributes,
       supply
     );
   };

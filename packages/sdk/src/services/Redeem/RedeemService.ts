@@ -73,13 +73,14 @@ export class RedeemService extends BaseService {
     name: string,
     description: string,
     variations: Array<IProductVariationClientModel>,
-
+    attributes?: { [key: string]: any },
     supply?: number
   ): Promise<void> => {
     const body = {
       name,
       description,
       variations,
+      attributes,
       supply,
     };
 
