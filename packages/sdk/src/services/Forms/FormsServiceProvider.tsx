@@ -33,6 +33,10 @@ const FormsServiceProvider = (props: FormsServiceProviderProps) => {
     return await FormsService.instance.getFormAnswers(formId);
   };
 
+  const getCsvFormAnswers = async (formId: string): Promise<string | null> => {
+    return await FormsService.instance.getCsvFormAnswers(formId);
+  };
+
   const sendFormAnswer = async (
     formId: string,
     fields: { [key: string]: any },
@@ -49,6 +53,7 @@ const FormsServiceProvider = (props: FormsServiceProviderProps) => {
         getForms,
         deleteForm,
         getFormAnswers,
+        getCsvFormAnswers,
         sendFormAnswer,
       }}
     >
