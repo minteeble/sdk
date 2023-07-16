@@ -119,6 +119,8 @@ export class RendererService extends BaseService {
   ): Promise<void> {
     let body = {
       attributes: renderer.attributes,
+      cacheable: renderer.cacheable,
+      renderingCondition: renderer.renderingCondition,
     };
 
     await this.apiCaller.put(`/renderer/${renderer.id}`, {
