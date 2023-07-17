@@ -118,9 +118,11 @@ export class RendererService extends BaseService {
     renderer: RendererDataClientModel
   ): Promise<void> {
     let body = {
-      attributes: renderer.attributes,
-      cacheable: renderer.cacheable,
-      renderingCondition: renderer.renderingCondition,
+      attributes: {
+        attributes: renderer.attributes,
+        cacheable: renderer.cacheable,
+        renderingCondition: renderer.renderingCondition,
+      },
     };
 
     await this.apiCaller.put(`/renderer/${renderer.id}`, {
