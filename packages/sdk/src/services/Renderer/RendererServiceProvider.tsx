@@ -41,7 +41,7 @@ export const RendererServiceProvider = (
     type: NftGenerationType,
     name: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<GenerationDataClientModel | null> => {
     return RendererService.instance.createGeneration(type, name, attributes);

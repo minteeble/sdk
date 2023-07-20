@@ -120,6 +120,7 @@ export class RendererService extends BaseService {
     let body = {
       attributes: {
         attributes: renderer.attributes,
+        baseUri: renderer.baseUri,
         cacheable: renderer.cacheable,
         renderingCondition: renderer.renderingCondition,
       },
@@ -142,7 +143,7 @@ export class RendererService extends BaseService {
     type: NftGenerationType,
     name: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<GenerationDataClientModel | null> {
     let body: ICreateGenerationRequestDto = {

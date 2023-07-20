@@ -23,7 +23,7 @@ export interface RendererServiceContent {
     type: NftGenerationType,
     name: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<GenerationDataClientModel | null>;
 
