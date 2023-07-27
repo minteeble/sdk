@@ -10,7 +10,7 @@ export interface PredicatesServiceContent {
     code: string,
     parameters: Array<PredicateParameter>,
     name: string
-  ): Promise<string>;
+  ): Promise<PredicateClientModel>;
   getPredicate(id: string): Promise<PredicateClientModel | null>;
   getPredicates(): Promise<PredicateClientModel[] | null>;
   updatePredicate(predicate: PredicateClientModel): Promise<void>;

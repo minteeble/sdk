@@ -189,6 +189,25 @@ export class ERC1155CollectionInstance
   public get smartContract() {
     return this._smartContract;
   }
+
+  public async loadSmartContract(): Promise<ERC1155SmartContractInstance | null> {
+    let smartContractInfo =
+      await SmartContractService.instance.getSmartContractInfo(
+        this.chainName,
+        this.smartContractId
+      );
+
+    if (smartContractInfo && this._web3) {
+      let smartContract = new ERC1155SmartContractInstance(
+        smartContractInfo,
+        this._web3
+      );
+
+      this._smartContract = smartContract;
+
+      return this._smartContract;
+    } else throw new Error("Cannot load smart contract");
+  }
 }
 
 export interface IMinteebleERC1155CollectionInstance

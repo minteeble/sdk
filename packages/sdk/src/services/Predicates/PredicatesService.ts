@@ -34,7 +34,7 @@ class PredicatesService extends BaseService {
     code: string,
     parameters: Array<PredicateParameter>,
     name: string
-  ): Promise<string> {
+  ): Promise<PredicateClientModel> {
     let body: ICreatePredicateRequestDto = {
       code: code,
       parameters: parameters,
@@ -48,8 +48,8 @@ class PredicatesService extends BaseService {
 
     let res = await this.apiCaller.post(`/predicate`, reqInit, true);
 
-    if (res && res.id && typeof res.id === "string") {
-      return res.id;
+    if (res && res.predicate) {
+      return res.predicate;
     } else throw new Error("Fail on creating predicate.");
   }
 

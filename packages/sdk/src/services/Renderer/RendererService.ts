@@ -118,7 +118,12 @@ export class RendererService extends BaseService {
     renderer: RendererDataClientModel
   ): Promise<void> {
     let body = {
-      attributes: renderer.attributes,
+      attributes: {
+        attributes: renderer.attributes,
+        baseUri: renderer.baseUri,
+        cacheable: renderer.cacheable,
+        renderingCondition: renderer.renderingCondition,
+      },
     };
 
     await this.apiCaller.put(`/renderer/${renderer.id}`, {
@@ -138,7 +143,7 @@ export class RendererService extends BaseService {
     type: NftGenerationType,
     name: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<GenerationDataClientModel | null> {
     let body: ICreateGenerationRequestDto = {

@@ -4,6 +4,7 @@ import { WalletServiceContext } from "./WalletServiceContext";
 import React from "react";
 import Web3 from "web3";
 import Web3Modal, { removeLocal } from "web3modal";
+import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 
 export interface WalletServiceProviderProps {
   children: any;
@@ -19,6 +20,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   const [modal, setModal] = useState<Web3Modal>();
   const [userIsSigning, setUserIsSigning] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<Array<string> | null>(null);
+  const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
   useEffect(() => {
     let service = new WalletService();
@@ -79,10 +81,30 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     }
   }, [userIsSigning]);
 
+  useEffect(() => {
+    (async () => {
+      const chainId = await web3?.eth.getChainId();
+
+      let chainName = NetworkUtils.getAllNetworks().find(
+        (net) => net.chainId === chainId
+      );
+
+      console.log("CHAIN", chainName);
+
+      if (!chainName) throw new Error("Chain is not implemented.");
+      setCurrentChain(chainName);
+    })();
+  }, [web3]);
+
+  useEffect(() => {
+    console.log("CURRENT CHAIN", currentChain);
+  }, [currentChain]);
+
   const disconnectWallet = async (): Promise<void> => {
     modal?.clearCachedProvider();
     setWeb3(null);
     setWalletAddress("");
+    setCurrentChain(null);
   };
 
   const connectWallet = async (): Promise<void> => {
@@ -127,6 +149,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
         accounts,
         walletAddress,
         userIsSigning,
+        currentChain,
         web3: web3 || undefined,
       }}
     >

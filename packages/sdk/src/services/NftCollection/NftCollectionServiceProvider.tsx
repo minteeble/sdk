@@ -8,6 +8,7 @@ import NftCollectionService from "./NftCollectionService";
 import { NftCollectionServiceContext } from "./NftCollectionServiceContext";
 import React from "react";
 import {
+  ERC1155CollectionInstance,
   ERC721CollectionInstance,
   MinteebleDynamiCollectionInstance,
   MinteebleERC1155CollectionInstance,
@@ -176,6 +177,11 @@ export const NftCollectionServiceProvider = (
               );
             } else if (collectionModel.type === "MINTEEBLE_ERC1155") {
               collectionInstance = new MinteebleERC1155CollectionInstance(
+                collectionModel,
+                web3
+              );
+            } else if (collectionModel.type === "ERC1155") {
+              collectionInstance = new ERC1155CollectionInstance(
                 collectionModel,
                 web3
               );
