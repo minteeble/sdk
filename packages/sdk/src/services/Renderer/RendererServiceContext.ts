@@ -49,6 +49,13 @@ export interface RendererServiceContent {
     collectionId: string,
     nftId: number
   ): Promise<void>;
+
+  mutateItem(
+    chainName: string,
+    collectionId: string,
+    nftId: number,
+    mutationVariantName: string
+  ): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -73,4 +80,6 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   deleteRenderer: () => new Promise(() => {}),
 
   revealItem: () => new Promise(() => {}),
+
+  mutateItem: () => new Promise(() => {}),
 });

@@ -258,4 +258,30 @@ export class RendererService extends BaseService {
       }
     );
   }
+
+  /**
+   * Mutates as NFT item
+   *
+   * @param chainName Network chain name
+   * @param collectionId Collection ID
+   * @param nftId NFT number ID
+   */
+  public async mutateItem(
+    chainName: string,
+    collectionId: string,
+    nftId: number,
+    mutationVariantName: string
+  ): Promise<void> {
+    let body = {
+      mutationVariantName,
+    };
+
+    await this.apiCaller.post(
+      `/chain/${chainName}/collection/${collectionId}/id/${nftId}/mutate`,
+      {
+        responseType: "text",
+        body,
+      }
+    );
+  }
 }
