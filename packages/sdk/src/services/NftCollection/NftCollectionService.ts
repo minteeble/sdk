@@ -111,7 +111,6 @@ class NftCollectionService extends BaseService {
     let bodyObject = {
       name: collection.collectionName,
       description: collection.description,
-      rendererId: collection.rendererId || [],
       generationId: collection.generationId || "",
     };
 

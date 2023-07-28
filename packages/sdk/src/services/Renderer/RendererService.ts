@@ -218,7 +218,7 @@ export class RendererService extends BaseService {
   public async updateGeneration(
     generationId: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<void> {
     let body = {

@@ -36,7 +36,7 @@ export interface RendererServiceContent {
   updateGeneration(
     generationId: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<void>;
 

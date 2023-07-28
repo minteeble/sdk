@@ -61,7 +61,6 @@ export class NftCollectionInstance
       this.type = collectionModel.type;
       this.collectionId = collectionModel.collectionId;
       this.smartContractId = collectionModel.smartContractId;
-      this.rendererId = collectionModel.rendererId;
       this.generationId = collectionModel.generationId;
     }
 

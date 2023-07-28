@@ -62,7 +62,7 @@ export const RendererServiceProvider = (
   const updateGeneration = async (
     generationId: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<void> => {
     return RendererService.instance.updateGeneration(generationId, attributes);
