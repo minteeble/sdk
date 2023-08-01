@@ -117,10 +117,17 @@ export class RendererService extends BaseService {
   public async updateRenderer(
     renderer: RendererDataClientModel
   ): Promise<void> {
+    let customAttributes = {};
+
+    Object.keys(renderer.attributes).forEach((key) => {
+      customAttributes[key] = renderer.attributes[key];
+    });
+
     let body = {
       attributes: {
-        attributes: renderer.attributes,
+        ...customAttributes,
         baseUri: renderer.baseUri,
+        variables: renderer.variables,
         cacheable: renderer.cacheable,
         renderingCondition: renderer.renderingCondition,
       },
