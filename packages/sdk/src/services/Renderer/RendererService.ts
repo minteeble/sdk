@@ -242,7 +242,7 @@ export class RendererService extends BaseService {
 
     let itemsInfo: NftGenerationItemInfoClientModel[] =
       (serializer.deserializeObjectArray<NftGenerationItemInfoClientModel>(
-        res,
+        res.itemsInfo,
         NftGenerationItemInfoClientModel
       ) || []) as NftGenerationItemInfoClientModel[];
 
