@@ -227,12 +227,29 @@ export const NftCollectionServiceProvider = (
     return nftCollectionService?.updateCollectionInfo(collection);
   };
 
-  const getNftImageUrl = (collectionId: string, tokenId: number): string => {
-    return nftCollectionService?.getNftImageUrl(collectionId, tokenId) || "";
+  const getNftImageUrl = (
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ): string => {
+    return (
+      nftCollectionService?.getNftImageUrl(collectionId, chainName, tokenId) ||
+      ""
+    );
   };
 
-  const getNftMetadataUrl = (collectionId: string, tokenId: number): string => {
-    return nftCollectionService?.getNftMetadataUrl(collectionId, tokenId) || "";
+  const getNftMetadataUrl = (
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ): string => {
+    return (
+      nftCollectionService?.getNftMetadataUrl(
+        collectionId,
+        chainName,
+        tokenId
+      ) || ""
+    );
   };
 
   return (
