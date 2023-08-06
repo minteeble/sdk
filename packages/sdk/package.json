@@ -14,6 +14,15 @@
     "set-dev": "./scripts/set-dev-env.sh",
     "pub": "yarn build && lerna publish"
   },
+  "dependencies": {
+    "@minteeble/utils": "^1.0.163",
+    "@walletconnect/web3-provider": "^1.7.8",
+    "aws-amplify": "^4.3.37",
+    "axios": "^1.3.3",
+    "core-js": "^3.24.1",
+    "typescript-json-serializer": "^5.1.0",
+    "websocket": "^1.0.34"
+  },
   "devDependencies": {
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
@@ -22,15 +31,6 @@
     "typescript": "^4.7.4",
     "web3": "^1.8.0",
     "web3modal": "^1.9.8"
-  },
-  "dependencies": {
-    "@minteeble/utils": "^1.0.153",
-    "@walletconnect/web3-provider": "^1.7.8",
-    "aws-amplify": "^4.3.37",
-    "axios": "^1.3.3",
-    "core-js": "^3.24.1",
-    "typescript-json-serializer": "^5.1.0",
-    "websocket": "^1.0.34"
   },
   "peerDependencies": {
     "react": "18.2.0",

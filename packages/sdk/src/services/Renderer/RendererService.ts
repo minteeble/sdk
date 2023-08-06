@@ -1,12 +1,11 @@
 import {
-  CreateRendererRequestDto,
   GenerationDataClientModel,
   ICreateGenerationRequestDto,
   ICreateRendererRequestDto,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
-  UpdateRendererRequestDto,
+  NftGenerationItemInfoClientModel,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
@@ -220,6 +219,34 @@ export class RendererService extends BaseService {
       ) || []) as GenerationDataClientModel[];
 
     return generations;
+  }
+
+  /**
+   * Gets information about specific generation items
+   *
+   * @param generationId generation's id
+   * @param nftGenerationItems a string with integers separated by commas, (eg: 1,2,3,5)
+   * @returns an array containing information about all the items
+   */
+  public async getNftGenerationItemsInfo(
+    generationId: string,
+    nftGenerationItems: string
+  ): Promise<Array<NftGenerationItemInfoClientModel>> {
+    let res = await this.apiCaller.get(
+      `/generation/${generationId}/items?nftGenerationItems=${nftGenerationItems}`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    let itemsInfo: NftGenerationItemInfoClientModel[] =
+      (serializer.deserializeObjectArray<NftGenerationItemInfoClientModel>(
+        res,
+        NftGenerationItemInfoClientModel
+      ) || []) as NftGenerationItemInfoClientModel[];
+
+    return itemsInfo;
   }
 
   public async updateGeneration(

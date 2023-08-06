@@ -1,5 +1,6 @@
 import {
   GenerationDataClientModel,
+  NftGenerationItemInfoClientModel,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
@@ -59,6 +60,16 @@ export const RendererServiceProvider = (
     return RendererService.instance.getGenerations();
   };
 
+  const getNftGenerationItemsInfo = async (
+    generationId: string,
+    nftGenerationItems: string
+  ): Promise<Array<NftGenerationItemInfoClientModel>> => {
+    return RendererService.instance.getNftGenerationItemsInfo(
+      generationId,
+      nftGenerationItems
+    );
+  };
+
   const updateGeneration = async (
     generationId: string,
     attributes: {
@@ -107,6 +118,7 @@ export const RendererServiceProvider = (
         createGeneration,
         getGeneration,
         getGenerations,
+        getNftGenerationItemsInfo,
         updateGeneration,
         deleteGeneration,
         deleteRenderer,
