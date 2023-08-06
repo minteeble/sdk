@@ -85,14 +85,16 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     (async () => {
       const chainId = await web3?.eth.getChainId();
 
-      let chainName = NetworkUtils.getAllNetworks().find(
-        (net) => net.chainId === chainId
-      );
+      if (chainId) {
+        let chainName = NetworkUtils.getAllNetworks().find(
+          (net) => net.chainId === chainId
+        );
 
-      console.log("CHAIN", chainName);
+        console.log("CHAIN", chainName);
 
-      if (!chainName) throw new Error("Chain is not implemented.");
-      setCurrentChain(chainName);
+        if (!chainName) throw new Error("Chain is not implemented.");
+        setCurrentChain(chainName);
+      }
     })();
   }, [web3]);
 
