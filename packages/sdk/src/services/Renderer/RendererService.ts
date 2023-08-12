@@ -318,4 +318,30 @@ export class RendererService extends BaseService {
       }
     );
   }
+
+  /**
+   * Sets mutation status for an item
+   *
+   * @param nftGenerationId ID of the Generation containing the item to mutate
+   * @param nftNumberId: number ID of the NFT to mutate
+   * @param mutationStatus status of the mutation
+   */
+  public async setMutation(
+    collectionId: string,
+    chainName: string,
+    nftId: number,
+    mutationStatus: boolean
+  ): Promise<void> {
+    let body = {
+      mutationStatus,
+    };
+
+    await this.apiCaller.post(
+      `/chain/${chainName}/collection/${collectionId}/id/${nftId}/setMutation`,
+      {
+        responseType: "text",
+        body,
+      }
+    );
+  }
 }

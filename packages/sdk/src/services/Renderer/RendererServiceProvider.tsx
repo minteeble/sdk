@@ -108,6 +108,20 @@ export const RendererServiceProvider = (
     );
   };
 
+  const setMutation = async (
+    collectionId: string,
+    chainName: string,
+    nftId: number,
+    mutationStatus: boolean
+  ) => {
+    return RendererService.instance.setMutation(
+      collectionId,
+      chainName,
+      nftId,
+      mutationStatus
+    );
+  };
+
   return (
     <RendererServiceContext.Provider
       value={{
@@ -124,6 +138,7 @@ export const RendererServiceProvider = (
         deleteRenderer,
         revealItem,
         mutateItem,
+        setMutation,
       }}
     >
       {props.children}
