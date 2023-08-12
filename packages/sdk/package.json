@@ -15,7 +15,7 @@
     "pub": "yarn build && lerna publish"
   },
   "dependencies": {
-    "@minteeble/utils": "^1.0.164",
+    "@minteeble/utils": "^1.0.169",
     "@walletconnect/web3-provider": "^1.7.8",
     "aws-amplify": "^4.3.37",
     "axios": "^1.3.3",
