@@ -63,7 +63,7 @@ export interface RendererServiceContent {
     mutationVariantName: string
   ): Promise<void>;
 
-  setMutation(
+  setMutationStatus(
     collectionId: string,
     chainName: string,
     nftId: number,
@@ -98,5 +98,5 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
 
   mutateItem: () => new Promise(() => {}),
 
-  setMutation: () => new Promise(() => {}),
+  setMutationStatus: () => new Promise(() => {}),
 });
