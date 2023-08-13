@@ -337,7 +337,7 @@ export class RendererService extends BaseService {
     };
 
     await this.apiCaller.post(
-      `/chain/${chainName}/collection/${collectionId}/id/${nftId}/setMutation`,
+      `/chain/${chainName}/collection/${collectionId}/id/${nftId}/mutation-status`,
       {
         responseType: "text",
         body,
