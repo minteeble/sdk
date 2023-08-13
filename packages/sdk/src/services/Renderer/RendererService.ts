@@ -326,7 +326,7 @@ export class RendererService extends BaseService {
    * @param nftNumberId: number ID of the NFT to mutate
    * @param mutationStatus status of the mutation
    */
-  public async setMutation(
+  public async setMutationStatus(
     collectionId: string,
     chainName: string,
     nftId: number,
