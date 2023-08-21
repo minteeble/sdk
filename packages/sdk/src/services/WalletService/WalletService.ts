@@ -124,12 +124,7 @@ class WalletService {
     walletAddress: string,
     message: any
   ): Promise<any> => {
-    const signature = await web3.eth.personal.sign(
-      message,
-      walletAddress,
-      "",
-      undefined
-    );
+    const signature = await web3.eth.personal.sign(message, walletAddress, "");
 
     return signature;
   };

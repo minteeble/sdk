@@ -5,7 +5,7 @@ import {
 } from "@minteeble/utils";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
-import * as BN from "bn.js";
+import { ContractAbi, AbiFragment } from "web3-types";
 
 export interface ISmartContractInstance extends ISmartContractClientModel {
   active: boolean;
@@ -21,7 +21,7 @@ export class SmartContractInstance
 
   protected _web3: Web3 | null;
 
-  protected _contract: Contract | null;
+  protected _contract: Contract<any[]> | null;
 
   constructor(smartContractModel?: SmartContractClientModel, web3?: Web3) {
     super();
@@ -59,7 +59,7 @@ export class SmartContractInstance
   /**
    * Returns web3 contract object is instance is active. Returns null otherwise
    */
-  public get contract(): Contract | null {
+  public get contract(): Contract<any[]> | null {
     return this._contract || null;
   }
 }
@@ -77,13 +77,15 @@ export class ERC721SMartContractInstance
   public async getOwner(): Promise<string | null> {
     this.requireActive();
 
-    return await this._contract?.methods.owner().call();
+    return (await this._contract?.methods.owner().call()) || null;
   }
 
   public async ownedIds(ownerAddress: string): Promise<Array<string>> {
     this.requireActive();
 
-    let ids = await this._contract?.methods.walletOfOwner(ownerAddress).call();
+    let ids = await (this._contract?.methods.walletOfOwner as any)(
+      ownerAddress
+    ).call();
 
     return ids;
   }
@@ -93,9 +95,9 @@ export interface IMinteebleErc721SmartContractInstance
   extends IERC721SmartContractInstance {
   mintToken(amount: number): Promise<void>;
 
-  mintPrice(): Promise<BN>;
+  mintPrice(): Promise<bigint>;
 
-  estimatedMintTrxFees(mintAmount: number): Promise<BN>;
+  estimatedMintTrxFees(mintAmount: number): Promise<bigint>;
 
   isPaused(): Promise<boolean>;
 
@@ -113,45 +115,46 @@ export class MinteebleErc721SmartContractInstance
   public override async getOwner(): Promise<string | null> {
     this.requireActive();
 
-    return await this._contract?.methods.owner().call();
+    return (await this._contract?.methods.owner().call()) || null;
   }
 
   public async mintToken(amount: number): Promise<void> {
     this.requireActive();
 
     let price = await this.mintPrice();
-    let value = price.muln(amount).toString();
+    let value = price * BigInt(amount);
     let accounts = await this._web3!.eth.getAccounts();
 
-    let trx = await this.contract!.methods.mint(amount).send({
+    let trx = await (this.contract!.methods.mint as any)(amount).send({
       value: value,
       from: accounts[0],
     });
   }
 
-  public async mintPrice(): Promise<BN> {
-    let price = await this.contract?.methods.mintPrice().call();
-    let priceNum = this._web3!.utils.toBN(price);
+  public async mintPrice(): Promise<bigint> {
+    let price = (await this.contract?.methods.mintPrice().call()) as bigint;
 
-    return priceNum;
+    return price;
   }
 
-  public async estimatedMintTrxFees(mintAmount: number): Promise<BN> {
+  public async estimatedMintTrxFees(mintAmount: number): Promise<bigint> {
     let accounts = await this._web3!.eth.getAccounts();
     let mintPrice = await this.mintPrice();
     let gasPrice = await this._web3?.eth.getGasPrice();
     if (gasPrice) {
-      let gas = await this.contract?.methods.mint(mintAmount).estimateGas({
+      let gas = await (this.contract?.methods.mint as any)(
+        mintAmount
+      ).estimateGas({
         from: accounts[0],
-        value: new BN.BN(mintPrice).muln(mintAmount).toString(),
+        value: mintPrice * BigInt(mintAmount),
       });
 
-      return new BN.BN(gas).mul(new BN.BN(gasPrice));
+      return gas * gasPrice;
     } else throw new Error("Error on getting gas price");
   }
 
   public async isPaused(): Promise<boolean> {
-    let pausedState = await this.contract?.methods.paused().call();
+    let pausedState = (await this.contract?.methods.paused().call()) as boolean;
 
     return pausedState;
   }
@@ -161,7 +164,9 @@ export class MinteebleErc721SmartContractInstance
   }
 
   public async maxMintAmountPerTrx(): Promise<number> {
-    let amount = await this.contract?.methods.maxMintAmountPerTrx().call();
+    let amount = (await this.contract?.methods
+      .maxMintAmountPerTrx()
+      .call()) as number;
 
     return amount;
   }
@@ -179,9 +184,9 @@ export class ERC1155SmartContractInstance
 
 export interface IMinteebleERC1155SmartContractInstance
   extends IERC1155SmartContractInstance {
-  mintPrice(id: number): Promise<BN>;
+  mintPrice(id: number): Promise<bigint>;
 
-  estimatedMintTrxFees(id: number, mintAmount: number): Promise<BN>;
+  estimatedMintTrxFees(id: number, mintAmount: number): Promise<bigint>;
 
   mintToken(id: number, amount: number): Promise<void>;
 
@@ -203,27 +208,29 @@ export class MinteebleERC1155SmartContractInstance
   extends ERC1155SmartContractInstance
   implements IMinteebleERC1155SmartContractInstance
 {
-  public async mintPrice(id: number): Promise<BN> {
-    let price = await this.contract?.methods.mintPrice(id).call();
-    let priceNum = this._web3!.utils.toBN(price);
+  public async mintPrice(id: number): Promise<bigint> {
+    let price = await (this.contract?.methods.mintPrice as any)(id).call();
 
-    return priceNum;
+    return price as bigint;
   }
 
   public async estimatedMintTrxFees(
     id: number,
     mintAmount: number
-  ): Promise<BN> {
+  ): Promise<bigint> {
     let accounts = await this._web3!.eth.getAccounts();
     let mintPrice = await this.mintPrice(id);
     let gasPrice = await this._web3?.eth.getGasPrice();
     if (gasPrice) {
-      let gas = await this.contract?.methods.mint(id, mintAmount).estimateGas({
+      let gas = await (this.contract?.methods.mint as any)(
+        id,
+        mintAmount
+      ).estimateGas({
         from: accounts[0],
-        value: new BN.BN(mintPrice).muln(mintAmount).toString(),
+        value: mintPrice * BigInt(mintAmount),
       });
 
-      return new BN.BN(gas).mul(new BN.BN(gasPrice));
+      return gas * gasPrice;
     } else throw new Error("Error on getting gas price");
   }
 
@@ -231,11 +238,11 @@ export class MinteebleERC1155SmartContractInstance
     this.requireActive();
 
     let price = await this.mintPrice(id);
-    let value = price.muln(amount).toString();
+    let value = price * BigInt(amount);
     let accounts = await this._web3!.eth.getAccounts();
 
-    let trx = await this.contract!.methods.mint(id, amount).send({
-      value: value,
+    let trx = await (this.contract!.methods.mint as any)(id, amount).send({
+      value: value.toString(),
       from: accounts[0],
     });
   }
@@ -243,7 +250,9 @@ export class MinteebleERC1155SmartContractInstance
   public async balanceOf(account: string): Promise<number> {
     this.requireActive();
 
-    let balance = await this.contract!.methods.balanceOf(account).call();
+    let balance = await (this.contract!.methods.balanceOf as any)(
+      account
+    ).call();
 
     return parseInt(balance);
   }
@@ -263,10 +272,9 @@ export class MinteebleERC1155SmartContractInstance
   ): Promise<Array<number>> {
     this.requireActive();
 
-    let balances: string[] = await this.contract!.methods.balanceOfBatch(
-      accounts,
-      ids
-    ).call();
+    let balances: string[] = await (
+      this.contract!.methods.balanceOfBatch as any
+    )(accounts, ids).call();
 
     return balances.map((balance) => parseInt(balance));
   }
@@ -277,9 +285,10 @@ export class MinteebleERC1155SmartContractInstance
   ): Promise<boolean> {
     this.requireActive();
 
-    return await this.contract?.methods
-      .isApprovedForAll(account, operator)
-      .call();
+    return await (this.contract?.methods.isApprovedForAll as any)(
+      account,
+      operator
+    ).call();
   }
 
   public async setApprovalForAll(
@@ -289,9 +298,10 @@ export class MinteebleERC1155SmartContractInstance
     this.requireActive();
     let accounts = await this._web3!.eth.getAccounts();
 
-    await this.contract?.methods
-      .setApprovalForAll(operator, approved)
-      .send({ from: accounts[0] });
+    await (this.contract?.methods.setApprovalForAll as any)(
+      operator,
+      approved
+    ).send({ from: accounts[0] });
   }
 }
 
@@ -319,9 +329,11 @@ export class MinteebleDynamicCollectionSmartContractInstance
     let accounts = await this._web3!.eth.getAccounts();
 
     console.log("Input data", id, groupId, variationId);
-    await this.contract?.methods
-      .pairGadget(id, groupId, variationId)
-      .send({ from: accounts[0] });
+    await (this.contract?.methods.pairGadget as any)(
+      id,
+      groupId,
+      variationId
+    ).send({ from: accounts[0] });
   }
 }
 
@@ -344,9 +356,10 @@ export class MinteebleGadgetsSmartContractInstance
   ): Promise<number> {
     this.requireActive();
 
-    let tokenId = await this.contract?.methods
-      .groupIdToTokenId(groupId, variationId)
-      .call();
+    let tokenId = await (this.contract?.methods.groupIdToTokenId as any)(
+      groupId,
+      variationId
+    ).call();
 
     return parseInt(tokenId);
   }
@@ -356,9 +369,9 @@ export class MinteebleGadgetsSmartContractInstance
   ): Promise<{ groupId: number; variationId: number }> {
     this.requireActive();
 
-    let groupInfo = await this.contract?.methods
-      .tokenIdToGroupId(tokenId)
-      .call();
+    let groupInfo = await (this.contract?.methods.tokenIdToGroupId as any)(
+      tokenId
+    ).call();
     console.log("GroupInfo:", groupInfo);
 
     return {

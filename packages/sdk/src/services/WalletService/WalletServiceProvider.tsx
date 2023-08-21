@@ -87,7 +87,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
 
       if (chainId) {
         let chainName = NetworkUtils.getAllNetworks().find(
-          (net) => net.chainId === chainId
+          (net) => BigInt(net.chainId) == chainId
         );
 
         console.log("CHAIN", chainName);
