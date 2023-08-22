@@ -9,51 +9,51 @@
  */
 "use strict";
 
-import Web3Modal, { removeLocal } from "web3modal";
+// import Web3Modal, { removeLocal } from "web3modal";
 
 import Web3 from "web3";
-import WalletConnectProvider from "@walletconnect/web3-provider";
+// import WalletConnectProvider from "@walletconnect/web3-provider";
 
 class WalletService {
   constructor() {}
 
-  public getModal = (): Web3Modal => {
-    const providerOptions = {
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: "95e5a8d4be98435ba50d93f448a1d34e",
-        },
-      },
-    };
+  // public getModal = (): Web3Modal => {
+  //   const providerOptions = {
+  //     walletconnect: {
+  //       package: WalletConnectProvider,
+  //       options: {
+  //         infuraId: "95e5a8d4be98435ba50d93f448a1d34e",
+  //       },
+  //     },
+  //   };
 
-    const web3Modal: Web3Modal = new Web3Modal({
-      theme: "dark",
-      cacheProvider: true,
-      disableInjectedProvider: false,
-      providerOptions,
-    });
+  //   const web3Modal: Web3Modal = new Web3Modal({
+  //     theme: "dark",
+  //     cacheProvider: true,
+  //     disableInjectedProvider: false,
+  //     providerOptions,
+  //   });
 
-    // if (web3Modal.cachedProvider) {
-    //   this.connectWallet();
-    // }
+  //   // if (web3Modal.cachedProvider) {
+  //   //   this.connectWallet();
+  //   // }
 
-    return web3Modal;
-  };
+  //   return web3Modal;
+  // };
 
-  public connectWallet = async (modal: Web3Modal): Promise<Web3> => {
-    return new Promise<Web3>(async (resolve, reject) => {
+  public connectWallet = async (): Promise<Web3> => {
+    return new Promise<Web3>(async (_resolve, reject) => {
       try {
         console.log("Connecting to wallet");
 
         console.log("Modal:", this);
 
-        let provider = await modal.connect();
+        // let provider = await modal.connect();
 
-        console.log("Got provider", provider);
-        let web3 = new Web3(provider);
+        // console.log("Got provider", provider);
+        // let web3 = new Web3(provider);
 
-        resolve(web3);
+        // resolve(web3);
 
         // if (accounts.length > 0) {
         //   this._walletAddress = accounts[0];
