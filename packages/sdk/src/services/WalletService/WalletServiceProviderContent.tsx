@@ -19,7 +19,7 @@ export function walletClientToSigner(walletClient: any) {
   };
   const provider = new providers.Web3Provider(transport, network);
   const signer = provider.getSigner(account.address);
-  return provider;
+  return signer;
 }
 
 /** Hook to convert a viem Wallet Client to an ethers.js Signer. */
@@ -35,7 +35,7 @@ export function useWeb3Signer({ chainId } = {} as any) {
   const { data: walletClient } = useWalletClient({ chainId });
 
   return walletClient
-    ? new Web3(walletClientToSigner(walletClient).provider as any)
+    ? new Web3((walletClientToSigner(walletClient).provider as any).provider)
     : undefined;
 }
 
@@ -61,12 +61,10 @@ export const WalletServiceProviderContent = (
 
   useEffect(() => {
     console.log("web3signer:", web3signer);
-    if (web3signer) setWeb3(web3signer as any);
+    if (web3signer && !web3) {
+      setWeb3(web3signer as any);
+    }
   }, [web3signer]);
-
-  useEffect(() => {
-    console.log("isLoading:", isLoading);
-  }, [isLoading]);
 
   useEffect(() => {
     let service = new WalletService();
@@ -93,14 +91,22 @@ export const WalletServiceProviderContent = (
         if (address.length > 0) {
           setWalletAddress(address);
 
-          walletService.registerWeb3Events(
+          console.log("Address:", address);
+          console.log(
+            "Current provider:",
             web3.eth.currentProvider,
-            (accounts) => {
-              setAccounts(accounts);
-            }
+            web3.currentProvider
           );
 
+          // walletService.registerWeb3Events(
+          //   web3.eth.currentProvider,
+          //   (accounts) => {
+          //     setAccounts(accounts);
+          //   }
+          // );
+
           setAccounts(await web3.eth.getAccounts());
+          console.log("ACCOUNTS:", await web3.eth.getAccounts());
 
           // (web3.eth.currentProvider as any).on(
           //   "accountsChanged",

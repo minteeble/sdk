@@ -121,14 +121,25 @@ export class MinteebleErc721SmartContractInstance
   public async mintToken(amount: number): Promise<void> {
     this.requireActive();
 
+    console.log("REQUESTED MINT", amount);
+
     let price = await this.mintPrice();
     let value = price * BigInt(amount);
     let accounts = await this._web3!.eth.getAccounts();
 
+    console.log("Requested mint", {
+      value: value.toString(),
+      from: accounts[0],
+      amount: amount,
+      price: price,
+    });
+
     let trx = await (this.contract!.methods.mint as any)(amount).send({
-      value: value,
+      value: value.toString(),
       from: accounts[0],
     });
+
+    console.log("TRX", trx);
   }
 
   public async mintPrice(): Promise<bigint> {

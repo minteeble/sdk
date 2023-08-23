@@ -6,7 +6,7 @@ import {
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { mainnet, polygon } from "wagmi/chains";
+import { mainnet, polygon, sepolia } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 
 export interface WalletServiceProviderProps
@@ -14,10 +14,7 @@ export interface WalletServiceProviderProps
   children: any;
 }
 
-const { chains, publicClient } = configureChains(
-  [mainnet, polygon],
-  [publicProvider()]
-);
+const { chains, publicClient } = configureChains([sepolia], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
   appName: "Test App",
