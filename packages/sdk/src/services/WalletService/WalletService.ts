@@ -91,32 +91,29 @@ class WalletService {
   // };
 
   public registerWeb3Events = (
-    provider: any,
-    onAccountChange?: (accounts: Array<string>) => void
+    _provider: any,
+    _onAccountChange?: (accounts: Array<string>) => void
   ): void => {
     // Subscribe to accounts change
-    provider.on("accountsChanged", (accounts: string[]) => {
-      console.log(accounts);
-      if (onAccountChange) {
-        onAccountChange(accounts);
-      }
-    });
-
-    // Subscribe to chainId change
-    provider.on("chainChanged", (chainId: number) => {
-      console.log(chainId);
-      window.location.reload();
-    });
-
-    // Subscribe to provider connection
-    provider.on("connect", (info: { chainId: number }) => {
-      console.log("User connected", info);
-    });
-
-    // Subscribe to provider disconnection
-    provider.on("disconnect", (error: { code: number; message: string }) => {
-      console.log(error);
-    });
+    // provider.on("accountsChanged", (accounts: string[]) => {
+    //   console.log(accounts);
+    //   if (onAccountChange) {
+    //     onAccountChange(accounts);
+    //   }
+    // });
+    // // Subscribe to chainId change
+    // provider.on("chainChanged", (chainId: number) => {
+    //   console.log(chainId);
+    //   window.location.reload();
+    // });
+    // // Subscribe to provider connection
+    // provider.on("connect", (info: { chainId: number }) => {
+    //   console.log("User connected", info);
+    // });
+    // // Subscribe to provider disconnection
+    // provider.on("disconnect", (error: { code: number; message: string }) => {
+    //   console.log(error);
+    // });
   };
 
   public sign = async (

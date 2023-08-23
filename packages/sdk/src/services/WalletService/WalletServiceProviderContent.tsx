@@ -8,6 +8,37 @@ import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useWalletClient } from "wagmi";
 
+import { providers } from "ethers";
+
+export function walletClientToSigner(walletClient: any) {
+  const { account, chain, transport } = walletClient;
+  const network = {
+    chainId: chain.id,
+    name: chain.name,
+    ensAddress: chain.contracts?.ensRegistry?.address,
+  };
+  const provider = new providers.Web3Provider(transport, network);
+  const signer = provider.getSigner(account.address);
+  return provider;
+}
+
+/** Hook to convert a viem Wallet Client to an ethers.js Signer. */
+export function useEthersSigner({ chainId } = {} as any) {
+  const { data: walletClient } = useWalletClient({ chainId });
+  return React.useMemo(
+    () => (walletClient ? walletClientToSigner(walletClient) : undefined),
+    [walletClient]
+  );
+}
+
+export function useWeb3Signer({ chainId } = {} as any) {
+  const { data: walletClient } = useWalletClient({ chainId });
+
+  return walletClient
+    ? new Web3(walletClientToSigner(walletClient).provider as any)
+    : undefined;
+}
+
 export interface WalletServiceProviderContentProps {
   children: any;
 }
@@ -19,7 +50,7 @@ export const WalletServiceProviderContent = (
     null
   );
   const { data: walletClient, isError, isLoading } = useWalletClient();
-
+  const web3signer = useWeb3Signer();
   const { openConnectModal } = useConnectModal();
 
   const [web3, setWeb3] = useState<Web3 | null>();
@@ -29,8 +60,9 @@ export const WalletServiceProviderContent = (
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
   useEffect(() => {
-    console.log("WalletCLient:", walletClient);
-  }, [walletClient]);
+    console.log("web3signer:", web3signer);
+    if (web3signer) setWeb3(web3signer as any);
+  }, [web3signer]);
 
   useEffect(() => {
     console.log("isLoading:", isLoading);
