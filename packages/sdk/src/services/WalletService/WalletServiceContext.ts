@@ -2,6 +2,7 @@ import { createContext } from "react";
 import Web3 from "web3";
 import WalletService from "./WalletService";
 import { NetworkModel } from "@minteeble/utils";
+import { WalletClient } from "viem";
 
 export interface WalletServiceContent {
   walletService?: WalletService;
@@ -13,6 +14,7 @@ export interface WalletServiceContent {
   walletAddress: string;
   accounts: Array<string> | null;
   currentChain: NetworkModel | null;
+  walletClient: WalletClient | null;
 }
 
 export const WalletServiceContext = createContext<WalletServiceContent>({
@@ -24,4 +26,5 @@ export const WalletServiceContext = createContext<WalletServiceContent>({
   userIsSigning: false,
   accounts: null,
   currentChain: null,
+  walletClient: null,
 });
