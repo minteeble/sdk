@@ -3,7 +3,6 @@ import {
   NftCollectionInfoClientModel,
   SmartContractClientModel,
 } from "@minteeble/utils";
-import Web3 from "web3";
 import {
   ERC1155SmartContractInstance,
   ERC721SMartContractInstance,
@@ -47,8 +46,6 @@ export class NftCollectionInstance
   protected _active: boolean;
 
   protected _smartContract: SmartContractInstance | null;
-
-  protected _web3: Web3 | null;
 
   protected _walletClient: WalletClient | null;
 
