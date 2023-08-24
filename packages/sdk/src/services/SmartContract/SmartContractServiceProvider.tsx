@@ -12,7 +12,7 @@ import { SmartContractServiceContext } from "./SmartContractServiceContext";
 export const SmartContractServiceProvider = (
   props: SmartContractServiceProviderProps
 ) => {
-  let { walletAddress, web3 } = useWalletService();
+  let { walletAddress, walletClient } = useWalletService();
 
   const createSmartContract = async (
     chianName: string,
@@ -34,7 +34,7 @@ export const SmartContractServiceProvider = (
     return new Promise<SmartContractInstance | null>(
       async (resolve, reject) => {
         try {
-          if (connect && !web3) {
+          if (connect && !walletClient) {
             reject("Error. Client is not yet connected to web3.");
             return;
           }
@@ -46,7 +46,10 @@ export const SmartContractServiceProvider = (
             );
 
           let smartContractInstance: SmartContractInstance | null =
-            new SmartContractInstance(smartContractInfo || undefined, web3);
+            new SmartContractInstance(
+              smartContractInfo || undefined,
+              walletClient!
+            );
 
           if (connect && smartContractInstance) {
             await smartContractInstance.connect();

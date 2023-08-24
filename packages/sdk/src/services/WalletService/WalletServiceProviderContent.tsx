@@ -31,6 +31,8 @@ export const WalletServiceProviderContent = (
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
   useEffect(() => {
+    console.log("AAAA", chain);
+
     if (chain) {
       const chainId = chain.id;
 
@@ -130,7 +132,7 @@ export const WalletServiceProviderContent = (
         if (address.length > 0) {
           setWalletAddress(address);
         } else {
-          await disconnectWallet();
+          // await disconnectWallet();
         }
       }
     })();
