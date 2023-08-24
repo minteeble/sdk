@@ -7,6 +7,8 @@ import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useWalletClient, useDisconnect, useNetwork } from "wagmi";
 // import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { privateKeyToAccount } from "viem/accounts";
+import { fetchBlockNumber, signMessage } from "wagmi/actions";
 
 export interface WalletServiceProviderContentProps {
   children: any;
@@ -155,24 +157,28 @@ export const WalletServiceProviderContent = (
   };
 
   const sign = async (_message: any): Promise<any> => {
-    // return new Promise<any>(async (resolve, reject) => {
-    //   if (walletService && walletAddress && web3) {
-    //     try {
-    //       setUserIsSigning(true);
-    //       const signature = await walletService.sign(
-    //         web3,
-    //         walletAddress,
-    //         message
-    //       );
-    //       setUserIsSigning(false);
-    //       resolve(signature);
-    //     } catch (err) {
-    //       setUserIsSigning(false);
-    //       console.error(err);
-    //       reject();
-    //     }
-    //   } else reject();
-    // });
+    return new Promise<any>(async (resolve, reject) => {
+      if (walletService && walletAddress && walletClient) {
+        try {
+          setUserIsSigning(true);
+
+          const signature = await signMessage({
+            message: _message,
+          });
+          // const signature = await walletService.sign(
+          //   web3,
+          //   walletAddress,
+          //   message
+          // );
+          setUserIsSigning(false);
+          resolve(signature);
+        } catch (err) {
+          setUserIsSigning(false);
+          console.error(err);
+          reject();
+        }
+      } else reject();
+    });
   };
 
   return (
