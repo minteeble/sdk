@@ -31,8 +31,6 @@ export const WalletServiceProviderContent = (
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
   useEffect(() => {
-    console.log("AAAA", chain);
-
     if (chain) {
       const chainId = chain.id;
 
@@ -56,58 +54,8 @@ export const WalletServiceProviderContent = (
   useEffect(() => {
     let service = new WalletService();
 
-    (async () => {
-      // let modalObj = service.getModal();
-      // setModal(modalObj);
-      // if (modalObj.cachedProvider) {
-      //   let web3Obj = await service.connectWallet(modalObj);
-      //   setWeb3(web3Obj);
-      // }
-    })();
-
     setWalletService(service);
   }, []);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     // console.log("Got new web3 object:", web3);
-  //     if (walletService && web3 != null) {
-  //       console.log("Loading accounts");
-  //       let address = (await walletService.getWalletAddress(web3)) || "";
-
-  //       if (address.length > 0) {
-  //         setWalletAddress(address);
-
-  //         console.log("Address:", address);
-  //         console.log(
-  //           "Current provider:",
-  //           web3.eth.currentProvider,
-  //           web3.currentProvider
-  //         );
-
-  //         // walletService.registerWeb3Events(
-  //         //   web3.eth.currentProvider,
-  //         //   (accounts) => {
-  //         //     setAccounts(accounts);
-  //         //   }
-  //         // );
-
-  //         setAccounts(await web3.eth.getAccounts());
-  //         console.log("ACCOUNTS:", await web3.eth.getAccounts());
-
-  //         // (web3.eth.currentProvider as any).on(
-  //         //   "accountsChanged",
-  //         //   (accounts: string[]) => {
-  //         //     console.log(accounts);
-  //         //     window.location.reload();
-  //         //   }
-  //         // );
-  //       } else {
-  //         await disconnectWallet();
-  //       }
-  //     }
-  //   })();
-  // }, [web3]);
 
   useEffect(() => {
     if (userIsSigning) {
@@ -139,11 +87,6 @@ export const WalletServiceProviderContent = (
   };
 
   const connectWallet = async (): Promise<void> => {
-    // if (walletService && modal) {
-    //   let web3Obj = await walletService.connectWallet(modal);
-
-    //   setWeb3(web3Obj);
-    // }
     if (openConnectModal) {
       console.log("Opening connect modal.");
       openConnectModal();
@@ -159,11 +102,7 @@ export const WalletServiceProviderContent = (
           const signature = await signMessage({
             message: _message,
           });
-          // const signature = await walletService.sign(
-          //   web3,
-          //   walletAddress,
-          //   message
-          // );
+
           setUserIsSigning(false);
           resolve(signature);
         } catch (err) {
