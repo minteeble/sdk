@@ -68,13 +68,6 @@ export const WalletServiceProviderContent = (
     setWalletService(service);
   }, []);
 
-  useEffect(() => {
-    (async () => {
-      if (walletClient) {
-      }
-    })();
-  }, [walletClient]);
-
   // useEffect(() => {
   //   (async () => {
   //     // console.log("Got new web3 object:", web3);
@@ -140,9 +133,8 @@ export const WalletServiceProviderContent = (
 
   const disconnectWallet = async (): Promise<void> => {
     // modal?.clearCachedProvider();
-    // setWeb3(null);
-    // setWalletAddress("");
-    // setCurrentChain(null);
+    setWalletAddress("");
+    setCurrentChain(null);
     disconnect();
   };
 
