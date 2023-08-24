@@ -17,7 +17,7 @@ export interface WalletServiceProviderProps
 const { chains, publicClient } = configureChains([sepolia], [publicProvider()]);
 
 const { connectors } = getDefaultWallets({
-  appName: "Test App",
+  appName: "Test Project",
   projectId: "9377377b92bc54c321702b390bfb5b83",
   chains,
 });

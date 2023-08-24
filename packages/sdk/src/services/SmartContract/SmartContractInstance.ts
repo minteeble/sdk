@@ -3,8 +3,6 @@ import {
   ISmartContractClientModel,
   SmartContractClientModel,
 } from "@minteeble/utils";
-// import Web3 from "web3";
-// import { Contract } from "web3-eth-contract";
 import { WalletClient } from "viem";
 import {
   fetchBlockNumber,
@@ -14,8 +12,6 @@ import {
   writeContract,
   GetContractResult,
 } from "wagmi/actions";
-import { Contract } from "web3";
-import Web3 from "web3";
 
 export interface ISmartContractInstance extends ISmartContractClientModel {
   active: boolean;
@@ -30,8 +26,6 @@ export class SmartContractInstance
   private _active: boolean;
 
   protected _walletClient: WalletClient | null;
-
-  protected _web3: Web3 | null;
 
   protected _contract: GetContractResult<any, any> | null;
 
@@ -53,10 +47,6 @@ export class SmartContractInstance
     this._active = false;
     this._walletClient = walletClient || null;
     this._contract = null;
-  }
-
-  public get web3(): Web3 | null {
-    return this._web3;
   }
 
   public get active(): boolean {

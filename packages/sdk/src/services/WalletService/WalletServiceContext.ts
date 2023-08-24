@@ -1,12 +1,10 @@
 import { createContext } from "react";
-import Web3 from "web3";
 import WalletService from "./WalletService";
 import { NetworkModel } from "@minteeble/utils";
 import { WalletClient } from "viem";
 
 export interface WalletServiceContent {
   walletService?: WalletService;
-  web3?: Web3;
   userIsSigning: boolean;
   connectWallet: () => Promise<void>;
   disconnectWallet: () => Promise<void>;
@@ -22,7 +20,6 @@ export const WalletServiceContext = createContext<WalletServiceContent>({
   disconnectWallet: () => new Promise<void>(() => {}),
   sign: () => new Promise<any>(() => {}),
   walletAddress: "",
-  web3: undefined,
   userIsSigning: false,
   accounts: null,
   currentChain: null,
