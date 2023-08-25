@@ -10,7 +10,15 @@
 "use strict";
 
 class WalletService {
+  private static _instance: WalletService;
+
   constructor() {}
+
+  public static get instance(): WalletService {
+    if (!this._instance) this._instance = new WalletService();
+
+    return this._instance;
+  }
 
   public registerWeb3Events = (
     provider: any,
