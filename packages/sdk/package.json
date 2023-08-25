@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@minteeble/utils": "^1.0.172",
-    "@walletconnect/web3-provider": "^1.7.8",
     "aws-amplify": "^4.3.37",
     "axios": "^1.3.3",
     "core-js": "^3.24.1",
@@ -24,19 +23,23 @@
     "websocket": "^1.0.34"
   },
   "devDependencies": {
+    "@rainbow-me/rainbowkit": "^1.0.8",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/websocket": "^1.0.5",
     "lerna": "^6.5.1",
-    "typescript": "^4.7.4",
-    "web3": "^1.8.0",
-    "web3modal": "^1.9.8"
-  },
-  "peerDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "web3": "^1.7.4",
-    "web3modal": "^1.9.8"
+    "typescript": "^5.1.6",
+    "viem": "^1.6.4",
+    "wagmi": "^1.3.10"
+  },
+  "peerDependencies": {
+    "@rainbow-me/rainbowkit": "^1.0.8",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "viem": "^1.6.4",
+    "wagmi": "^1.3.10"
   },
   "files": [
     "/lib"
