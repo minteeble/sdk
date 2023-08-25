@@ -11,24 +11,32 @@ import { publicProvider } from "wagmi/providers/public";
 
 export interface WalletServiceProviderProps
   extends WalletServiceProviderContentProps {
+  appName?: string;
+  walletConnectProjectId: string;
+  chains: Array<any>;
+
   children: any;
 }
 
-const { chains, publicClient } = configureChains([sepolia], [publicProvider()]);
-
-const { connectors } = getDefaultWallets({
-  appName: "Test App",
-  projectId: "9377377b92bc54c321702b390bfb5b83",
-  chains,
-});
-
-const wagmiConfig = createConfig({
-  autoConnect: false,
-  connectors,
-  publicClient,
-});
-
 export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
+  const { chains, publicClient } = configureChains(props.chains || [], [
+    publicProvider(),
+  ]);
+
+  const { connectors } = getDefaultWallets({
+    appName: props.appName || "Minteeble Sdk Consumer",
+    projectId: props.walletConnectProjectId,
+    chains,
+  });
+
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors,
+    publicClient,
+  });
+
+  console.log("Setting config:", wagmiConfig);
+
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>

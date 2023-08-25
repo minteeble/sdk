@@ -3,7 +3,6 @@ import {
   NftCollectionInfoClientModel,
   SmartContractClientModel,
 } from "@minteeble/utils";
-import Web3 from "web3";
 import {
   ERC1155SmartContractInstance,
   ERC721SMartContractInstance,
@@ -17,6 +16,7 @@ import {
   SmartContractInstance,
 } from "../SmartContract";
 import { SmartContractService } from "../SmartContract/SmartContractService";
+import { WalletClient } from "viem";
 
 /**
  * Interface model for NftCollectionInstance
@@ -47,9 +47,12 @@ export class NftCollectionInstance
 
   protected _smartContract: SmartContractInstance | null;
 
-  protected _web3: Web3 | null;
+  protected _walletClient: WalletClient | null;
 
-  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
+  constructor(
+    collectionModel: NftCollectionInfoClientModel,
+    walletClient?: WalletClient
+  ) {
     super();
 
     if (collectionModel) {
@@ -65,7 +68,7 @@ export class NftCollectionInstance
     }
 
     this._active = false;
-    this._web3 = web3 || null;
+    this._walletClient = walletClient || null;
     this._smartContract = null;
   }
 
@@ -80,10 +83,10 @@ export class NftCollectionInstance
         this.smartContractId
       );
 
-    if (smartContractInfo && this._web3) {
+    if (smartContractInfo && this._walletClient) {
       let smartContract = new SmartContractInstance(
         smartContractInfo,
-        this._web3
+        this._walletClient
       );
 
       this._smartContract = smartContract;
@@ -97,11 +100,11 @@ export class NftCollectionInstance
       if (!this._smartContract) await this.loadSmartContract();
 
       if (this._smartContract) await this._smartContract.connect();
-      else throw new Error("Cannot load smart contract");
+      else throw new Error("Cannot load smart contract: Unable to connect");
 
       if (this._smartContract.active) {
         this._active = true;
-      } else throw new Error("Cannot load smart contract");
+      } else throw new Error("Cannot load smart contract: Unable to connect.");
     }
   }
 
@@ -126,8 +129,11 @@ export class ERC721CollectionInstance
 {
   protected _smartContract: ERC721SMartContractInstance;
 
-  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
-    super(collectionModel, web3);
+  constructor(
+    collectionModel: NftCollectionInfoClientModel,
+    walletClient?: WalletClient
+  ) {
+    super(collectionModel, walletClient);
   }
 
   public get smartContract() {
@@ -146,8 +152,11 @@ export class MinteebleERC721CollectionInstance
 {
   protected _smartContract: MinteebleErc721SmartContractInstance;
 
-  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
-    super(collectionModel, web3);
+  constructor(
+    collectionModel: NftCollectionInfoClientModel,
+    walletClient?: WalletClient
+  ) {
+    super(collectionModel, walletClient);
   }
 
   public get smartContract() {
@@ -161,10 +170,18 @@ export class MinteebleERC721CollectionInstance
         this.smartContractId
       );
 
-    if (smartContractInfo && this._web3) {
+    console.log(
+      "Loading smart contract. Info",
+      smartContractInfo,
+      "Wallet:",
+      this._walletClient
+    );
+
+    if (smartContractInfo && this._walletClient) {
+      console.log("HERE");
       let smartContract = new MinteebleErc721SmartContractInstance(
         smartContractInfo,
-        this._web3
+        this._walletClient
       );
       this._smartContract = smartContract;
 
@@ -181,8 +198,11 @@ export class ERC1155CollectionInstance
 {
   protected _smartContract: ERC1155SmartContractInstance;
 
-  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
-    super(collectionModel, web3);
+  constructor(
+    collectionModel: NftCollectionInfoClientModel,
+    walletClient?: WalletClient
+  ) {
+    super(collectionModel, walletClient);
   }
 
   public get smartContract() {
@@ -196,10 +216,10 @@ export class ERC1155CollectionInstance
         this.smartContractId
       );
 
-    if (smartContractInfo && this._web3) {
+    if (smartContractInfo && this._walletClient) {
       let smartContract = new ERC1155SmartContractInstance(
         smartContractInfo,
-        this._web3
+        this._walletClient
       );
 
       this._smartContract = smartContract;
@@ -220,8 +240,11 @@ export class MinteebleERC1155CollectionInstance
 {
   protected _smartContract: MinteebleERC1155SmartContractInstance;
 
-  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
-    super(collectionModel, web3);
+  constructor(
+    collectionModel: NftCollectionInfoClientModel,
+    walletClient?: WalletClient
+  ) {
+    super(collectionModel, walletClient);
   }
 
   public get smartContract() {
@@ -235,10 +258,10 @@ export class MinteebleERC1155CollectionInstance
         this.smartContractId
       );
 
-    if (smartContractInfo && this._web3) {
+    if (smartContractInfo && this._walletClient) {
       let smartContract = new MinteebleERC1155SmartContractInstance(
         smartContractInfo,
-        this._web3
+        this._walletClient
       );
 
       this._smartContract = smartContract;
@@ -259,8 +282,11 @@ export class MinteebleDynamiCollectionInstance
 {
   protected _smartContract: MinteebleDynamicCollectionSmartContractInstance;
 
-  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
-    super(collectionModel, web3);
+  constructor(
+    collectionModel: NftCollectionInfoClientModel,
+    walletClient?: WalletClient
+  ) {
+    super(collectionModel, walletClient);
   }
 
   public get smartContract() {
@@ -274,10 +300,10 @@ export class MinteebleDynamiCollectionInstance
         this.smartContractId
       );
 
-    if (smartContractInfo && this._web3) {
+    if (smartContractInfo && this._walletClient) {
       let smartContract = new MinteebleDynamicCollectionSmartContractInstance(
         smartContractInfo,
-        this._web3
+        this._walletClient
       );
 
       this._smartContract = smartContract;
@@ -298,8 +324,11 @@ export class MinteebleGadgetsCollectionInstance
 {
   protected _smartContract: MinteebleGadgetsSmartContractInstance;
 
-  constructor(collectionModel: NftCollectionInfoClientModel, web3?: Web3) {
-    super(collectionModel, web3);
+  constructor(
+    collectionModel: NftCollectionInfoClientModel,
+    walletClient?: WalletClient
+  ) {
+    super(collectionModel, walletClient);
   }
 
   public get smartContract() {
@@ -313,10 +342,10 @@ export class MinteebleGadgetsCollectionInstance
         this.smartContractId
       );
 
-    if (smartContractInfo && this._web3) {
+    if (smartContractInfo && this._walletClient) {
       let smartContract = new MinteebleGadgetsSmartContractInstance(
         smartContractInfo,
-        this._web3
+        this._walletClient
       );
 
       this._smartContract = smartContract;
