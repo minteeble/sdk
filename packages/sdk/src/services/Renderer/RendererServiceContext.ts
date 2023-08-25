@@ -1,5 +1,6 @@
 import {
   GenerationDataClientModel,
+  NftGenerationItemInfoClientModel,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
@@ -23,7 +24,7 @@ export interface RendererServiceContent {
     type: NftGenerationType,
     name: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<GenerationDataClientModel | null>;
 
@@ -33,10 +34,15 @@ export interface RendererServiceContent {
 
   getGenerations(): Promise<Array<GenerationDataClientModel>>;
 
+  getNftGenerationItemsInfo(
+    generationId: string,
+    nftGenerationItems: string
+  ): Promise<Array<NftGenerationItemInfoClientModel>>;
+
   updateGeneration(
     generationId: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<void>;
 
@@ -48,6 +54,20 @@ export interface RendererServiceContent {
     chainName: string,
     collectionId: string,
     nftId: number
+  ): Promise<void>;
+
+  mutateItem(
+    chainName: string,
+    collectionId: string,
+    nftId: number,
+    mutationVariantName: string
+  ): Promise<void>;
+
+  setMutationStatus(
+    collectionId: string,
+    chainName: string,
+    nftId: number,
+    mutationStatus: boolean
   ): Promise<void>;
 }
 
@@ -66,6 +86,8 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
 
   getGenerations: () => new Promise(() => {}),
 
+  getNftGenerationItemsInfo: () => new Promise(() => {}),
+
   updateGeneration: () => new Promise(() => {}),
 
   deleteGeneration: () => new Promise(() => {}),
@@ -73,4 +95,8 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   deleteRenderer: () => new Promise(() => {}),
 
   revealItem: () => new Promise(() => {}),
+
+  mutateItem: () => new Promise(() => {}),
+
+  setMutationStatus: () => new Promise(() => {}),
 });

@@ -102,10 +102,8 @@ export class AppsService extends BaseService {
     urlName: string
   ): Promise<Array<UserPreviewClientModel>> => {
     let res: IGetAppAdminsResponseDto = await this.apiCaller.get(
-      `/${urlName}/admins/app`,
-      {
-        responseType: "text",
-      },
+      `/${urlName}/admins`,
+      {},
       true
     );
 

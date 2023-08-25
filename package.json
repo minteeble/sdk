@@ -12,7 +12,8 @@
     "clean-all": "yarn clean && yarn clean-modules",
     "test": "lerna exec \"yarn run test\" --concurrency=1 --no-bail",
     "prepublishOnly": "yarn build",
-    "set-dev": "lerna run set-dev"
+    "set-dev": "lerna run set-dev",
+    "pub": "lerna run pub"
   },
   "devDependencies": {
     "lerna": "^6.5.1"

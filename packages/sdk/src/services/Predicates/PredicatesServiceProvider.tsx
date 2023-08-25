@@ -15,7 +15,7 @@ export const PredicatesServiceProvider = (
     code: string,
     parameters: Array<PredicateParameter>,
     name: string
-  ): Promise<string> => {
+  ): Promise<PredicateClientModel> => {
     return PredicatesService.instance.createPredicate(code, parameters, name);
   };
 

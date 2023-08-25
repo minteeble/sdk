@@ -1,5 +1,6 @@
 import {
   GenerationDataClientModel,
+  NftGenerationItemInfoClientModel,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
@@ -41,7 +42,7 @@ export const RendererServiceProvider = (
     type: NftGenerationType,
     name: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<GenerationDataClientModel | null> => {
     return RendererService.instance.createGeneration(type, name, attributes);
@@ -59,10 +60,20 @@ export const RendererServiceProvider = (
     return RendererService.instance.getGenerations();
   };
 
+  const getNftGenerationItemsInfo = async (
+    generationId: string,
+    nftGenerationItems: string
+  ): Promise<Array<NftGenerationItemInfoClientModel>> => {
+    return RendererService.instance.getNftGenerationItemsInfo(
+      generationId,
+      nftGenerationItems
+    );
+  };
+
   const updateGeneration = async (
     generationId: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<void> => {
     return RendererService.instance.updateGeneration(generationId, attributes);
@@ -83,6 +94,34 @@ export const RendererServiceProvider = (
     return RendererService.instance.revealItem(chainName, collectionId, nftId);
   };
 
+  const mutateItem = async (
+    chainName: string,
+    collectionId: string,
+    nftId: number,
+    mutationVariantName: string
+  ) => {
+    return RendererService.instance.mutateItem(
+      chainName,
+      collectionId,
+      nftId,
+      mutationVariantName
+    );
+  };
+
+  const setMutationStatus = async (
+    collectionId: string,
+    chainName: string,
+    nftId: number,
+    mutationStatus: boolean
+  ) => {
+    return RendererService.instance.setMutationStatus(
+      collectionId,
+      chainName,
+      nftId,
+      mutationStatus
+    );
+  };
+
   return (
     <RendererServiceContext.Provider
       value={{
@@ -93,10 +132,13 @@ export const RendererServiceProvider = (
         createGeneration,
         getGeneration,
         getGenerations,
+        getNftGenerationItemsInfo,
         updateGeneration,
         deleteGeneration,
         deleteRenderer,
         revealItem,
+        mutateItem,
+        setMutationStatus,
       }}
     >
       {props.children}

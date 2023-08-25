@@ -8,6 +8,8 @@ import NftCollectionService from "./NftCollectionService";
 import { NftCollectionServiceContext } from "./NftCollectionServiceContext";
 import React from "react";
 import {
+  ERC1155CollectionInstance,
+  ERC721CollectionInstance,
   MinteebleDynamiCollectionInstance,
   MinteebleERC1155CollectionInstance,
   MinteebleERC721CollectionInstance,
@@ -32,7 +34,7 @@ export const NftCollectionServiceProvider = (
   //   []
   // );
 
-  let { walletAddress, web3 } = useWalletService();
+  let { walletAddress, walletClient } = useWalletService();
 
   useEffect(() => {
     let service = new NftCollectionService();
@@ -149,7 +151,7 @@ export const NftCollectionServiceProvider = (
     return new Promise<NftCollectionInstance | null>(
       async (resolve, reject) => {
         try {
-          if (connect && !web3) {
+          if (connect && !walletClient) {
             reject("Error. Client is not yet connected to web3.");
             return;
           }
@@ -164,26 +166,31 @@ export const NftCollectionServiceProvider = (
 
           let collectionInstance: NftCollectionInstance | null = null;
 
-          if (collectionModel) {
+          if (collectionModel && walletClient) {
             if (
               collectionModel.type === "MINTEEBLE_ERC721" ||
               collectionModel.type === "MinteebleERC721A"
             ) {
               collectionInstance = new MinteebleERC721CollectionInstance(
                 collectionModel,
-                web3
+                walletClient
               );
             } else if (collectionModel.type === "MINTEEBLE_ERC1155") {
               collectionInstance = new MinteebleERC1155CollectionInstance(
                 collectionModel,
-                web3
+                walletClient
+              );
+            } else if (collectionModel.type === "ERC1155") {
+              collectionInstance = new ERC1155CollectionInstance(
+                collectionModel,
+                walletClient
               );
             } else if (
               collectionModel.type === CollectionType.MINTEEBLE_GADGETS
             ) {
               collectionInstance = new MinteebleGadgetsCollectionInstance(
                 collectionModel,
-                web3
+                walletClient
               );
             } else if (
               collectionModel.type ===
@@ -191,7 +198,12 @@ export const NftCollectionServiceProvider = (
             ) {
               collectionInstance = new MinteebleDynamiCollectionInstance(
                 collectionModel,
-                web3
+                walletClient
+              );
+            } else if (collectionModel.type === CollectionType.ERC721) {
+              collectionInstance = new ERC721CollectionInstance(
+                collectionModel,
+                walletClient
               );
             }
 
@@ -215,12 +227,29 @@ export const NftCollectionServiceProvider = (
     return nftCollectionService?.updateCollectionInfo(collection);
   };
 
-  const getNftImageUrl = (collectionId: string, tokenId: number): string => {
-    return nftCollectionService?.getNftImageUrl(collectionId, tokenId) || "";
+  const getNftImageUrl = (
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ): string => {
+    return (
+      nftCollectionService?.getNftImageUrl(collectionId, chainName, tokenId) ||
+      ""
+    );
   };
 
-  const getNftMetadataUrl = (collectionId: string, tokenId: number): string => {
-    return nftCollectionService?.getNftMetadataUrl(collectionId, tokenId) || "";
+  const getNftMetadataUrl = (
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ): string => {
+    return (
+      nftCollectionService?.getNftMetadataUrl(
+        collectionId,
+        chainName,
+        tokenId
+      ) || ""
+    );
   };
 
   return (

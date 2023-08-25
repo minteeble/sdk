@@ -1,14 +1,10 @@
 import { JsonObject, JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
 import {
-  CreateFormRequestDto,
   FormClientModel,
   FormAnswerClientModel,
-  GetFormRequestDto,
-  GetFormResponseDto,
   GetFormsResponseDto,
   ICreateFormRequestDto,
-  IGetFormRequestDto,
   GetFormAnswersResponseDto,
 } from "@minteeble/utils";
 
@@ -70,6 +66,16 @@ export class FormsService extends BaseService {
       null;
 
     return form;
+  };
+
+  public getCsvFormAnswers = async (formId: string): Promise<string | null> => {
+    const csv: string = await this.apiCaller.get(
+      `/form/${formId}/csv`,
+      {},
+      true
+    );
+
+    return csv || null;
   };
 
   public getForms = async (): Promise<FormClientModel[]> => {

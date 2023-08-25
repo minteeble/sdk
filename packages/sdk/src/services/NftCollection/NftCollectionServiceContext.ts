@@ -38,9 +38,17 @@ export interface NftCollectionServiceContent {
     collection: NftCollectionInfoClientModel
   ) => Promise<void>;
 
-  getNftImageUrl: (collectionId: string, tokenId: number) => string;
+  getNftImageUrl: (
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ) => string;
 
-  getNftMetadataUrl: (collectionId: string, tokenId: number) => string;
+  getNftMetadataUrl: (
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ) => string;
 }
 
 export const NftCollectionServiceContext =

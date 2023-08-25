@@ -111,7 +111,6 @@ class NftCollectionService extends BaseService {
     let bodyObject = {
       name: collection.collectionName,
       description: collection.description,
-      rendererId: collection.rendererId || [],
       generationId: collection.generationId || "",
     };
 
@@ -192,12 +191,20 @@ class NftCollectionService extends BaseService {
     }
   };
 
-  public getNftImageUrl(collectionId: string, tokenId: number): string {
-    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/collection/${collectionId}/image/${tokenId}.png`;
+  public getNftImageUrl(
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ): string {
+    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/chain/${chainName}/collection/${collectionId}/image/${tokenId}.png`;
   }
 
-  public getNftMetadataUrl(collectionId: string, tokenId: number): string {
-    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/collection/${collectionId}/metadata/${tokenId}.json`;
+  public getNftMetadataUrl(
+    collectionId: string,
+    chainName: string,
+    tokenId: number
+  ): string {
+    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/chain/${chainName}/collection/${collectionId}/metadata/${tokenId}.json`;
   }
 }
 

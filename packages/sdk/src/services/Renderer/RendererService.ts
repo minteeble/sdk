@@ -1,12 +1,11 @@
 import {
-  CreateRendererRequestDto,
   GenerationDataClientModel,
   ICreateGenerationRequestDto,
   ICreateRendererRequestDto,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
-  UpdateRendererRequestDto,
+  NftGenerationItemInfoClientModel,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
@@ -117,8 +116,20 @@ export class RendererService extends BaseService {
   public async updateRenderer(
     renderer: RendererDataClientModel
   ): Promise<void> {
+    let customAttributes = {};
+
+    Object.keys(renderer.attributes).forEach((key) => {
+      customAttributes[key] = renderer.attributes[key];
+    });
+
     let body = {
-      attributes: renderer.attributes,
+      attributes: {
+        ...customAttributes,
+        baseUri: renderer.baseUri,
+        variables: renderer.variables,
+        cacheable: renderer.cacheable,
+        renderingCondition: renderer.renderingCondition,
+      },
     };
 
     await this.apiCaller.put(`/renderer/${renderer.id}`, {
@@ -138,7 +149,7 @@ export class RendererService extends BaseService {
     type: NftGenerationType,
     name: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<GenerationDataClientModel | null> {
     let body: ICreateGenerationRequestDto = {
@@ -210,10 +221,38 @@ export class RendererService extends BaseService {
     return generations;
   }
 
+  /**
+   * Gets information about specific generation items
+   *
+   * @param generationId generation's id
+   * @param nftGenerationItems a string with integers separated by commas, (eg: 1,2,3,5)
+   * @returns an array containing information about all the items
+   */
+  public async getNftGenerationItemsInfo(
+    generationId: string,
+    nftGenerationItems: string
+  ): Promise<Array<NftGenerationItemInfoClientModel>> {
+    let res = await this.apiCaller.get(
+      `/generation/${generationId}/items?nftGenerationItems=${nftGenerationItems}`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    let itemsInfo: NftGenerationItemInfoClientModel[] =
+      (serializer.deserializeObjectArray<NftGenerationItemInfoClientModel>(
+        res.itemsInfo,
+        NftGenerationItemInfoClientModel
+      ) || []) as NftGenerationItemInfoClientModel[];
+
+    return itemsInfo;
+  }
+
   public async updateGeneration(
     generationId: string,
     attributes: {
-      [key: string]: string;
+      [key: string]: any;
     }
   ): Promise<void> {
     let body = {
@@ -250,6 +289,58 @@ export class RendererService extends BaseService {
       `/chain/${chainName}/collection/${collectionId}/id/${nftId}/reveal`,
       {
         responseType: "text",
+      }
+    );
+  }
+
+  /**
+   * Mutates as NFT item
+   *
+   * @param chainName Network chain name
+   * @param collectionId Collection ID
+   * @param nftId NFT number ID
+   */
+  public async mutateItem(
+    chainName: string,
+    collectionId: string,
+    nftId: number,
+    mutationVariantName: string
+  ): Promise<void> {
+    let body = {
+      mutationVariantName,
+    };
+
+    await this.apiCaller.post(
+      `/chain/${chainName}/collection/${collectionId}/id/${nftId}/mutate`,
+      {
+        responseType: "text",
+        body,
+      }
+    );
+  }
+
+  /**
+   * Sets mutation status for an item
+   *
+   * @param nftGenerationId ID of the Generation containing the item to mutate
+   * @param nftNumberId: number ID of the NFT to mutate
+   * @param mutationStatus status of the mutation
+   */
+  public async setMutationStatus(
+    collectionId: string,
+    chainName: string,
+    nftId: number,
+    mutationStatus: boolean
+  ): Promise<void> {
+    let body = {
+      mutationStatus,
+    };
+
+    await this.apiCaller.post(
+      `/chain/${chainName}/collection/${collectionId}/id/${nftId}/mutation-status`,
+      {
+        responseType: "text",
+        body,
       }
     );
   }
