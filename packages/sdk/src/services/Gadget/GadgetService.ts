@@ -161,7 +161,7 @@ export class GadgetService extends BaseService {
         true
       );
 
-      return image || null;
+      return (image as unknown as Buffer).toString("base64") || null;
     } catch (err) {
       return null;
     }

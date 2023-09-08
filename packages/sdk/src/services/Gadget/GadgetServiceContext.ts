@@ -45,6 +45,8 @@ export interface GadgetServiceContent {
   ) => Promise<string | null>;
 
   uploadGadgetImage: (url: string, imageString: string) => Promise<void>;
+
+  getGadgetImageUrl: (groupId: string, tokenId: number) => string;
 }
 
 export const GadgetServiceContext = createContext<GadgetServiceContent>({
@@ -59,4 +61,5 @@ export const GadgetServiceContext = createContext<GadgetServiceContent>({
   deleteGadget: () => new Promise(() => {}),
   getGadgetImageUploadUrl: () => new Promise(() => {}),
   uploadGadgetImage: () => new Promise(() => {}),
+  getGadgetImageUrl: () => "",
 });

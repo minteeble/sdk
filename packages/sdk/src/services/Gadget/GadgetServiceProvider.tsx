@@ -142,6 +142,10 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     return GadgetService.instance.deleteGadget(groupId, tokenId);
   };
 
+  const getGadgetImageUrl = (groupId: string, tokenId: number): string => {
+    return GadgetService.instance.getGadgetImageUrl(groupId, tokenId);
+  };
+
   return (
     <GadgetServiceContext.Provider
       value={{
@@ -156,6 +160,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         deleteGadget,
         getGadgetImageUploadUrl,
         uploadGadgetImage,
+        getGadgetImageUrl,
       }}
     >
       {props.children}
