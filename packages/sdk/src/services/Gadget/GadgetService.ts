@@ -109,18 +109,6 @@ export class GadgetService extends BaseService {
     tokenId: string,
     imageString: string
   ): Promise<void> {
-    // let body = new Blob([
-    //   Buffer.from(imageString.split(",").at(1) || "", "base64"),
-    // ]);
-
-    // console.log(
-    //   "BLOB:",
-    //   body.size,
-    //   imageString,
-    //   imageString.slice(0, 30),
-    //   imageString.split(",").at(1)!.length
-    // );
-
     await this.apiCaller.post(
       `/group/${groupId}/token/${tokenId}`,
       {
@@ -172,9 +160,6 @@ export class GadgetService extends BaseService {
         },
         true
       );
-      if (image.success === false) {
-        return null;
-      }
 
       return image || null;
     } catch (err) {
