@@ -6,6 +6,8 @@ import {
   NftRendererType,
   RendererDataClientModel,
   NftGenerationItemInfoClientModel,
+  ITriggerCustomActionRequestDto,
+  TriggerCustomActionResponseDto,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
@@ -343,5 +345,39 @@ export class RendererService extends BaseService {
         body,
       }
     );
+  }
+
+  /**
+   * Triggers the execution of a `CustomAction`
+   *
+   * @param params CustomAction parameters
+   * @param authenticated Specififes if request has to be authenticated or not
+   */
+  public async triggerCustomAction(
+    params: ITriggerCustomActionRequestDto,
+    authenticated: boolean = false
+  ): Promise<TriggerCustomActionResponseDto | null> {
+    const body = {
+      requestBody: params.requestBody,
+    };
+
+    let endpointUrl = `/custom-action/${params.actionName}/chain/${params.chainName}/collection/${params.collectionId}/type/${params.resourceType}/resource/${params.resourceId}/`;
+
+    if (authenticated) endpointUrl += "auth";
+    else endpointUrl += "no-auth";
+
+    const res = await this.apiCaller.post(endpointUrl, {
+      responseType: "text",
+      body,
+      authenticated,
+    });
+
+    const decodedRes =
+      serializer.deserializeObject<TriggerCustomActionResponseDto>(
+        res,
+        TriggerCustomActionResponseDto
+      ) || null;
+
+    return decodedRes;
   }
 }

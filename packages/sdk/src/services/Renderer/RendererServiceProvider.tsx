@@ -1,12 +1,15 @@
 import {
   GenerationDataClientModel,
+  ITriggerCustomActionRequestDto,
   NftGenerationItemInfoClientModel,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
+  TriggerCustomActionResponseDto,
   UpdateRendererRequestDto,
 } from "@minteeble/utils";
 import React from "react";
+import { useAuthService } from "../AuthService";
 import { RendererService } from "./RendererService";
 import { RendererServiceProviderProps } from "./RendererService.types";
 import { RendererServiceContext } from "./RendererServiceContext";
@@ -14,6 +17,8 @@ import { RendererServiceContext } from "./RendererServiceContext";
 export const RendererServiceProvider = (
   props: RendererServiceProviderProps
 ) => {
+  const { user } = useAuthService();
+
   const createRenderer = async (
     type: NftRendererType,
     name: string,
@@ -122,6 +127,13 @@ export const RendererServiceProvider = (
     );
   };
 
+  const triggerCustomAction = async (
+    params: ITriggerCustomActionRequestDto,
+    authenticated?: boolean
+  ): Promise<TriggerCustomActionResponseDto | null> => {
+    return RendererService.instance.triggerCustomAction(params, authenticated);
+  };
+
   return (
     <RendererServiceContext.Provider
       value={{
@@ -139,6 +151,7 @@ export const RendererServiceProvider = (
         revealItem,
         mutateItem,
         setMutationStatus,
+        triggerCustomAction,
       }}
     >
       {props.children}

@@ -1,9 +1,11 @@
 import {
   GenerationDataClientModel,
+  ITriggerCustomActionRequestDto,
   NftGenerationItemInfoClientModel,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
+  TriggerCustomActionResponseDto,
 } from "@minteeble/utils";
 import { createContext } from "react";
 
@@ -69,6 +71,11 @@ export interface RendererServiceContent {
     nftId: number,
     mutationStatus: boolean
   ): Promise<void>;
+
+  triggerCustomAction(
+    params: ITriggerCustomActionRequestDto,
+    authenticated?: boolean
+  ): Promise<TriggerCustomActionResponseDto | null>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -99,4 +106,6 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   mutateItem: () => new Promise(() => {}),
 
   setMutationStatus: () => new Promise(() => {}),
+
+  triggerCustomAction: () => new Promise(() => {}),
 });
