@@ -452,11 +452,14 @@ export class RendererService extends BaseService {
     if (authenticated) endpointUrl += "auth";
     else endpointUrl += "no-auth";
 
-    const res = await this.apiCaller.post(endpointUrl, {
-      responseType: "text",
-      body,
-      authenticated,
-    });
+    const res = await this.apiCaller.post(
+      endpointUrl,
+      {
+        responseType: "text",
+        body,
+      },
+      authenticated
+    );
 
     const decodedRes =
       serializer.deserializeObject<TriggerCustomActionResponseDto>(
@@ -467,6 +470,12 @@ export class RendererService extends BaseService {
     return decodedRes;
   }
 
+  /**
+   * Triggers a renderer custom action
+   *
+   * @param params Custo action params object
+   * @returns Custom action response object
+   */
   public async triggerRendererAction<
     RT extends NftRendererType,
     AT extends UploadRendererCustomActionNames | never

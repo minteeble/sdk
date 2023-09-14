@@ -7,10 +7,15 @@ import {
   RendererDataClientModel,
   TriggerCustomActionResponseDto,
   UpdateRendererRequestDto,
+  UploadRendererCustomActionNames,
 } from "@minteeble/utils";
 import React from "react";
 import { useAuthService } from "../AuthService";
-import { RendererService } from "./RendererService";
+import {
+  RendererActionRequest,
+  RendererActionResponse,
+  RendererService,
+} from "./RendererService";
 import { RendererServiceProviderProps } from "./RendererService.types";
 import { RendererServiceContext } from "./RendererServiceContext";
 
@@ -134,6 +139,27 @@ export const RendererServiceProvider = (
     return RendererService.instance.triggerCustomAction(params, authenticated);
   };
 
+  const triggerRendererAction = async <
+    RT extends NftRendererType,
+    AT extends UploadRendererCustomActionNames | never
+  >(params: {
+    rendererType: RT;
+    chainName: string;
+    collectionId: string;
+    rendererId: string;
+    actionName: AT;
+    requestBody: RendererActionRequest<RT, AT>;
+    authenticated?: boolean;
+  }): Promise<{
+    responseBody: RendererActionResponse<RT, AT> | null;
+
+    success: boolean;
+
+    errorMessage?: string;
+  }> => {
+    return RendererService.instance.triggerRendererAction(params);
+  };
+
   return (
     <RendererServiceContext.Provider
       value={{
@@ -152,6 +178,7 @@ export const RendererServiceProvider = (
         mutateItem,
         setMutationStatus,
         triggerCustomAction,
+        triggerRendererAction,
       }}
     >
       {props.children}

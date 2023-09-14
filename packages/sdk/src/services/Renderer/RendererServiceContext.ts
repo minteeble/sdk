@@ -6,8 +6,13 @@ import {
   NftRendererType,
   RendererDataClientModel,
   TriggerCustomActionResponseDto,
+  UploadRendererCustomActionNames,
 } from "@minteeble/utils";
 import { createContext } from "react";
+import {
+  RendererActionRequest,
+  RendererActionResponse,
+} from "./RendererService";
 
 export interface RendererServiceContent {
   createRenderer(
@@ -76,6 +81,25 @@ export interface RendererServiceContent {
     params: ITriggerCustomActionRequestDto,
     authenticated?: boolean
   ): Promise<TriggerCustomActionResponseDto | null>;
+
+  triggerRendererAction<
+    RT extends NftRendererType,
+    AT extends UploadRendererCustomActionNames | never
+  >(params: {
+    rendererType: RT;
+    chainName: string;
+    collectionId: string;
+    rendererId: string;
+    actionName: AT;
+    requestBody: RendererActionRequest<RT, AT>;
+    authenticated?: boolean;
+  }): Promise<{
+    responseBody: RendererActionResponse<RT, AT> | null;
+
+    success: boolean;
+
+    errorMessage?: string;
+  }>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -108,4 +132,6 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   setMutationStatus: () => new Promise(() => {}),
 
   triggerCustomAction: () => new Promise(() => {}),
+
+  triggerRendererAction: () => new Promise(() => {}),
 });
