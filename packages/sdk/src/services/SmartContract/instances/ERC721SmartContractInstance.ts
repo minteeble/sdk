@@ -1,4 +1,4 @@
-import { readContract } from "wagmi/dist/actions";
+import { readContract } from "wagmi/actions";
 import {
   ISmartContractInstance,
   SmartContractInstance,

@@ -1,4 +1,4 @@
-import { readContract, writeContract } from "wagmi/dist/actions";
+import { readContract, writeContract } from "wagmi/actions";
 import {
   IERC721SmartContractInstance,
   ERC721SMartContractInstance,
