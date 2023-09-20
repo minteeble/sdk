@@ -6,9 +6,67 @@ import {
   NftRendererType,
   RendererDataClientModel,
   NftGenerationItemInfoClientModel,
+  ITriggerCustomActionRequestDto,
+  TriggerCustomActionResponseDto,
+  ConfirmPremintItemsUploadedActionRequestDto,
+  ConfirmPremintItemsUploadedActionResponseDto,
+  CustomActionRequestDTO,
+  CustomActionResponseDTO,
+  RegisterPremintUploadRequestDto,
+  RegisterPremintUploadResponseDto,
+  ConfirmNftMintedActionRequestDto,
+  ConfirmPostmintItemsUploadedRequestDto,
+  RegisterPostmintUploadRequestDto,
+  ConfirmNftMintedActionResponseDto,
+  RegisterPostmintUploadRepsonseDto,
+  ConfirmPostmintItemsUploadedRepsonseDto,
+  UploadRendererCustomActionNames,
+  TriggerCustomActionRequestDto,
+  CustomActionResourceType,
+  IRendererDataClientModel,
+  UploadRendererDataClientModel,
+  IConfirmNftMintedActionResponseDto,
+  IConfirmPostmintItemsUploadedRepsonseDto,
+  IConfirmPremintItemsUploadedActionResponseDto,
+  IRegisterPremintUploadResponseDto,
+  IRegisterPostmintUploadRepsonseDto,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
+
+export type RendererActionRequest<
+  RT extends NftRendererType,
+  AT extends UploadRendererCustomActionNames | never
+> = RT extends NftRendererType.UPLOAD
+  ? AT extends UploadRendererCustomActionNames.RegisterPremintUpload
+    ? RegisterPremintUploadRequestDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPremintItemsUploaded
+    ? ConfirmPremintItemsUploadedActionRequestDto
+    : AT extends UploadRendererCustomActionNames.ConfirmItemsMinted
+    ? ConfirmNftMintedActionRequestDto
+    : AT extends UploadRendererCustomActionNames.RegisterPostmintUpload
+    ? RegisterPostmintUploadRequestDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPostmintItemsUploaded
+    ? ConfirmPostmintItemsUploadedRequestDto
+    : CustomActionRequestDTO
+  : any;
+
+export type RendererActionResponse<
+  RT extends NftRendererType,
+  AT extends UploadRendererCustomActionNames | never
+> = RT extends NftRendererType.UPLOAD
+  ? AT extends UploadRendererCustomActionNames.RegisterPremintUpload
+    ? IRegisterPremintUploadResponseDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPremintItemsUploaded
+    ? IConfirmPremintItemsUploadedActionResponseDto
+    : AT extends UploadRendererCustomActionNames.ConfirmItemsMinted
+    ? IConfirmNftMintedActionResponseDto
+    : AT extends UploadRendererCustomActionNames.RegisterPostmintUpload
+    ? IRegisterPostmintUploadRepsonseDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPostmintItemsUploaded
+    ? IConfirmPostmintItemsUploadedRepsonseDto
+    : CustomActionResponseDTO
+  : any;
 
 const serializer = new JsonSerializer();
 
@@ -65,6 +123,36 @@ export class RendererService extends BaseService {
     renderer.type = type;
 
     return renderer;
+  }
+
+  /**
+   * Deserializes and instantiates a RendererClientModel based on its type
+   *
+   * @param rawRenderer Raw renderer client object to be deserialized. It can be either json-string or object
+   * @returns Specific RendererClientModel instance based on its type
+   */
+  public static rendererClientModelFactory(
+    rawRenderer: object | string
+  ): RendererDataClientModel | null {
+    let rawObj: object | null = null;
+    let deserializedObject: RendererDataClientModel | null = null;
+
+    try {
+      if (typeof rawRenderer === "string") rawObj = JSON.parse(rawRenderer);
+      if (typeof rawRenderer === "object") rawObj = rawRenderer;
+    } catch {}
+
+    switch ((rawObj as IRendererDataClientModel).type) {
+      case NftRendererType.UPLOAD:
+        deserializedObject =
+          serializer.deserializeObject<UploadRendererDataClientModel>(
+            rawObj as any,
+            UploadRendererDataClientModel
+          ) || null;
+        break;
+    }
+
+    return deserializedObject;
   }
 
   /**
@@ -344,4 +432,94 @@ export class RendererService extends BaseService {
       }
     );
   }
+
+  /**
+   * Triggers the execution of a `CustomAction`
+   *
+   * @param params CustomAction parameters
+   * @param authenticated Specififes if request has to be authenticated or not
+   */
+  public async triggerCustomAction(
+    params: ITriggerCustomActionRequestDto,
+    authenticated: boolean = false
+  ): Promise<TriggerCustomActionResponseDto | null> {
+    const body = {
+      requestBody: params.requestBody,
+    };
+
+    let endpointUrl = `/custom-action/${params.actionName}/chain/${params.chainName}/collection/${params.collectionId}/type/${params.resourceType}/resource/${params.resourceId}/`;
+
+    if (authenticated) endpointUrl += "auth";
+    else endpointUrl += "no-auth";
+
+    const res = await this.apiCaller.post(
+      endpointUrl,
+      {
+        responseType: "text",
+        body,
+      },
+      authenticated
+    );
+
+    const decodedRes =
+      serializer.deserializeObject<TriggerCustomActionResponseDto>(
+        res,
+        TriggerCustomActionResponseDto
+      ) || null;
+
+    return decodedRes;
+  }
+
+  /**
+   * Triggers a renderer custom action
+   *
+   * @param params Custo action params object
+   * @returns Custom action response object
+   */
+  public async triggerRendererAction<
+    RT extends NftRendererType,
+    AT extends UploadRendererCustomActionNames | never
+  >(params: {
+    rendererType: RT;
+    chainName: string;
+    collectionId: string;
+    rendererId: string;
+    actionName: AT;
+    requestBody: RendererActionRequest<RT, AT>;
+    authenticated?: boolean;
+  }): Promise<{
+    responseBody: RendererActionResponse<RT, AT> | null;
+
+    success: boolean;
+
+    errorMessage?: string;
+  }> {
+    let requestDto: ITriggerCustomActionRequestDto = {
+      requestBody: JSON.stringify(serializer.serialize(params.requestBody)),
+      chainName: params.chainName,
+      collectionId: params.collectionId,
+      resourceType: CustomActionResourceType.RENDERER,
+      resourceId: params.rendererId,
+      actionName: params.actionName,
+    };
+
+    let res = await this.triggerCustomAction(
+      requestDto,
+      !!params.authenticated
+    );
+
+    let decodedBody = null;
+
+    try {
+      decodedBody = JSON.parse(res?.responseBody) || null;
+    } catch {}
+
+    return {
+      success: res?.success || false,
+      errorMessage: res?.errorMessage,
+      responseBody: decodedBody,
+    };
+  }
 }
+
+// triggerRendererAction(NftRendererType.UPLOAD, UploadRendererCustomActionNames.ConfirmPremintItemsUploaded,)

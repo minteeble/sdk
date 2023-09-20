@@ -1,19 +1,29 @@
 import {
   GenerationDataClientModel,
+  ITriggerCustomActionRequestDto,
   NftGenerationItemInfoClientModel,
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
+  TriggerCustomActionResponseDto,
   UpdateRendererRequestDto,
+  UploadRendererCustomActionNames,
 } from "@minteeble/utils";
 import React from "react";
-import { RendererService } from "./RendererService";
+import { useAuthService } from "../AuthService";
+import {
+  RendererActionRequest,
+  RendererActionResponse,
+  RendererService,
+} from "./RendererService";
 import { RendererServiceProviderProps } from "./RendererService.types";
 import { RendererServiceContext } from "./RendererServiceContext";
 
 export const RendererServiceProvider = (
   props: RendererServiceProviderProps
 ) => {
+  const { user } = useAuthService();
+
   const createRenderer = async (
     type: NftRendererType,
     name: string,
@@ -122,6 +132,34 @@ export const RendererServiceProvider = (
     );
   };
 
+  const triggerCustomAction = async (
+    params: ITriggerCustomActionRequestDto,
+    authenticated?: boolean
+  ): Promise<TriggerCustomActionResponseDto | null> => {
+    return RendererService.instance.triggerCustomAction(params, authenticated);
+  };
+
+  const triggerRendererAction = async <
+    RT extends NftRendererType,
+    AT extends UploadRendererCustomActionNames | never
+  >(params: {
+    rendererType: RT;
+    chainName: string;
+    collectionId: string;
+    rendererId: string;
+    actionName: AT;
+    requestBody: RendererActionRequest<RT, AT>;
+    authenticated?: boolean;
+  }): Promise<{
+    responseBody: RendererActionResponse<RT, AT> | null;
+
+    success: boolean;
+
+    errorMessage?: string;
+  }> => {
+    return RendererService.instance.triggerRendererAction(params);
+  };
+
   return (
     <RendererServiceContext.Provider
       value={{
@@ -139,6 +177,8 @@ export const RendererServiceProvider = (
         revealItem,
         mutateItem,
         setMutationStatus,
+        triggerCustomAction,
+        triggerRendererAction,
       }}
     >
       {props.children}
