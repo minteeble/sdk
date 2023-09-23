@@ -62,7 +62,8 @@ export class MinteebleERC1155SmartContractInstance
   }
 
   public async hasAdminRole(account: string): Promise<boolean> {
-    return this.hasRole(await this.defaultAdminRole(), account);
+    const adminRole = await this.defaultAdminRole();
+    return this.hasRole(adminRole, account);
   }
 
   public async mintPrice(id: number): Promise<bigint> {
