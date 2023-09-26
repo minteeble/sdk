@@ -1,4 +1,4 @@
-import { readContract } from "wagmi/actions";
+import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
 import {
   IMinteebleERC1155SmartContractInstance,
   MinteebleERC1155SmartContractInstance,
@@ -15,6 +15,8 @@ export interface IMinteebleGadgetsSmartContractInstance
   getGadgetGroups(): Promise<bigint>;
 
   getGadgetGroupVariations(groupId: number): Promise<bigint>;
+
+  addVariation(groupId: number): Promise<void>;
 }
 
 export class MinteebleGadgetsSmartContractInstance
@@ -81,5 +83,18 @@ export class MinteebleGadgetsSmartContractInstance
     });
 
     return result as any;
+  }
+
+  public async addVariation(groupId: number): Promise<void> {
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "mint",
+      args: [groupId],
+    });
+
+    await waitForTransaction({
+      hash,
+    });
   }
 }
