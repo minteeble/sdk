@@ -89,7 +89,7 @@ export class MinteebleGadgetsSmartContractInstance
     let { hash } = await writeContract({
       address: this.address as any,
       abi: this.abi,
-      functionName: "mint",
+      functionName: "addVariation",
       args: [groupId],
     });
 
