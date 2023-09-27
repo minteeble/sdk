@@ -15,6 +15,8 @@ export interface IAccessControl {
 export interface IMinteebleERC1155SmartContractInstance
   extends IERC1155SmartContractInstance,
     IAccessControl {
+  totalSupply(id: number): Promise<bigint>;
+
   mintPrice(id: number): Promise<bigint>;
 
   estimatedMintTrxFees(id: number, mintAmount: number): Promise<bigint>;
@@ -64,6 +66,17 @@ export class MinteebleERC1155SmartContractInstance
   public async hasAdminRole(account: string): Promise<boolean> {
     const adminRole = await this.defaultAdminRole();
     return this.hasRole(adminRole, account);
+  }
+
+  public async totalSupply(id: number): Promise<bigint> {
+    let result = await readContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "totalSupply",
+      args: [id],
+    });
+
+    return result as any;
   }
 
   public async mintPrice(id: number): Promise<bigint> {
