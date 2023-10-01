@@ -21,6 +21,13 @@ export interface GadgetServiceContent {
     tokenId: number
   ) => Promise<GadgetInfoClientModel | null>;
 
+  updateGadget: (
+    groupId: string,
+    tokenId: number,
+    traitName: string,
+    value: string
+  ) => Promise<void>;
+
   createGadgetImage: (
     groupId: string,
     tokenId: string,
@@ -62,4 +69,5 @@ export const GadgetServiceContext = createContext<GadgetServiceContent>({
   getGadgetImageUploadUrl: () => new Promise(() => {}),
   uploadGadgetImage: () => new Promise(() => {}),
   getGadgetImageUrl: () => "",
+  updateGadget: () => new Promise(() => {}),
 });

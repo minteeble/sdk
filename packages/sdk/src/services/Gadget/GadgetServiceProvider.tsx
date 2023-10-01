@@ -53,6 +53,20 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
+  const updateGadget = async (
+    groupId: string,
+    tokenId: number,
+    traitName: string,
+    value: string
+  ): Promise<void> => {
+    return GadgetService.instance.updateGadget(
+      groupId,
+      tokenId,
+      traitName,
+      value
+    );
+  };
+
   const createGadgetImage = async (
     groupId: string,
     tokenId: string,
@@ -152,6 +166,7 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         createGadgetGroup,
         getGadgetGroup,
         createGadget,
+        updateGadget,
         createGadgetImage,
         getGadgetImage,
         getGadgetsGroupByOwner,

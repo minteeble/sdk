@@ -104,6 +104,32 @@ export class GadgetService extends BaseService {
     return gadget;
   }
 
+  public async updateGadget(
+    groupId: string,
+    tokenId: number,
+    traitName: string,
+    value: string
+  ): Promise<void> {
+    let body: ICreateGadgetRequestDto = {
+      groupId: groupId,
+      traitName: traitName,
+      value: value,
+      tokenId: tokenId,
+    };
+
+    return;
+
+    // TODO: wait api completion
+    // await this.apiCaller.put(
+    //   `/group/${groupId}/gadget/${tokenId}`,
+    //   {
+    //     responseType: "text",
+    //     body: body,
+    //   },
+    //   true
+    // );
+  }
+
   public async createGadgetImage(
     groupId: string,
     tokenId: string,
