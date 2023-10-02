@@ -37,6 +37,8 @@ export const WalletServiceProviderContent = (
 
   useEffect(() => {
     console.log("Wagmi account", account);
+    // console.log("")
+    // account.connector.
   }, [account]);
 
   useEffect(() => {
@@ -48,37 +50,34 @@ export const WalletServiceProviderContent = (
   }, [chains]);
 
   useEffect(() => {
-    if (chain) {
-      const chainId = chain.id;
-
-      if (chainId) {
-        let networkInfo = NetworkUtils.getAllNetworks().find(
-          (net) => net.chainId == chainId
-        );
-
-        console.log("Current chain:", networkInfo);
-
-        if (networkInfo) {
-          if (currentChain && currentChain.chainId !== networkInfo.chainId) {
-            window.location.reload();
-          }
-          setCurrentChain(networkInfo);
-        } else {
-          console.log("Current chain: Unknown");
-          if (currentChain && currentChain.chainId !== 0) {
-            window.location.reload();
-          }
-          setCurrentChain({
-            chainId: 0,
-            name: "unknown",
-            currency: "",
-            urlName: "unknown",
-            isTestnet: false,
-            explorerUrlPattern: "",
-          });
-        }
-      }
-    }
+    // if (chain) {
+    //   const chainId = chain.id;
+    //   if (chainId) {
+    //     let networkInfo = NetworkUtils.getAllNetworks().find(
+    //       (net) => net.chainId == chainId
+    //     );
+    //     console.log("Current chain:", networkInfo);
+    //     if (networkInfo) {
+    //       if (currentChain && currentChain.chainId !== networkInfo.chainId) {
+    //         window.location.reload();
+    //       }
+    //       setCurrentChain(networkInfo);
+    //     } else {
+    //       console.log("Current chain: Unknown");
+    //       if (currentChain && currentChain.chainId !== 0) {
+    //         window.location.reload();
+    //       }
+    //       setCurrentChain({
+    //         chainId: 0,
+    //         name: "unknown",
+    //         currency: "",
+    //         urlName: "unknown",
+    //         isTestnet: false,
+    //         explorerUrlPattern: "",
+    //       });
+    //     }
+    //   }
+    // }
   }, [chain]);
 
   useEffect(() => {
