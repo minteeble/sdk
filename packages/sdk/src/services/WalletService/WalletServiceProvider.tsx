@@ -31,7 +31,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
 
   const wagmiConfig = createConfig({
     autoConnect: true,
-    connectors: [new InjectedConnector({ chains })],
+    connectors: connectors,
     publicClient,
   });
 
