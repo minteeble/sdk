@@ -20,7 +20,7 @@ export interface WalletServiceProviderProps
 
 export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   const { chains, publicClient } = configureChains(props.chains || [], [
-    // publicProvider(),
+    publicProvider(),
   ]);
 
   const { connectors } = getDefaultWallets({

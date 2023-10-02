@@ -5,7 +5,13 @@ import React from "react";
 
 import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useWalletClient, useDisconnect, useNetwork, useAccount } from "wagmi";
+import {
+  useWalletClient,
+  useDisconnect,
+  useNetwork,
+  useAccount,
+  useSwitchNetwork,
+} from "wagmi";
 // import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { privateKeyToAccount } from "viem/accounts";
 import { fetchBlockNumber, signMessage } from "wagmi/actions";
@@ -31,6 +37,15 @@ export const WalletServiceProviderContent = (
   const [accounts, setAccounts] = useState<Array<string> | null>(null);
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
+  const {
+    chains: switchChains,
+    error,
+    pendingChainId,
+    switchNetwork,
+  } = useSwitchNetwork({
+    throwForSwitchChainNotSupported: true,
+  });
+
   useEffect(() => {
     console.log("Wagmi chain", chain);
   }, [chain]);
@@ -42,7 +57,7 @@ export const WalletServiceProviderContent = (
   }, [account]);
 
   useEffect(() => {
-    console.log("Wagmi walletclient", chain);
+    console.log("Wagmi walletclient", walletClient);
   }, [walletClient]);
 
   useEffect(() => {
