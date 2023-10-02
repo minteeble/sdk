@@ -31,6 +31,18 @@ export const WalletServiceProviderContent = (
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
   useEffect(() => {
+    console.log("Wagmi chain", chain);
+  }, [chain]);
+
+  useEffect(() => {
+    console.log("Wagmi walletclient", chain);
+  }, [walletClient]);
+
+  useEffect(() => {
+    console.log("Wagmi chains", chains);
+  }, [chains]);
+
+  useEffect(() => {
     if (chain) {
       const chainId = chain.id;
 
