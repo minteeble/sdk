@@ -7,6 +7,7 @@ import {
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export interface WalletServiceProviderProps
   extends WalletServiceProviderContentProps {
@@ -30,7 +31,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
 
   const wagmiConfig = createConfig({
     autoConnect: true,
-    connectors,
+    connectors: [new InjectedConnector({ chains })],
     publicClient,
   });
 
