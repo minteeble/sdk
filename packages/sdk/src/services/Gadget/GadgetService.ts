@@ -241,7 +241,7 @@ export class GadgetService extends BaseService {
   public async getGadgetsBatchUploadUrl(
     groupId: string
   ): Promise<GetGadgetsBatchUploadUrlResponseDto | null> {
-    let res = await this.apiCaller.post(
+    let res = await this.apiCaller.get(
       `/group/${groupId}/zip`,
       {
         responseType: "text",
