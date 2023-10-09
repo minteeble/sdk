@@ -1,6 +1,7 @@
 import {
   GadgetGroupClientModel,
   GadgetInfoClientModel,
+  GetGadgetsBatchUploadUrlResponseDto,
   ICreateGadgetGroupRequestDto,
   ICreateGadgetImageRequestDto,
   ICreateGadgetRequestDto,
@@ -235,5 +236,42 @@ export class GadgetService extends BaseService {
 
   public getGadgetImageUrl(groupId: string, tokenId: number): string {
     return `${this.apiCaller.apiBaseUrl}/${this.apiCaller.serviceSlug}/${this.apiCaller.appName}/group/${groupId}/token/${tokenId}`;
+  }
+
+  public async getGadgetsBatchUploadUrl(
+    groupId: string
+  ): Promise<GetGadgetsBatchUploadUrlResponseDto | null> {
+    let res = await this.apiCaller.post(
+      `/group/${groupId}/zip`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    const responseDto =
+      serializer.deserializeObject<GetGadgetsBatchUploadUrlResponseDto>(
+        res,
+        GetGadgetsBatchUploadUrlResponseDto
+      );
+
+    return responseDto || null;
+  }
+
+  public async batchCreateGadgets(
+    groupId: string,
+    requestId: string
+  ): Promise<{ success: boolean; message?: string }> {
+    let path = `/group/${groupId}/gadget/batch-upload/request/${requestId}`;
+
+    let res = await this.apiCaller.post(
+      path,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    return res as any;
   }
 }

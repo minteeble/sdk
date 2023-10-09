@@ -4,6 +4,7 @@ import { GadgetServiceContext } from "./GadgetServiceContext";
 import {
   GadgetGroupClientModel,
   GadgetInfoClientModel,
+  GetGadgetsBatchUploadUrlResponseDto,
   IGadgetGroupClientModel,
   IGadgetInfoClientModel,
 } from "@minteeble/utils";
@@ -160,6 +161,19 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     return GadgetService.instance.getGadgetImageUrl(groupId, tokenId);
   };
 
+  const getGadgetsBatchUploadUrl = async (
+    groupId: string
+  ): Promise<GetGadgetsBatchUploadUrlResponseDto | null> => {
+    return GadgetService.instance.getGadgetsBatchUploadUrl(groupId);
+  };
+
+  const batchCreateGadgets = async (
+    groupId: string,
+    requestId: string
+  ): Promise<{ success: boolean; message?: string }> => {
+    return GadgetService.instance.batchCreateGadgets(groupId, requestId);
+  };
+
   return (
     <GadgetServiceContext.Provider
       value={{
@@ -176,6 +190,8 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         getGadgetImageUploadUrl,
         uploadGadgetImage,
         getGadgetImageUrl,
+        getGadgetsBatchUploadUrl,
+        batchCreateGadgets,
       }}
     >
       {props.children}
