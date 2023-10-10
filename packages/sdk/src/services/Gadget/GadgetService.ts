@@ -165,14 +165,14 @@ export class GadgetService extends BaseService {
 
   public async uploadGadgetImage(
     url: string,
-    imageString: string
+    imageData: string | Blob
   ): Promise<void> {
-    console.log(url, imageString.length);
+    let blobData: Blob =
+      typeof imageData === "string"
+        ? new Blob([Buffer.from(imageData.split(",").at(1) || "", "base64")])
+        : imageData;
 
-    await axios.put(
-      url,
-      new Blob([Buffer.from(imageString.split(",").at(1) || "", "base64")])
-    );
+    await axios.put(url, blobData);
   }
 
   public async getGadgetImage(
