@@ -169,7 +169,12 @@ export class GadgetService extends BaseService {
   ): Promise<void> {
     let blobData: Blob =
       typeof imageData === "string"
-        ? new Blob([Buffer.from(imageData.split(",").at(1) || "", "base64")])
+        ? new Blob([
+            Buffer.from(
+              `data:image/png;base64,${imageData}`.split(",").at(1) || "",
+              "base64"
+            ),
+          ])
         : imageData;
 
     await axios.put(url, blobData);
