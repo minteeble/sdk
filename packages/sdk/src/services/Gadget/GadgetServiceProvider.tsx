@@ -97,15 +97,15 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
   const getGadgetImage = async (
     groupId: string,
     tokenId: string
-  ): Promise<string | null> => {
-    return new Promise<string | null>(async (resolve, reject) => {
+  ): Promise<Blob | null> => {
+    return new Promise<Blob | null>(async (resolve, reject) => {
       try {
         let image = await GadgetService.instance.getGadgetImage(
           groupId,
           tokenId
         );
 
-        resolve(image || "");
+        resolve(image || null);
       } catch (err) {
         console.log(err);
         reject(err);

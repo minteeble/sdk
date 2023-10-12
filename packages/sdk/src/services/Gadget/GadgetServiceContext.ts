@@ -80,7 +80,7 @@ export interface GadgetServiceContent {
    * @param tokenId - The ID of the token.
    * @returns A Promise that resolves with the base64-encoded image string or null if the operation fails.
    */
-  getGadgetImage: (groupId: string, tokenId: string) => Promise<string | null>;
+  getGadgetImage: (groupId: string, tokenId: string) => Promise<Blob | null>;
 
   /**
    * Retrieves all gadget groups owned by the current user.

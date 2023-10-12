@@ -178,17 +178,17 @@ export class GadgetService extends BaseService {
   public async getGadgetImage(
     groupId: string,
     tokenId: string
-  ): Promise<string | null> {
+  ): Promise<Blob | null> {
     try {
       let image = await this.apiCaller.get(
         `/group/${groupId}/token/${tokenId}`,
         {
-          responseType: "text",
+          responseType: "blob",
         },
-        true
+        false
       );
 
-      return (image as unknown as Buffer).toString("base64") || null;
+      return image;
     } catch (err) {
       return null;
     }
