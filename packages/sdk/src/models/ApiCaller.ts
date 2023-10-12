@@ -90,6 +90,7 @@ export class ApiCaller {
       return (
         await axios.get(`${this.apiBaseUrl}${urlPath}`, {
           params: init?.queryStringParameters || {},
+          responseType: init?.responseType || "json",
         })
       ).data;
     }

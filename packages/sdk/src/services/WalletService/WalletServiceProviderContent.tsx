@@ -5,7 +5,13 @@ import React from "react";
 
 import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { useWalletClient, useDisconnect, useNetwork } from "wagmi";
+import {
+  useWalletClient,
+  useDisconnect,
+  useNetwork,
+  useAccount,
+  useSwitchNetwork,
+} from "wagmi";
 // import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { privateKeyToAccount } from "viem/accounts";
 import { fetchBlockNumber, signMessage } from "wagmi/actions";
@@ -20,6 +26,7 @@ export const WalletServiceProviderContent = (
   const [walletService, setWalletService] = useState<WalletService | null>(
     null
   );
+  const account = useAccount();
   const { chain, chains } = useNetwork();
   const { data: walletClient, isError, isLoading } = useWalletClient();
   const { disconnect } = useDisconnect();
@@ -30,38 +37,62 @@ export const WalletServiceProviderContent = (
   const [accounts, setAccounts] = useState<Array<string> | null>(null);
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
+  const {
+    chains: switchChains,
+    error,
+    pendingChainId,
+    switchNetwork,
+  } = useSwitchNetwork({
+    throwForSwitchChainNotSupported: true,
+  });
+
   useEffect(() => {
-    if (chain) {
-      const chainId = chain.id;
+    console.log("Wagmi chain", chain);
+  }, [chain]);
 
-      if (chainId) {
-        let networkInfo = NetworkUtils.getAllNetworks().find(
-          (net) => net.chainId == chainId
-        );
+  useEffect(() => {
+    console.log("Wagmi account", account);
+    // console.log("")
+    // account.connector.
+  }, [account]);
 
-        console.log("Current chain:", networkInfo);
+  useEffect(() => {
+    console.log("Wagmi walletclient", walletClient);
+  }, [walletClient]);
 
-        if (networkInfo) {
-          if (currentChain && currentChain.chainId !== networkInfo.chainId) {
-            window.location.reload();
-          }
-          setCurrentChain(networkInfo);
-        } else {
-          console.log("Current chain: Unknown");
-          if (currentChain && currentChain.chainId !== 0) {
-            window.location.reload();
-          }
-          setCurrentChain({
-            chainId: 0,
-            name: "unknown",
-            currency: "",
-            urlName: "unknown",
-            isTestnet: false,
-            explorerUrlPattern: "",
-          });
-        }
-      }
-    }
+  useEffect(() => {
+    console.log("Wagmi chains", chains);
+  }, [chains]);
+
+  useEffect(() => {
+    // if (chain) {
+    //   const chainId = chain.id;
+    //   if (chainId) {
+    //     let networkInfo = NetworkUtils.getAllNetworks().find(
+    //       (net) => net.chainId == chainId
+    //     );
+    //     console.log("Current chain:", networkInfo);
+    //     if (networkInfo) {
+    //       if (currentChain && currentChain.chainId !== networkInfo.chainId) {
+    //         window.location.reload();
+    //       }
+    //       setCurrentChain(networkInfo);
+    //     } else {
+    //       console.log("Current chain: Unknown");
+    //       if (currentChain && currentChain.chainId !== 0) {
+    //         window.location.reload();
+    //       }
+    //       setCurrentChain({
+    //         chainId: 0,
+    //         name: "unknown",
+    //         currency: "",
+    //         urlName: "unknown",
+    //         isTestnet: false,
+    //         explorerUrlPattern: "",
+    //       });
+    //     }
+    //   }
+    // }
   }, [chain]);
 
   useEffect(() => {
