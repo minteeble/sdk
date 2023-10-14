@@ -1,3 +1,4 @@
+import { waitForTransaction, writeContract } from "wagmi/actions";
 import {
   IMinteebleErc721SmartContractInstance,
   MinteebleErc721SmartContractInstance,
@@ -7,6 +8,7 @@ export interface IMinteebleDynamicCollectionSmartContractInstance
   extends IMinteebleErc721SmartContractInstance {
   gadgetCollection(): Promise<string>;
   pairGadget(id: string, groupId: number, variationId: number): Promise<void>;
+  unpairGadget(id: string, groupId: number, variationId: number): Promise<void>;
 }
 
 export class MinteebleDynamicCollectionSmartContractInstance
@@ -14,6 +16,7 @@ export class MinteebleDynamicCollectionSmartContractInstance
   implements IMinteebleDynamicCollectionSmartContractInstance
 {
   public async gadgetCollection(): Promise<string> {
+    throw new Error("Method not implemented.");
     return "";
     // TOTO implement
     // this.requireActive();
@@ -26,13 +29,32 @@ export class MinteebleDynamicCollectionSmartContractInstance
     _groupId: number,
     _variationId: number
   ): Promise<void> {
-    // TODO impleemnt in viem
-    // let accounts = await this._web3!.eth.getAccounts();
-    // console.log("Input data", id, groupId, variationId);
-    // await (this.contract?.methods.pairGadget as any)(
-    //   id,
-    //   groupId,
-    //   variationId
-    // ).send({ from: accounts[0] });
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "pairGadget",
+      args: [_id, _groupId, _variationId],
+    });
+
+    await waitForTransaction({
+      hash,
+    });
+  }
+
+  public async unpairGadget(
+    _id: string,
+    _groupId: number,
+    _variationId: number
+  ): Promise<void> {
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "unpairGadget",
+      args: [_id, _groupId, _variationId],
+    });
+
+    await waitForTransaction({
+      hash,
+    });
   }
 }
