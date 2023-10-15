@@ -63,7 +63,7 @@ export class MinteebleDynamicCollectionSmartContractInstance
     let result = await readContract({
       address: this.address as any,
       abi: this.abi,
-      functionName: "getIteminfo",
+      functionName: "getItemInfo",
       args: [_id],
     });
 
