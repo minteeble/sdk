@@ -82,7 +82,7 @@ export class MinteebleGadgetsSmartContractInstance
       args: [_tokenId],
     });
 
-    return result as any;
+    // return result as any;
     // return { groupId: 0, variationId: 0 };
     // TODO
     // this.requireActive();
@@ -92,10 +92,13 @@ export class MinteebleGadgetsSmartContractInstance
     // ).call();
     // console.log("GroupInfo:", groupInfo);
 
-    // return {
-    //   groupId: parseInt(groupInfo[0]),
-    //   variationId: parseInt(groupInfo[1]),
-    // };
+    let groupId = parseInt(result[0]);
+    let variationId = parseInt(result[1]);
+
+    return {
+      groupId,
+      variationId,
+    };
   }
 
   public async getGadgetGroups(): Promise<bigint> {
