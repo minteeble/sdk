@@ -174,27 +174,29 @@ export class MinteebleERC1155SmartContractInstance
     _account: string,
     _operator: string
   ): Promise<boolean> {
-    return false;
-    // TODO implement
+    this.requireActive();
 
-    // this.requireActive();
+    let res: any = await readContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "isApprovedForAll",
+      args: [_account, _operator],
+    });
 
-    // return await (this.contract?.methods.isApprovedForAll as any)(
-    //   account,
-    //   operator
-    // ).call();
+    return !!res;
   }
 
   public async setApprovalForAll(
     _operator: string,
     _approved: boolean
   ): Promise<void> {
-    // TODO impleemnt in viem
-    // this.requireActive();
-    // let accounts = await this._web3!.eth.getAccounts();
-    // await (this.contract?.methods.setApprovalForAll as any)(
-    //   operator,
-    //   approved
-    // ).send({ from: accounts[0] });
+    this.requireActive();
+
+    await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "setApprovalForAll",
+      args: [_operator, _approved],
+    });
   }
 }
