@@ -1,4 +1,4 @@
-import { readContract } from "wagmi/actions";
+import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
 import {
   IERC1155SmartContractInstance,
   ERC1155SmartContractInstance,
@@ -117,16 +117,19 @@ export class MinteebleERC1155SmartContractInstance
   public async mintToken(_id: number, _amount: number): Promise<void> {
     this.requireActive();
 
-    // TODO implement erc1155 mint
+    let price = await this.mintPrice(_id);
 
-    // let price = await this.mintPrice(id);
-    // let value = price * BigInt(amount);
-    // let accounts = await this._web3!.eth.getAccounts();
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "mint",
+      args: [_id, _amount],
+      value: price * BigInt(_amount),
+    });
 
-    // let trx = await (this.contract!.methods.mint as any)(id, amount).send({
-    //   value: value.toString(),
-    //   from: accounts[0],
-    // });
+    await waitForTransaction({
+      hash,
+    });
   }
 
   public async balanceOf(_account: string): Promise<number> {
