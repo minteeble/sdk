@@ -1,4 +1,4 @@
-import { waitForTransaction, writeContract } from "wagmi/actions";
+import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
 import {
   IMinteebleErc721SmartContractInstance,
   MinteebleErc721SmartContractInstance,
@@ -9,6 +9,7 @@ export interface IMinteebleDynamicCollectionSmartContractInstance
   gadgetCollection(): Promise<string>;
   pairGadget(id: string, groupId: number, variationId: number): Promise<void>;
   unpairGadget(id: string, groupId: number, variationId: number): Promise<void>;
+  getIteminfo(id: string): Promise<Array<number>>;
 }
 
 export class MinteebleDynamicCollectionSmartContractInstance
@@ -56,5 +57,16 @@ export class MinteebleDynamicCollectionSmartContractInstance
     await waitForTransaction({
       hash,
     });
+  }
+
+  public async getIteminfo(_id: string): Promise<Array<number>> {
+    let result = await readContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "getIteminfo",
+      args: [_id],
+    });
+
+    return result.map((item) => Number(item)) as any;
   }
 }
