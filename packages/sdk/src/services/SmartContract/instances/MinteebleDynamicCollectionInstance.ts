@@ -54,9 +54,13 @@ export class MinteebleDynamicCollectionSmartContractInstance
       args: [_id, _groupId, _variationId],
     });
 
+    console.log("Triggered unpair");
+
     await waitForTransaction({
       hash,
     });
+
+    console.log("Unpair completed");
   }
 
   public async getIteminfo(_id: string): Promise<Array<bigint>> {
