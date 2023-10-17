@@ -194,9 +194,14 @@ class NftCollectionService extends BaseService {
   public getNftImageUrl(
     collectionId: string,
     chainName: string,
-    tokenId: number
+    tokenId: number,
+    size?: number
   ): string {
-    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/chain/${chainName}/collection/${collectionId}/image/${tokenId}.png`;
+    return `${this.apiCaller.apiBaseUrl}/renderer/${
+      this.apiCaller.appName
+    }/chain/${chainName}/collection/${collectionId}/image/${tokenId}.png${
+      size ? "?imageSize=" + size : ""
+    }`;
   }
 
   public getNftMetadataUrl(
