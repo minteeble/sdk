@@ -255,11 +255,15 @@ export class MinteebleERC1155SmartContractInstance
   ): Promise<void> {
     this.requireActive();
 
-    await writeContract({
+    let { hash } = await writeContract({
       address: this.address as any,
       abi: this.abi,
       functionName: "setApprovalForAll",
       args: [_operator, _approved],
+    });
+
+    await waitForTransaction({
+      hash,
     });
   }
 
