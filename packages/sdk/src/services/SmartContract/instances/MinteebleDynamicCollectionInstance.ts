@@ -9,7 +9,7 @@ export interface IMinteebleDynamicCollectionSmartContractInstance
   gadgetCollection(): Promise<string>;
   pairGadget(id: string, groupId: number, variationId: number): Promise<void>;
   unpairGadget(id: string, groupId: number, variationId: number): Promise<void>;
-  getIteminfo(id: string): Promise<Array<bigint>>;
+  getIteminfo(id: string): Promise<{ gadgets: Array<bigint> }>;
 }
 
 export class MinteebleDynamicCollectionSmartContractInstance
@@ -63,15 +63,13 @@ export class MinteebleDynamicCollectionSmartContractInstance
     console.log("Unpair completed");
   }
 
-  public async getIteminfo(_id: string): Promise<Array<bigint>> {
+  public async getIteminfo(_id: string): Promise<{ gadgets: Array<bigint> }> {
     let result = await readContract({
       address: this.address as any,
       abi: this.abi,
       functionName: "getItemInfo",
       args: [_id],
     });
-
-    console.log("ItemInfo:", result, typeof result);
 
     return result as any;
   }
