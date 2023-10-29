@@ -57,6 +57,19 @@ export interface IMinteebleERC1155SmartContractInstance
   mintToken(id: number, amount: number): Promise<void>;
 
   /**
+   * Mints the specified amount of tokens with the given ID for the specified account.
+   *
+   * @param recipientAccount The account to mint the tokens for.
+   * @param ids The IDs of the tokens to mint.
+   * @param amounts The amounts of the tokens to mint.
+   */
+  mintTokenBatchForAddress(
+    recipientAccount: string,
+    ids: number[],
+    amounts: number[]
+  ): Promise<void>;
+
+  /**
    * Returns the balance of the specified account for the specified token ID.
    * @param account The account to check the balance of.
    * @param id The ID of the token.
@@ -276,5 +289,27 @@ export class MinteebleERC1155SmartContractInstance
     });
 
     return prices.map((price) => BigInt(price));
+  }
+
+  public async mintTokenBatchForAddress(
+    recipientAccount: string,
+    ids: number[],
+    amounts: number[]
+  ): Promise<void> {
+    this.requireActive();
+
+    let prices = await this.batchMintPrice(ids);
+
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "mintTokenBatchForAddress",
+      args: [recipientAccount, ids, amounts],
+      value: prices.reduce((a, b) => a + b, BigInt(0)),
+    });
+
+    await waitForTransaction({
+      hash,
+    });
   }
 }
