@@ -2331,10 +2331,10 @@
     semver "^7.3.8"
     superstruct "^1.0.3"
 
-"@minteeble/utils@^1.0.180":
-  version "1.0.180"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.180.tgz#c8b825fca3e7e6aeb8656381bf5ed7fe9fd204cd"
-  integrity sha512-mdW5OKIWPeqNT84Mw82OeJkTXLVns6XABhLLxkTyKygvg2DwaDp/tflJVtu5wmyl0sJQPitOSRmAvaROb4/Svg==
+"@minteeble/utils@^1.0.182":
+  version "1.0.182"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.182.tgz#cb719bdda0846c666c447efd87dcd0a265cfd4de"
+  integrity sha512-IsWci2ARJzQizySeSjlO8o0NgsCFAd5HmPXAtoIlZl1XdoBMnrWCSHKh/NHidL8qVh3ixggL0eM0ZaHmOaSdhQ==
   dependencies:
     typescript-json-serializer "^6.0.1"
 
