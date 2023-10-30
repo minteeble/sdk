@@ -303,7 +303,7 @@ export class MinteebleERC1155SmartContractInstance
     let { hash } = await writeContract({
       address: this.address as any,
       abi: this.abi,
-      functionName: "mintTokenBatchForAddress",
+      functionName: "mintBatchForAddress",
       args: [recipientAccount, ids, amounts],
       value: prices.reduce((a, b) => a + b, BigInt(0)),
     });
