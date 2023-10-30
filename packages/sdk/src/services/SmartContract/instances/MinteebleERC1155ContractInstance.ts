@@ -300,12 +300,18 @@ export class MinteebleERC1155SmartContractInstance
 
     let prices = await this.batchMintPrice(ids);
 
+    let totPrice: bigint = BigInt(0);
+
+    for (let i = 0; i < prices.length; i++) {
+      totPrice += prices[i] * BigInt(amounts[i]);
+    }
+
     let { hash } = await writeContract({
       address: this.address as any,
       abi: this.abi,
       functionName: "mintBatchForAddress",
       args: [recipientAccount, ids, amounts],
-      value: prices.reduce((a, b) => a + b, BigInt(0)),
+      value: totPrice,
     });
 
     await waitForTransaction({
