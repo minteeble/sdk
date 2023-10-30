@@ -114,6 +114,8 @@ export interface RendererServiceContent {
       [traitType: string]: string[];
     }
   ): Promise<Array<number>>;
+
+  triggerTraitsRefresh(chainName: string, collectionId: string): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -152,4 +154,6 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   getCollectionTraits: () => new Promise(() => {}),
 
   filterNftsOnTraits: () => new Promise(() => {}),
+
+  triggerTraitsRefresh: () => new Promise(() => {}),
 });

@@ -589,6 +589,22 @@ export class RendererService extends BaseService {
 
     return responseDto?.nftIds || [];
   }
+
+  /**
+   * Triggers a traits refresh for a collection
+   *
+   * @param chainName Network chain name
+   * @param collectionId ID of the collection to refresh the traits of
+   */
+  public async triggerTraitsRefresh(chainName: string, collectionId: string) {
+    await this.apiCaller.post(
+      `/chain/${chainName}/collection/${collectionId}/refresh-traits`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+  }
 }
 
 // triggerRendererAction(NftRendererType.UPLOAD, UploadRendererCustomActionNames.ConfirmPremintItemsUploaded,)

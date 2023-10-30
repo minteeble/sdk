@@ -185,6 +185,16 @@ export const RendererServiceProvider = (
     );
   };
 
+  const triggerTraitsRefresh = async (
+    chainName: string,
+    collectionId: string
+  ) => {
+    return RendererService.instance.triggerTraitsRefresh(
+      chainName,
+      collectionId
+    );
+  };
+
   return (
     <RendererServiceContext.Provider
       value={{
@@ -206,6 +216,7 @@ export const RendererServiceProvider = (
         triggerRendererAction,
         getCollectionTraits,
         filterNftsOnTraits,
+        triggerTraitsRefresh,
       }}
     >
       {props.children}
