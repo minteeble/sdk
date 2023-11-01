@@ -587,7 +587,7 @@ export class RendererService extends BaseService {
         FilterNftsOnTraitsResponseDto
       ) || null;
 
-    return responseDto?.nftIds || [];
+    return (responseDto?.nftIds || []).sort((a, b) => a - b);
   }
 
   /**
