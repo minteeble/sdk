@@ -42,13 +42,15 @@ export interface NftCollectionServiceContent {
     collectionId: string,
     chainName: string,
     tokenId: number,
-    size?: number
+    size?: number,
+    showMutation?: boolean
   ) => string;
 
   getNftMetadataUrl: (
     collectionId: string,
     chainName: string,
-    tokenId: number
+    tokenId: number,
+    showMutation?: boolean
   ) => string;
 }
 

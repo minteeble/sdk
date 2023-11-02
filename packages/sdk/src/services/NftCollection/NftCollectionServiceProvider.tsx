@@ -231,14 +231,16 @@ export const NftCollectionServiceProvider = (
     collectionId: string,
     chainName: string,
     tokenId: number,
-    size?: number
+    size?: number,
+    showMutation?: boolean
   ): string => {
     return (
       nftCollectionService?.getNftImageUrl(
         collectionId,
         chainName,
         tokenId,
-        size
+        size,
+        showMutation
       ) || ""
     );
   };
@@ -246,13 +248,15 @@ export const NftCollectionServiceProvider = (
   const getNftMetadataUrl = (
     collectionId: string,
     chainName: string,
-    tokenId: number
+    tokenId: number,
+    showMutation?: boolean
   ): string => {
     return (
       nftCollectionService?.getNftMetadataUrl(
         collectionId,
         chainName,
-        tokenId
+        tokenId,
+        showMutation
       ) || ""
     );
   };

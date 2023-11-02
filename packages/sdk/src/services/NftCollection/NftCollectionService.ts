@@ -195,21 +195,29 @@ class NftCollectionService extends BaseService {
     collectionId: string,
     chainName: string,
     tokenId: number,
-    size?: number
+    size?: number,
+    showMutation?: boolean
   ): string {
     return `${this.apiCaller.apiBaseUrl}/renderer/${
       this.apiCaller.appName
     }/chain/${chainName}/collection/${collectionId}/image/${tokenId}.png${
       size ? "?imageSize=" + size : ""
+    }${
+      typeof showMutation !== "undefined" ? "&showMutation=" + showMutation : ""
     }`;
   }
 
   public getNftMetadataUrl(
     collectionId: string,
     chainName: string,
-    tokenId: number
+    tokenId: number,
+    showMutation?: boolean
   ): string {
-    return `${this.apiCaller.apiBaseUrl}/renderer/${this.apiCaller.appName}/chain/${chainName}/collection/${collectionId}/metadata/${tokenId}.json`;
+    return `${this.apiCaller.apiBaseUrl}/renderer/${
+      this.apiCaller.appName
+    }/chain/${chainName}/collection/${collectionId}/metadata/${tokenId}.json${
+      typeof showMutation !== "undefined" ? "?showMutation=" + showMutation : ""
+    }`;
   }
 }
 
