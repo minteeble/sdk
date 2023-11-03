@@ -26,7 +26,7 @@
     "websocket": "^1.0.34"
   },
   "devDependencies": {
-    "@rainbow-me/rainbowkit": "^1.0.11",
+    "@rainbow-me/rainbowkit": "^1.2.0",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@types/websocket": "^1.0.5",
@@ -34,8 +34,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "^5.1.6",
-    "viem": "^1.14.0",
-    "wagmi": "^1.4.2"
+    "viem": "^1.18.4",
+    "wagmi": "^1.4.5"
   },
   "peerDependencies": {
     "@rainbow-me/rainbowkit": "^1.0.11",
