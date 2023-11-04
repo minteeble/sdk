@@ -331,11 +331,15 @@ export class RendererService extends BaseService {
       false
     );
 
+    console.log("res", res);
+
     let itemsInfo: NftGenerationItemInfoClientModel[] =
       (serializer.deserializeObjectArray<NftGenerationItemInfoClientModel>(
         res.itemsInfo,
         NftGenerationItemInfoClientModel
       ) || []) as NftGenerationItemInfoClientModel[];
+
+    console.log("itemsInfo", itemsInfo);
 
     return itemsInfo;
   }
