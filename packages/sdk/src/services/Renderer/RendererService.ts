@@ -328,7 +328,7 @@ export class RendererService extends BaseService {
       {
         responseType: "text",
       },
-      true
+      false
     );
 
     let itemsInfo: NftGenerationItemInfoClientModel[] =
