@@ -5,6 +5,7 @@ import {
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
+  TraitTypeStats,
   TriggerCustomActionResponseDto,
   UploadRendererCustomActionNames,
 } from "@minteeble/utils";
@@ -100,6 +101,21 @@ export interface RendererServiceContent {
 
     errorMessage?: string;
   }>;
+
+  getCollectionTraits(
+    chainName: string,
+    collectionId: string
+  ): Promise<TraitTypeStats[]>;
+
+  filterNftsOnTraits(
+    chainName: string,
+    collectionId: string,
+    filterOptions: {
+      [traitType: string]: string[];
+    }
+  ): Promise<Array<number>>;
+
+  triggerTraitsRefresh(chainName: string, collectionId: string): Promise<void>;
 }
 
 export const RendererServiceContext = createContext<RendererServiceContent>({
@@ -134,4 +150,10 @@ export const RendererServiceContext = createContext<RendererServiceContent>({
   triggerCustomAction: () => new Promise(() => {}),
 
   triggerRendererAction: () => new Promise(() => {}),
+
+  getCollectionTraits: () => new Promise(() => {}),
+
+  filterNftsOnTraits: () => new Promise(() => {}),
+
+  triggerTraitsRefresh: () => new Promise(() => {}),
 });
