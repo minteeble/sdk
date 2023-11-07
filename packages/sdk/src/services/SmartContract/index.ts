@@ -4,3 +4,4 @@ export * from "./SmartContractService.types";
 export * from "./SmartContractServiceContext";
 export * from "./SmartContractServiceProvider";
 export * from "./useSmartContractService";
+export * from "./instances";

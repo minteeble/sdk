@@ -1,6 +1,7 @@
 import {
   GadgetGroupClientModel,
   GadgetInfoClientModel,
+  GetGadgetsBatchUploadUrlResponseDto,
   ICreateGadgetGroupRequestDto,
   ICreateGadgetImageRequestDto,
   ICreateGadgetRequestDto,
@@ -104,23 +105,37 @@ export class GadgetService extends BaseService {
     return gadget;
   }
 
+  public async updateGadget(
+    groupId: string,
+    tokenId: number,
+    traitName: string,
+    value: string
+  ): Promise<void> {
+    let body: ICreateGadgetRequestDto = {
+      groupId: groupId,
+      traitName: traitName,
+      value: value,
+      tokenId: tokenId,
+    };
+
+    return;
+
+    // TODO: wait api completion
+    // await this.apiCaller.put(
+    //   `/group/${groupId}/gadget/${tokenId}`,
+    //   {
+    //     responseType: "text",
+    //     body: body,
+    //   },
+    //   true
+    // );
+  }
+
   public async createGadgetImage(
     groupId: string,
     tokenId: string,
     imageString: string
   ): Promise<void> {
-    // let body = new Blob([
-    //   Buffer.from(imageString.split(",").at(1) || "", "base64"),
-    // ]);
-
-    // console.log(
-    //   "BLOB:",
-    //   body.size,
-    //   imageString,
-    //   imageString.slice(0, 30),
-    //   imageString.split(",").at(1)!.length
-    // );
-
     await this.apiCaller.post(
       `/group/${groupId}/token/${tokenId}`,
       {
@@ -150,33 +165,35 @@ export class GadgetService extends BaseService {
 
   public async uploadGadgetImage(
     url: string,
-    imageString: string
+    imageData: string | Blob
   ): Promise<void> {
-    console.log(url, imageString.length);
+    let blobData: Blob =
+      typeof imageData === "string"
+        ? new Blob([
+            Buffer.from(
+              `data:image/png;base64,${imageData}`.split(",").at(1) || "",
+              "base64"
+            ),
+          ])
+        : imageData;
 
-    await axios.put(
-      url,
-      new Blob([Buffer.from(imageString.split(",").at(1) || "", "base64")])
-    );
+    await axios.put(url, blobData);
   }
 
   public async getGadgetImage(
     groupId: string,
     tokenId: string
-  ): Promise<string | null> {
+  ): Promise<Blob | null> {
     try {
       let image = await this.apiCaller.get(
         `/group/${groupId}/token/${tokenId}`,
         {
-          responseType: "text",
+          responseType: "blob",
         },
-        true
+        false
       );
-      if (image.success === false) {
-        return null;
-      }
 
-      return image || null;
+      return image;
     } catch (err) {
       return null;
     }
@@ -224,5 +241,42 @@ export class GadgetService extends BaseService {
 
   public getGadgetImageUrl(groupId: string, tokenId: number): string {
     return `${this.apiCaller.apiBaseUrl}/${this.apiCaller.serviceSlug}/${this.apiCaller.appName}/group/${groupId}/token/${tokenId}`;
+  }
+
+  public async getGadgetsBatchUploadUrl(
+    groupId: string
+  ): Promise<GetGadgetsBatchUploadUrlResponseDto | null> {
+    let res = await this.apiCaller.get(
+      `/group/${groupId}/zip`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    const responseDto =
+      serializer.deserializeObject<GetGadgetsBatchUploadUrlResponseDto>(
+        res,
+        GetGadgetsBatchUploadUrlResponseDto
+      );
+
+    return responseDto || null;
+  }
+
+  public async batchCreateGadgets(
+    groupId: string,
+    requestId: string
+  ): Promise<{ success: boolean; message?: string }> {
+    let path = `/group/${groupId}/gadget/batch-upload/request/${requestId}`;
+
+    let res = await this.apiCaller.post(
+      path,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    return res as any;
   }
 }

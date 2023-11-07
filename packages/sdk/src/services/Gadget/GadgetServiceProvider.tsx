@@ -4,6 +4,7 @@ import { GadgetServiceContext } from "./GadgetServiceContext";
 import {
   GadgetGroupClientModel,
   GadgetInfoClientModel,
+  GetGadgetsBatchUploadUrlResponseDto,
   IGadgetGroupClientModel,
   IGadgetInfoClientModel,
 } from "@minteeble/utils";
@@ -53,6 +54,20 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     );
   };
 
+  const updateGadget = async (
+    groupId: string,
+    tokenId: number,
+    traitName: string,
+    value: string
+  ): Promise<void> => {
+    return GadgetService.instance.updateGadget(
+      groupId,
+      tokenId,
+      traitName,
+      value
+    );
+  };
+
   const createGadgetImage = async (
     groupId: string,
     tokenId: string,
@@ -82,15 +97,15 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
   const getGadgetImage = async (
     groupId: string,
     tokenId: string
-  ): Promise<string | null> => {
-    return new Promise<string | null>(async (resolve, reject) => {
+  ): Promise<Blob | null> => {
+    return new Promise<Blob | null>(async (resolve, reject) => {
       try {
         let image = await GadgetService.instance.getGadgetImage(
           groupId,
           tokenId
         );
 
-        resolve(image || "");
+        resolve(image || null);
       } catch (err) {
         console.log(err);
         reject(err);
@@ -142,12 +157,30 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
     return GadgetService.instance.deleteGadget(groupId, tokenId);
   };
 
+  const getGadgetImageUrl = (groupId: string, tokenId: number): string => {
+    return GadgetService.instance.getGadgetImageUrl(groupId, tokenId);
+  };
+
+  const getGadgetsBatchUploadUrl = async (
+    groupId: string
+  ): Promise<GetGadgetsBatchUploadUrlResponseDto | null> => {
+    return GadgetService.instance.getGadgetsBatchUploadUrl(groupId);
+  };
+
+  const batchCreateGadgets = async (
+    groupId: string,
+    requestId: string
+  ): Promise<{ success: boolean; message?: string }> => {
+    return GadgetService.instance.batchCreateGadgets(groupId, requestId);
+  };
+
   return (
     <GadgetServiceContext.Provider
       value={{
         createGadgetGroup,
         getGadgetGroup,
         createGadget,
+        updateGadget,
         createGadgetImage,
         getGadgetImage,
         getGadgetsGroupByOwner,
@@ -156,6 +189,9 @@ export const GadgetServiceProvider = (props: GadgetServiceProviderProps) => {
         deleteGadget,
         getGadgetImageUploadUrl,
         uploadGadgetImage,
+        getGadgetImageUrl,
+        getGadgetsBatchUploadUrl,
+        batchCreateGadgets,
       }}
     >
       {props.children}

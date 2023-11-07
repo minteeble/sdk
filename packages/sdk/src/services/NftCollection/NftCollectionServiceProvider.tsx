@@ -230,24 +230,33 @@ export const NftCollectionServiceProvider = (
   const getNftImageUrl = (
     collectionId: string,
     chainName: string,
-    tokenId: number
+    tokenId: number,
+    size?: number,
+    showMutation?: boolean
   ): string => {
     return (
-      nftCollectionService?.getNftImageUrl(collectionId, chainName, tokenId) ||
-      ""
+      nftCollectionService?.getNftImageUrl(
+        collectionId,
+        chainName,
+        tokenId,
+        size,
+        showMutation
+      ) || ""
     );
   };
 
   const getNftMetadataUrl = (
     collectionId: string,
     chainName: string,
-    tokenId: number
+    tokenId: number,
+    showMutation?: boolean
   ): string => {
     return (
       nftCollectionService?.getNftMetadataUrl(
         collectionId,
         chainName,
-        tokenId
+        tokenId,
+        showMutation
       ) || ""
     );
   };

@@ -6,9 +6,70 @@ import {
   NftRendererType,
   RendererDataClientModel,
   NftGenerationItemInfoClientModel,
+  ITriggerCustomActionRequestDto,
+  TriggerCustomActionResponseDto,
+  ConfirmPremintItemsUploadedActionRequestDto,
+  ConfirmPremintItemsUploadedActionResponseDto,
+  CustomActionRequestDTO,
+  CustomActionResponseDTO,
+  RegisterPremintUploadRequestDto,
+  RegisterPremintUploadResponseDto,
+  ConfirmNftMintedActionRequestDto,
+  ConfirmPostmintItemsUploadedRequestDto,
+  RegisterPostmintUploadRequestDto,
+  ConfirmNftMintedActionResponseDto,
+  RegisterPostmintUploadRepsonseDto,
+  ConfirmPostmintItemsUploadedRepsonseDto,
+  UploadRendererCustomActionNames,
+  TriggerCustomActionRequestDto,
+  CustomActionResourceType,
+  IRendererDataClientModel,
+  UploadRendererDataClientModel,
+  IConfirmNftMintedActionResponseDto,
+  IConfirmPostmintItemsUploadedRepsonseDto,
+  IConfirmPremintItemsUploadedActionResponseDto,
+  IRegisterPremintUploadResponseDto,
+  IRegisterPostmintUploadRepsonseDto,
+  TraitTypeStats,
+  GetCollectionTraitsResponseDto,
+  FilterNftsOnTraitsResponseDto,
 } from "@minteeble/utils";
 import { JsonSerializer } from "typescript-json-serializer";
 import { BaseService } from "../../models";
+
+export type RendererActionRequest<
+  RT extends NftRendererType,
+  AT extends UploadRendererCustomActionNames | never
+> = RT extends NftRendererType.UPLOAD
+  ? AT extends UploadRendererCustomActionNames.RegisterPremintUpload
+    ? RegisterPremintUploadRequestDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPremintItemsUploaded
+    ? ConfirmPremintItemsUploadedActionRequestDto
+    : AT extends UploadRendererCustomActionNames.ConfirmItemsMinted
+    ? ConfirmNftMintedActionRequestDto
+    : AT extends UploadRendererCustomActionNames.RegisterPostmintUpload
+    ? RegisterPostmintUploadRequestDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPostmintItemsUploaded
+    ? ConfirmPostmintItemsUploadedRequestDto
+    : CustomActionRequestDTO
+  : any;
+
+export type RendererActionResponse<
+  RT extends NftRendererType,
+  AT extends UploadRendererCustomActionNames | never
+> = RT extends NftRendererType.UPLOAD
+  ? AT extends UploadRendererCustomActionNames.RegisterPremintUpload
+    ? IRegisterPremintUploadResponseDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPremintItemsUploaded
+    ? IConfirmPremintItemsUploadedActionResponseDto
+    : AT extends UploadRendererCustomActionNames.ConfirmItemsMinted
+    ? IConfirmNftMintedActionResponseDto
+    : AT extends UploadRendererCustomActionNames.RegisterPostmintUpload
+    ? IRegisterPostmintUploadRepsonseDto
+    : AT extends UploadRendererCustomActionNames.ConfirmPostmintItemsUploaded
+    ? IConfirmPostmintItemsUploadedRepsonseDto
+    : CustomActionResponseDTO
+  : any;
 
 const serializer = new JsonSerializer();
 
@@ -65,6 +126,36 @@ export class RendererService extends BaseService {
     renderer.type = type;
 
     return renderer;
+  }
+
+  /**
+   * Deserializes and instantiates a RendererClientModel based on its type
+   *
+   * @param rawRenderer Raw renderer client object to be deserialized. It can be either json-string or object
+   * @returns Specific RendererClientModel instance based on its type
+   */
+  public static rendererClientModelFactory(
+    rawRenderer: object | string
+  ): RendererDataClientModel | null {
+    let rawObj: object | null = null;
+    let deserializedObject: RendererDataClientModel | null = null;
+
+    try {
+      if (typeof rawRenderer === "string") rawObj = JSON.parse(rawRenderer);
+      if (typeof rawRenderer === "object") rawObj = rawRenderer;
+    } catch {}
+
+    switch ((rawObj as IRendererDataClientModel).type) {
+      case NftRendererType.UPLOAD:
+        deserializedObject =
+          serializer.deserializeObject<UploadRendererDataClientModel>(
+            rawObj as any,
+            UploadRendererDataClientModel
+          ) || null;
+        break;
+    }
+
+    return deserializedObject;
   }
 
   /**
@@ -237,12 +328,12 @@ export class RendererService extends BaseService {
       {
         responseType: "text",
       },
-      true
+      false
     );
 
     let itemsInfo: NftGenerationItemInfoClientModel[] =
       (serializer.deserializeObjectArray<NftGenerationItemInfoClientModel>(
-        res.itemsInfo,
+        JSON.parse(res).itemsInfo,
         NftGenerationItemInfoClientModel
       ) || []) as NftGenerationItemInfoClientModel[];
 
@@ -344,4 +435,176 @@ export class RendererService extends BaseService {
       }
     );
   }
+
+  /**
+   * Triggers the execution of a `CustomAction`
+   *
+   * @param params CustomAction parameters
+   * @param authenticated Specififes if request has to be authenticated or not
+   */
+  public async triggerCustomAction(
+    params: ITriggerCustomActionRequestDto,
+    authenticated: boolean = false
+  ): Promise<TriggerCustomActionResponseDto | null> {
+    const body = {
+      requestBody: params.requestBody,
+    };
+
+    let endpointUrl = `/custom-action/${params.actionName}/chain/${params.chainName}/collection/${params.collectionId}/type/${params.resourceType}/resource/${params.resourceId}/`;
+
+    if (authenticated) endpointUrl += "auth";
+    else endpointUrl += "no-auth";
+
+    const res = await this.apiCaller.post(
+      endpointUrl,
+      {
+        responseType: "text",
+        body,
+      },
+      authenticated
+    );
+
+    const decodedRes =
+      serializer.deserializeObject<TriggerCustomActionResponseDto>(
+        res,
+        TriggerCustomActionResponseDto
+      ) || null;
+
+    return decodedRes;
+  }
+
+  /**
+   * Triggers a renderer custom action
+   *
+   * @param params Custo action params object
+   * @returns Custom action response object
+   */
+  public async triggerRendererAction<
+    RT extends NftRendererType,
+    AT extends UploadRendererCustomActionNames | never
+  >(params: {
+    rendererType: RT;
+    chainName: string;
+    collectionId: string;
+    rendererId: string;
+    actionName: AT;
+    requestBody: RendererActionRequest<RT, AT>;
+    authenticated?: boolean;
+  }): Promise<{
+    responseBody: RendererActionResponse<RT, AT> | null;
+
+    success: boolean;
+
+    errorMessage?: string;
+  }> {
+    let requestDto: ITriggerCustomActionRequestDto = {
+      requestBody: JSON.stringify(serializer.serialize(params.requestBody)),
+      chainName: params.chainName,
+      collectionId: params.collectionId,
+      resourceType: CustomActionResourceType.RENDERER,
+      resourceId: params.rendererId,
+      actionName: params.actionName,
+    };
+
+    let res = await this.triggerCustomAction(
+      requestDto,
+      !!params.authenticated
+    );
+
+    let decodedBody = null;
+
+    try {
+      decodedBody = JSON.parse(res?.responseBody) || null;
+    } catch {}
+
+    return {
+      success: res?.success || false,
+      errorMessage: res?.errorMessage,
+      responseBody: decodedBody,
+    };
+  }
+
+  /**
+   * Gets the traits of a collection
+   *
+   * @param chainName Network chain name
+   * @param collectionId Collection ID
+   * @returns An array containing the traits of the collection
+   * @throws Error if the request fails
+   **/
+  public async getCollectionTraits(
+    chainName: string,
+    collectionId: string
+  ): Promise<TraitTypeStats[]> {
+    const res = await this.apiCaller.get(
+      `/chain/${chainName}/collection/${collectionId}/get-traits`,
+      {
+        responseType: "text",
+      },
+      false
+    );
+
+    const responseDto: GetCollectionTraitsResponseDto | null =
+      serializer.deserializeObject<GetCollectionTraitsResponseDto>(
+        res,
+        GetCollectionTraitsResponseDto
+      ) || null;
+
+    return responseDto?.traits || [];
+  }
+
+  /**
+   * Filters NFTs on traits
+   *
+   * @param chainName Network chain name
+   * @param collectionId Collection ID
+   * @param filterOptions Filter options
+   * @returns An array containing the IDs of the filtered NFTs
+   * @throws Error if the request fails
+   **/
+  public async filterNftsOnTraits(
+    chainName: string,
+    collectionId: string,
+    filterOptions: {
+      [traitType: string]: string[];
+    }
+  ): Promise<Array<number>> {
+    const encodedFilterOptions = encodeURIComponent(
+      JSON.stringify(filterOptions)
+    );
+
+    const res = await this.apiCaller.get(
+      `/chain/${chainName}/collection/${collectionId}/filter-traits?traits=${encodedFilterOptions}`,
+      {
+        responseType: "text",
+      },
+      false
+    );
+
+    const responseDto: FilterNftsOnTraitsResponseDto | null =
+      serializer.deserializeObject<FilterNftsOnTraitsResponseDto>(
+        res,
+        FilterNftsOnTraitsResponseDto
+      ) || null;
+
+    return (responseDto?.nftIds || []).sort((a, b) => a - b);
+  }
+
+  /**
+   * Triggers a traits refresh for a collection
+   *
+   * @param chainName Network chain name
+   * @param collectionId ID of the collection to refresh the traits of
+   */
+  public async triggerTraitsRefresh(chainName: string, collectionId: string) {
+    await this.apiCaller.post(
+      `/chain/${chainName}/collection/${collectionId}/refresh-traits`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+  }
 }
+
+// triggerRendererAction(NftRendererType.UPLOAD, UploadRendererCustomActionNames.ConfirmPremintItemsUploaded,)
