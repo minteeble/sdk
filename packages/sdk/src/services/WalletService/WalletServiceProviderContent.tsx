@@ -17,6 +17,11 @@ import { privateKeyToAccount } from "viem/accounts";
 import { fetchBlockNumber, signMessage } from "wagmi/actions";
 
 export interface WalletServiceProviderContentProps {
+  /**
+   * If true, the wallet will refresh on chain change
+   */
+  refreshOnChainChange?: boolean;
+
   children: any;
 }
 
@@ -64,6 +69,12 @@ export const WalletServiceProviderContent = (
     console.log("Wagmi chains", chains);
   }, [chains]);
 
+  const handleChainReload = () => {
+    if (props.refreshOnChainChange) {
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
     if (chain) {
       const chainId = chain.id;
@@ -74,13 +85,13 @@ export const WalletServiceProviderContent = (
         console.log("Current chain:", networkInfo);
         if (networkInfo) {
           if (currentChain && currentChain.chainId !== networkInfo.chainId) {
-            window.location.reload();
+            handleChainReload();
           }
           setCurrentChain(networkInfo);
         } else {
           console.log("Current chain: Unknown");
           if (currentChain && currentChain.chainId !== 0) {
-            window.location.reload();
+            handleChainReload();
           }
           setCurrentChain({
             chainId: 0,
