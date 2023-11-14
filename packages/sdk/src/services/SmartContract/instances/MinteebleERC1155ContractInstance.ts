@@ -1,4 +1,4 @@
-import { readContract } from "wagmi/actions";
+import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
 import {
   IERC1155SmartContractInstance,
   ERC1155SmartContractInstance,
@@ -12,28 +12,104 @@ export interface IAccessControl {
   hasAdminRole(account: string): Promise<boolean>;
 }
 
+/**
+ * Represents an instance of the MinteebleERC1155 smart contract.
+ * Extends the IERC1155SmartContractInstance and IAccessControl interfaces.
+ */
 export interface IMinteebleERC1155SmartContractInstance
   extends IERC1155SmartContractInstance,
     IAccessControl {
+  /**
+   * Returns the total supply of tokens with the given ID.
+   * @param id The ID of the token.
+   * @returns A Promise that resolves to a bigint representing the total supply of tokens.
+   */
   totalSupply(id: number): Promise<bigint>;
 
+  /**
+   * Returns the price to mint a single token with the given ID.
+   * @param id The ID of the token.
+   * @returns A Promise that resolves to a bigint representing the price to mint a single token.
+   */
   mintPrice(id: number): Promise<bigint>;
 
+  /**
+   * Returns the prices to mint multiple tokens with the given IDs.
+   * @param ids An array of token IDs.
+   * @returns A Promise that resolves to an array of bigints representing the prices to mint each token.
+   */
+  batchMintPrice(ids: Array<number>): Promise<Array<bigint>>;
+
+  /**
+   * Returns the estimated transaction fees to mint a given amount of tokens with the given ID.
+   * @param id The ID of the token.
+   * @param mintAmount The amount of tokens to mint.
+   * @returns A Promise that resolves to a bigint representing the estimated transaction fees.
+   */
   estimatedMintTrxFees(id: number, mintAmount: number): Promise<bigint>;
 
+  /**
+   * Mints the specified amount of tokens with the given ID.
+   * @param id The ID of the token.
+   * @param amount The amount of tokens to mint.
+   * @returns A Promise that resolves when the transaction is complete.
+   */
   mintToken(id: number, amount: number): Promise<void>;
 
+  /**
+   * Mints the specified amount of tokens with the given ID for the specified account.
+   *
+   * @param recipientAccount The account to mint the tokens for.
+   * @param ids The IDs of the tokens to mint.
+   * @param amounts The amounts of the tokens to mint.
+   */
+  mintTokenBatchForAddress(
+    recipientAccount: string,
+    ids: number[],
+    amounts: number[]
+  ): Promise<void>;
+
+  /**
+   * Returns the balance of the specified account for the specified token ID.
+   * @param account The account to check the balance of.
+   * @param id The ID of the token.
+   * @returns A Promise that resolves to the balance of the account for the specified token ID.
+   */
   balanceOf(account: string, id: number): Promise<number>;
 
+  /**
+   * Returns the balances of the specified accounts for the specified token IDs.
+   * @param accounts An array of accounts to check the balances of.
+   * @param ids An array of token IDs.
+   * @returns A Promise that resolves to an array of balances for the specified accounts and token IDs.
+   */
   balanceOfBatch(
     accounts: Array<string>,
     ids: Array<number>
   ): Promise<Array<number>>;
 
+  /**
+   * Returns the balances of the specified account for the specified token IDs.
+   * @param account The account to check the balances of.
+   * @param ids An array of token IDs.
+   * @returns A Promise that resolves to an array of balances for the specified account and token IDs.
+   */
   balanceOfIds(account: string, ids: Array<number>): Promise<Array<number>>;
 
+  /**
+   * Returns whether the specified operator is approved to manage all of the specified account's tokens.
+   * @param account The account to check.
+   * @param operator The operator to check.
+   * @returns A Promise that resolves to a boolean indicating whether the operator is approved.
+   */
   isApprovedForAll(account: string, operator: string): Promise<boolean>;
 
+  /**
+   * Sets whether the specified operator is approved to manage all of the specified account's tokens.
+   * @param operator The operator to set approval for.
+   * @param approved Whether to approve or revoke approval.
+   * @returns A Promise that resolves when the transaction is complete.
+   */
   setApprovalForAll(operator: string, approved: boolean): Promise<void>;
 }
 
@@ -117,16 +193,19 @@ export class MinteebleERC1155SmartContractInstance
   public async mintToken(_id: number, _amount: number): Promise<void> {
     this.requireActive();
 
-    // TODO implement erc1155 mint
+    let price = await this.mintPrice(_id);
 
-    // let price = await this.mintPrice(id);
-    // let value = price * BigInt(amount);
-    // let accounts = await this._web3!.eth.getAccounts();
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "mint",
+      args: [_id, _amount],
+      value: price * BigInt(_amount),
+    });
 
-    // let trx = await (this.contract!.methods.mint as any)(id, amount).send({
-    //   value: value.toString(),
-    //   from: accounts[0],
-    // });
+    await waitForTransaction({
+      hash,
+    });
   }
 
   public async balanceOf(_account: string): Promise<number> {
@@ -171,27 +250,72 @@ export class MinteebleERC1155SmartContractInstance
     _account: string,
     _operator: string
   ): Promise<boolean> {
-    return false;
-    // TODO implement
+    this.requireActive();
 
-    // this.requireActive();
+    let res: any = await readContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "isApprovedForAll",
+      args: [_account, _operator],
+    });
 
-    // return await (this.contract?.methods.isApprovedForAll as any)(
-    //   account,
-    //   operator
-    // ).call();
+    return !!res;
   }
 
   public async setApprovalForAll(
     _operator: string,
     _approved: boolean
   ): Promise<void> {
-    // TODO impleemnt in viem
-    // this.requireActive();
-    // let accounts = await this._web3!.eth.getAccounts();
-    // await (this.contract?.methods.setApprovalForAll as any)(
-    //   operator,
-    //   approved
-    // ).send({ from: accounts[0] });
+    this.requireActive();
+
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "setApprovalForAll",
+      args: [_operator, _approved],
+    });
+
+    await waitForTransaction({
+      hash,
+    });
+  }
+
+  public async batchMintPrice(ids: Array<number>): Promise<Array<bigint>> {
+    let prices: any[] = await readContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "batchMintPrice",
+      args: [ids],
+    });
+
+    return prices.map((price) => BigInt(price));
+  }
+
+  public async mintTokenBatchForAddress(
+    recipientAccount: string,
+    ids: number[],
+    amounts: number[]
+  ): Promise<void> {
+    this.requireActive();
+
+    let prices = await this.batchMintPrice(ids);
+
+    let totPrice: bigint = BigInt(0);
+
+    for (let i = 0; i < prices.length; i++) {
+      totPrice += prices[i] * BigInt(amounts[i]);
+    }
+
+    let { hash } = await writeContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "mintBatchForAddress",
+      args: [recipientAccount, ids, amounts],
+      value: totPrice,
+    });
+
+    await waitForTransaction({
+      hash,
+    });
   }
 }

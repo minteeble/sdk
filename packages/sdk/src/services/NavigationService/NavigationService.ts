@@ -1,5 +1,5 @@
-import { GetNavigationByGroupResponseDto } from "@minteeble/utils";
-import { API } from "aws-amplify";
+// import { GetNavigationByGroupResponseDto } from "@minteeble/utils";
+// import { API } from "aws-amplify";
 
 /**
  * Service for handling Navigation info

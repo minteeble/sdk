@@ -5,6 +5,7 @@ import {
   NftGenerationType,
   NftRendererType,
   RendererDataClientModel,
+  TraitTypeStats,
   TriggerCustomActionResponseDto,
   UpdateRendererRequestDto,
   UploadRendererCustomActionNames,
@@ -160,6 +161,40 @@ export const RendererServiceProvider = (
     return RendererService.instance.triggerRendererAction(params);
   };
 
+  const getCollectionTraits = async (
+    chainName: string,
+    collectionId: string
+  ): Promise<TraitTypeStats[]> => {
+    return RendererService.instance.getCollectionTraits(
+      chainName,
+      collectionId
+    );
+  };
+
+  const filterNftsOnTraits = async (
+    chainName: string,
+    collectionId: string,
+    filterOptions: {
+      [traitType: string]: string[];
+    }
+  ): Promise<Array<number>> => {
+    return RendererService.instance.filterNftsOnTraits(
+      chainName,
+      collectionId,
+      filterOptions
+    );
+  };
+
+  const triggerTraitsRefresh = async (
+    chainName: string,
+    collectionId: string
+  ) => {
+    return RendererService.instance.triggerTraitsRefresh(
+      chainName,
+      collectionId
+    );
+  };
+
   return (
     <RendererServiceContext.Provider
       value={{
@@ -179,6 +214,9 @@ export const RendererServiceProvider = (
         setMutationStatus,
         triggerCustomAction,
         triggerRendererAction,
+        getCollectionTraits,
+        filterNftsOnTraits,
+        triggerTraitsRefresh,
       }}
     >
       {props.children}

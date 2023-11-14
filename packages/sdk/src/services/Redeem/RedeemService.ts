@@ -258,4 +258,18 @@ export class RedeemService extends BaseService {
       return null;
     }
   };
+
+  public deleteRedeemSystemProductImage = async (
+    redeemSystemId: string,
+    productId: string,
+    imageIndex: string
+  ): Promise<void> => {
+    const reqInit: any = {
+      responseType: "text",
+    };
+    await this.apiCaller.delete(
+      `/info/${redeemSystemId}/product/${productId}/image/${imageIndex}`,
+      reqInit
+    );
+  };
 }

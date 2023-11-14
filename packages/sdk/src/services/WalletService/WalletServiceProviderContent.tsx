@@ -17,6 +17,11 @@ import { privateKeyToAccount } from "viem/accounts";
 import { fetchBlockNumber, signMessage } from "wagmi/actions";
 
 export interface WalletServiceProviderContentProps {
+  /**
+   * If true, the wallet will refresh on chain change
+   */
+  refreshOnChainChange?: boolean;
+
   children: any;
 }
 
@@ -64,35 +69,41 @@ export const WalletServiceProviderContent = (
     console.log("Wagmi chains", chains);
   }, [chains]);
 
+  const handleChainReload = () => {
+    if (props.refreshOnChainChange) {
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
-    // if (chain) {
-    //   const chainId = chain.id;
-    //   if (chainId) {
-    //     let networkInfo = NetworkUtils.getAllNetworks().find(
-    //       (net) => net.chainId == chainId
-    //     );
-    //     console.log("Current chain:", networkInfo);
-    //     if (networkInfo) {
-    //       if (currentChain && currentChain.chainId !== networkInfo.chainId) {
-    //         window.location.reload();
-    //       }
-    //       setCurrentChain(networkInfo);
-    //     } else {
-    //       console.log("Current chain: Unknown");
-    //       if (currentChain && currentChain.chainId !== 0) {
-    //         window.location.reload();
-    //       }
-    //       setCurrentChain({
-    //         chainId: 0,
-    //         name: "unknown",
-    //         currency: "",
-    //         urlName: "unknown",
-    //         isTestnet: false,
-    //         explorerUrlPattern: "",
-    //       });
-    //     }
-    //   }
-    // }
+    if (chain) {
+      const chainId = chain.id;
+      if (chainId) {
+        let networkInfo = NetworkUtils.getAllNetworks().find(
+          (net) => net.chainId == chainId
+        );
+        console.log("Current chain:", networkInfo);
+        if (networkInfo) {
+          if (currentChain && currentChain.chainId !== networkInfo.chainId) {
+            handleChainReload();
+          }
+          setCurrentChain(networkInfo);
+        } else {
+          console.log("Current chain: Unknown");
+          if (currentChain && currentChain.chainId !== 0) {
+            handleChainReload();
+          }
+          setCurrentChain({
+            chainId: 0,
+            name: "unknown",
+            currency: "",
+            urlName: "unknown",
+            isTestnet: false,
+            explorerUrlPattern: "",
+          });
+        }
+      }
+    }
   }, [chain]);
 
   useEffect(() => {
