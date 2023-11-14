@@ -24,21 +24,27 @@ export const NavigationServiceProvider = (
   }, []);
 
   const loadUserNavigationInfo = async (): Promise<void> => {
-    return new Promise<void>(async (resolve, reject) => {
-      // try {
-      //   console.log("Navigation service:", navigationService);
-      //   if (navigationService) {
-      //     let navigationInfo =
-      //       await navigationService.getNavigationInfoForUser();
-      //     setUserNavigationInfo(navigationInfo);
-      //     resolve();
-      //   }
-      // } catch (err) {
-      //   setUserNavigationInfo(null);
-      //   console.log(err);
-      //   reject(err);
-      // }
-    });
+    return new Promise<void>(
+      async (
+        resolve
+        // reject
+      ) => {
+        // try {
+        //   console.log("Navigation service:", navigationService);
+        //   if (navigationService) {
+        //     let navigationInfo =
+        //       await navigationService.getNavigationInfoForUser();
+        //     setUserNavigationInfo(navigationInfo);
+        //     resolve();
+        //   }
+        // } catch (err) {
+        //   setUserNavigationInfo(null);
+        //   console.log(err);
+        //   reject(err);
+        // }
+        resolve();
+      }
+    );
   };
 
   return (
