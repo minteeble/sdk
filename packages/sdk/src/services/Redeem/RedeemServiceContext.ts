@@ -40,10 +40,10 @@ export interface RedeemServiceContent {
     supply?: number
   ): Promise<void>;
 
-  getRedeemProductImageUrl(
+  getRedeemProductImageUrls(
     redeemSystemId: string,
     productId: string
-  ): Promise<string>;
+  ): Promise<Array<string>>;
 
   updateRedeemSystemProduct(
     redeemSystemId: string,
@@ -94,7 +94,7 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   updateRedeemSystemInfo: () => new Promise(() => {}),
   deleteRedeemSystemInfo: () => new Promise(() => {}),
   addRedeemSystemProduct: () => new Promise(() => {}),
-  getRedeemProductImageUrl: () => new Promise(() => {}),
+  getRedeemProductImageUrls: () => new Promise(() => {}),
   updateRedeemSystemProduct: () => new Promise(() => {}),
   updateRedeemSystemProductImage: () => new Promise(() => {}),
   deleteRedeemSystemProduct: () => new Promise(() => {}),

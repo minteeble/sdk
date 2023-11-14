@@ -77,11 +77,11 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     );
   };
 
-  const getRedeemProductImageUrl = async (
+  const getRedeemProductImageUrls = async (
     redeemSystemId: string,
     productId: string
-  ): Promise<string> => {
-    return await RedeemService.instance.getRedeemProductImageUrl(
+  ): Promise<Array<string>> => {
+    return await RedeemService.instance.getRedeemProductImageUrls(
       redeemSystemId,
       productId
     );
@@ -179,7 +179,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         updateRedeemSystemInfo,
         deleteRedeemSystemInfo,
         addRedeemSystemProduct,
-        getRedeemProductImageUrl,
+        getRedeemProductImageUrls,
         deleteRedeemSystemProduct,
         updateRedeemSystemProduct,
         updateRedeemSystemProductImage,

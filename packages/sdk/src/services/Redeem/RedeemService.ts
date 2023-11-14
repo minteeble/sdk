@@ -54,10 +54,10 @@ export class RedeemService extends BaseService {
     );
   };
 
-  public getRedeemProductImageUrl = async (
+  public getRedeemProductImageUrls = async (
     redeemSystemId: string,
     productId: string
-  ): Promise<string> => {
+  ): Promise<Array<string>> => {
     let url = await this.apiCaller.get(
       `/info/${redeemSystemId}/product/${productId}/image`,
       {},
