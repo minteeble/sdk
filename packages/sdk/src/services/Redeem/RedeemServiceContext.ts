@@ -80,6 +80,11 @@ export interface RedeemServiceContent {
     nftId: string,
     redeemSystemId: string
   ) => Promise<GetRedeemedItemResponseDto | null>;
+  deleteRedeemSystemProductImage: (
+    redeemSystemId: string,
+    productId: string,
+    imageIndex: string
+  ) => Promise<void>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -96,4 +101,5 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   redeemItem: () => new Promise(() => {}),
   getRedeemableIds: () => new Promise(() => {}),
   getRedeemedItem: () => new Promise(() => {}),
+  deleteRedeemSystemProductImage: () => new Promise(() => {}),
 });
