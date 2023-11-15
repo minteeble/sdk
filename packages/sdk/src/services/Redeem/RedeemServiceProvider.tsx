@@ -163,7 +163,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     productId: string,
     imageIndex: string
   ): Promise<void> => {
-    return await deleteRedeemSystemProductImage(
+    return await RedeemService.instance.deleteRedeemSystemProductImage(
       redeemSystemId,
       productId,
       imageIndex
