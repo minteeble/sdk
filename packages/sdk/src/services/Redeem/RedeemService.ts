@@ -293,7 +293,7 @@ export class RedeemService extends BaseService {
 
     return (
       (serializer.deserializeObjectArray<RedeemRequestClientModel>(
-        res.items || [],
+        res.requests || [],
         RedeemRequestClientModel
       ) as RedeemRequestClientModel[]) || []
     );
