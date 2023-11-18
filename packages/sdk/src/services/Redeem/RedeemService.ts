@@ -7,6 +7,7 @@ import {
   IGetRedeemedItemResponseDto,
   IProductVariationClientModel,
   IRedeemItemRequestDto,
+  RedeemRequestClientModel,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
@@ -272,4 +273,29 @@ export class RedeemService extends BaseService {
       reqInit
     );
   };
+
+  /**
+   * Gets all the requests belonging to a redeem system
+   *
+   * @param redeemSystemId ID of the redeem system
+   * @returns Array of redeem requests
+   */
+  public async getRedeemRequests(
+    redeemSystemId: string
+  ): Promise<Array<RedeemRequestClientModel>> {
+    const res = await this.apiCaller.get(
+      `/info/${redeemSystemId}/requests`,
+      {},
+      true
+    );
+
+    if (!res) return [];
+
+    return (
+      (serializer.deserializeObjectArray<RedeemRequestClientModel>(
+        res.items || [],
+        RedeemRequestClientModel
+      ) as RedeemRequestClientModel[]) || []
+    );
+  }
 }

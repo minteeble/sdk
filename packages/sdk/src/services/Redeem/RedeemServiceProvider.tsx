@@ -7,6 +7,7 @@ import {
   ContactInformation,
   IProductVariationClientModel,
   GetRedeemedItemResponseDto,
+  RedeemRequestClientModel,
 } from "@minteeble/utils";
 import React from "react";
 import { RedeemService } from "./RedeemService";
@@ -170,6 +171,12 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     );
   };
 
+  const getRedeemRequests = async (
+    redeemSystemId: string
+  ): Promise<Array<RedeemRequestClientModel>> => {
+    return RedeemService.instance.getRedeemRequests(redeemSystemId);
+  };
+
   return (
     <RedeemServiceContext.Provider
       value={{
@@ -187,6 +194,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         getRedeemableIds,
         getRedeemedItem,
         deleteRedeemSystemProductImage,
+        getRedeemRequests,
       }}
     >
       {props.children}

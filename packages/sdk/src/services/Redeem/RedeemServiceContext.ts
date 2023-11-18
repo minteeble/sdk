@@ -3,6 +3,7 @@ import {
   ContactInformation,
   GetRedeemedItemResponseDto,
   IProductVariationClientModel,
+  RedeemRequestClientModel,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
@@ -80,11 +81,16 @@ export interface RedeemServiceContent {
     nftId: string,
     redeemSystemId: string
   ) => Promise<GetRedeemedItemResponseDto | null>;
+
   deleteRedeemSystemProductImage: (
     redeemSystemId: string,
     productId: string,
     imageIndex: string
   ) => Promise<void>;
+
+  getRedeemRequests(
+    redeemSystemId: string
+  ): Promise<Array<RedeemRequestClientModel>>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -102,4 +108,5 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   getRedeemableIds: () => new Promise(() => {}),
   getRedeemedItem: () => new Promise(() => {}),
   deleteRedeemSystemProductImage: () => new Promise(() => {}),
+  getRedeemRequests: () => new Promise(() => {}),
 });
