@@ -177,6 +177,13 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     return RedeemService.instance.getRedeemRequests(redeemSystemId);
   };
 
+  const sendItemRedeemedEmail = async (
+    redeemSystemId: string,
+    nftId: string
+  ): Promise<void> => {
+    return RedeemService.instance.sendItemRedeemedEmail(redeemSystemId, nftId);
+  };
+
   return (
     <RedeemServiceContext.Provider
       value={{
@@ -195,6 +202,7 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         getRedeemedItem,
         deleteRedeemSystemProductImage,
         getRedeemRequests,
+        sendItemRedeemedEmail,
       }}
     >
       {props.children}

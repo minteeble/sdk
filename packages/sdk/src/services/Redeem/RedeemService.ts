@@ -298,4 +298,18 @@ export class RedeemService extends BaseService {
       ) as RedeemRequestClientModel[]) || []
     );
   }
+
+  /**
+   * Sends email notification to the user that the item has been redeemed
+   *
+   * @param redeemSystemId ID of the redeem system
+   * @param nftId ID of the NFT
+   */
+  public async sendItemRedeemedEmail(redeemSystemId: string, nftId: string) {
+    await this.apiCaller.post(
+      `/info/${redeemSystemId}/nftId/${nftId}/email`,
+      {},
+      true
+    );
+  }
 }

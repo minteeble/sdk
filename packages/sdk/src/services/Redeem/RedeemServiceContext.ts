@@ -91,6 +91,8 @@ export interface RedeemServiceContent {
   getRedeemRequests(
     redeemSystemId: string
   ): Promise<Array<RedeemRequestClientModel>>;
+
+  sendItemRedeemedEmail(redeemSystemId: string, nftId: string): Promise<void>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -109,4 +111,5 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   getRedeemedItem: () => new Promise(() => {}),
   deleteRedeemSystemProductImage: () => new Promise(() => {}),
   getRedeemRequests: () => new Promise(() => {}),
+  sendItemRedeemedEmail: () => new Promise(() => {}),
 });
