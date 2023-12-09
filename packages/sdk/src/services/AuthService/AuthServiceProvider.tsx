@@ -132,12 +132,6 @@ export const AuthServiceProvider = (props: AuthServiceProviderProps) => {
     console.log("Signed out");
   };
 
-  // useEffect(() => {
-  //   if (user?.getUsername() && !walletAddress) {
-  //     signOut();
-  //   }
-  // }, [user, walletAddress]);
-
   return (
     <AuthServiceContext.Provider value={{ user, signIn, signOut, wsClient }}>
       {props.children}

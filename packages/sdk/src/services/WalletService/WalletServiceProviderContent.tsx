@@ -129,7 +129,10 @@ export const WalletServiceProviderContent = (
           setWalletAddress(address);
         } else {
           // await disconnectWallet();
+          setWalletAddress("");
         }
+      } else {
+        setWalletAddress("");
       }
     })();
   }, [walletClient]);
