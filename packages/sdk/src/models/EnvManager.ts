@@ -20,8 +20,8 @@ export class EnvManager {
   /**
    * Specifies the current env
    */
-  public static readonly environment: EnvironmentType =
-    process.env.ENVIRONMENT === "production"
+  public static environment: EnvironmentType =
+    process?.env?.ENVIRONMENT === "production"
       ? EnvironmentType.Prod
       : EnvironmentType.Dev;
 }
