@@ -3,6 +3,7 @@ import {
   ContactInformation,
   GetRedeemedItemResponseDto,
   IProductVariationClientModel,
+  RedeemRequestClientModel,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
@@ -40,10 +41,10 @@ export interface RedeemServiceContent {
     supply?: number
   ): Promise<void>;
 
-  getRedeemProductImageUrl(
+  getRedeemProductImageUrls(
     redeemSystemId: string,
     productId: string
-  ): Promise<string>;
+  ): Promise<Array<string>>;
 
   updateRedeemSystemProduct(
     redeemSystemId: string,
@@ -80,6 +81,18 @@ export interface RedeemServiceContent {
     nftId: string,
     redeemSystemId: string
   ) => Promise<GetRedeemedItemResponseDto | null>;
+
+  deleteRedeemSystemProductImage: (
+    redeemSystemId: string,
+    productId: string,
+    imageIndex: string
+  ) => Promise<void>;
+
+  getRedeemRequests(
+    redeemSystemId: string
+  ): Promise<Array<RedeemRequestClientModel>>;
+
+  sendItemRedeemedEmail(redeemSystemId: string, nftId: string): Promise<void>;
 }
 
 export const RedeemServiceContext = createContext<RedeemServiceContent>({
@@ -89,11 +102,14 @@ export const RedeemServiceContext = createContext<RedeemServiceContent>({
   updateRedeemSystemInfo: () => new Promise(() => {}),
   deleteRedeemSystemInfo: () => new Promise(() => {}),
   addRedeemSystemProduct: () => new Promise(() => {}),
-  getRedeemProductImageUrl: () => new Promise(() => {}),
+  getRedeemProductImageUrls: () => new Promise(() => {}),
   updateRedeemSystemProduct: () => new Promise(() => {}),
   updateRedeemSystemProductImage: () => new Promise(() => {}),
   deleteRedeemSystemProduct: () => new Promise(() => {}),
   redeemItem: () => new Promise(() => {}),
   getRedeemableIds: () => new Promise(() => {}),
   getRedeemedItem: () => new Promise(() => {}),
+  deleteRedeemSystemProductImage: () => new Promise(() => {}),
+  getRedeemRequests: () => new Promise(() => {}),
+  sendItemRedeemedEmail: () => new Promise(() => {}),
 });

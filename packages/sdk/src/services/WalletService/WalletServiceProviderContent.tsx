@@ -14,9 +14,14 @@ import {
 } from "wagmi";
 // import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { privateKeyToAccount } from "viem/accounts";
-import { fetchBlockNumber, signMessage } from "wagmi/actions";
+import { fetchBlockNumber, signMessage, switchNetwork } from "wagmi/actions";
 
 export interface WalletServiceProviderContentProps {
+  /**
+   * If true, the wallet will refresh on chain change
+   */
+  refreshOnChainChange?: boolean;
+
   children: any;
 }
 
@@ -37,15 +42,6 @@ export const WalletServiceProviderContent = (
   const [accounts, setAccounts] = useState<Array<string> | null>(null);
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
-  const {
-    chains: switchChains,
-    error,
-    pendingChainId,
-    switchNetwork,
-  } = useSwitchNetwork({
-    throwForSwitchChainNotSupported: true,
-  });
-
   useEffect(() => {
     console.log("Wagmi chain", chain);
   }, [chain]);
@@ -64,6 +60,12 @@ export const WalletServiceProviderContent = (
     console.log("Wagmi chains", chains);
   }, [chains]);
 
+  const handleChainReload = () => {
+    if (props.refreshOnChainChange) {
+      window.location.reload();
+    }
+  };
+
   useEffect(() => {
     if (chain) {
       const chainId = chain.id;
@@ -74,13 +76,13 @@ export const WalletServiceProviderContent = (
         console.log("Current chain:", networkInfo);
         if (networkInfo) {
           if (currentChain && currentChain.chainId !== networkInfo.chainId) {
-            window.location.reload();
+            handleChainReload();
           }
           setCurrentChain(networkInfo);
         } else {
           console.log("Current chain: Unknown");
           if (currentChain && currentChain.chainId !== 0) {
-            window.location.reload();
+            handleChainReload();
           }
           setCurrentChain({
             chainId: 0,
@@ -118,7 +120,10 @@ export const WalletServiceProviderContent = (
           setWalletAddress(address);
         } else {
           // await disconnectWallet();
+          setWalletAddress("");
         }
+      } else {
+        setWalletAddress("");
       }
     })();
   }, [walletClient]);
@@ -158,6 +163,10 @@ export const WalletServiceProviderContent = (
     });
   };
 
+  const switchChain = async (chainId: number) => {
+    await switchNetwork({ chainId: chainId });
+  };
+
   return (
     <WalletServiceContext.Provider
       value={{
@@ -170,6 +179,7 @@ export const WalletServiceProviderContent = (
         userIsSigning,
         currentChain,
         walletClient: walletClient || null,
+        switchChain,
       }}
     >
       {props.children}

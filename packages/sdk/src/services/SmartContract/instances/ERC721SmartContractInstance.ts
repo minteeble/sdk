@@ -8,6 +8,9 @@ export interface IERC721SmartContractInstance extends ISmartContractInstance {
   getOwner(): Promise<string | null>;
 
   ownedIds(ownerAddress: string): Promise<Array<string>>;
+
+  getTotalSupply(): Promise<number>;
+  getMaxSupply(): Promise<number>;
 }
 
 export class ERC721SMartContractInstance
@@ -38,5 +41,27 @@ export class ERC721SMartContractInstance
     });
 
     return ids;
+  }
+
+  public async getTotalSupply(): Promise<number> {
+    const totalSupply: any = await readContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "totalSupply",
+      args: [],
+    });
+
+    return totalSupply;
+  }
+
+  public async getMaxSupply(): Promise<number> {
+    const maxSupply: any = await readContract({
+      address: this.address as any,
+      abi: this.abi,
+      functionName: "maxSupply",
+      args: [],
+    });
+
+    return maxSupply;
   }
 }

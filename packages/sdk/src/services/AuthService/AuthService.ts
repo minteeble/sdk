@@ -23,10 +23,10 @@ import { EnvironmentType, EnvManager } from "../../models/EnvManager";
  */
 class AuthService {
   constructor(customConfig: any | null = null) {
-    console.log("Loading Auth configs. Env: ", EnvManager.environment);
+    console.log("Loading Auth configs. Env: ", EnvManager.instance.environment);
 
     let awsmobile =
-      EnvManager.environment === EnvironmentType.Dev
+      EnvManager.instance.environment === EnvironmentType.Dev
         ? awsmobileDev
         : awsmobileProd;
 
@@ -117,11 +117,11 @@ class AuthService {
   public static get apiBaseUrl(): string {
     let url = "";
 
-    if (EnvManager.environment === EnvironmentType.Dev) {
+    if (EnvManager.instance.environment === EnvironmentType.Dev) {
       url =
         this.customApiBaseUrlDev ||
         awsmobileDev.aws_cloud_logic_custom[0].endpoint;
-    } else if (EnvManager.environment === EnvironmentType.Prod) {
+    } else if (EnvManager.instance.environment === EnvironmentType.Prod) {
       url =
         this.customApiBaseUrlProd ||
         awsmobileProd.aws_cloud_logic_custom[0].endpoint;

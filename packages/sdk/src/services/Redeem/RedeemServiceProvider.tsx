@@ -7,6 +7,7 @@ import {
   ContactInformation,
   IProductVariationClientModel,
   GetRedeemedItemResponseDto,
+  RedeemRequestClientModel,
 } from "@minteeble/utils";
 import React from "react";
 import { RedeemService } from "./RedeemService";
@@ -77,11 +78,11 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     );
   };
 
-  const getRedeemProductImageUrl = async (
+  const getRedeemProductImageUrls = async (
     redeemSystemId: string,
     productId: string
-  ): Promise<string> => {
-    return await RedeemService.instance.getRedeemProductImageUrl(
+  ): Promise<Array<string>> => {
+    return await RedeemService.instance.getRedeemProductImageUrls(
       redeemSystemId,
       productId
     );
@@ -158,6 +159,31 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
     return await RedeemService.instance.getRedeemedItem(nftId, redeemSystemId);
   };
 
+  const deleteRedeemSystemProductImage = async (
+    redeemSystemId: string,
+    productId: string,
+    imageIndex: string
+  ): Promise<void> => {
+    return await RedeemService.instance.deleteRedeemSystemProductImage(
+      redeemSystemId,
+      productId,
+      imageIndex
+    );
+  };
+
+  const getRedeemRequests = async (
+    redeemSystemId: string
+  ): Promise<Array<RedeemRequestClientModel>> => {
+    return RedeemService.instance.getRedeemRequests(redeemSystemId);
+  };
+
+  const sendItemRedeemedEmail = async (
+    redeemSystemId: string,
+    nftId: string
+  ): Promise<void> => {
+    return RedeemService.instance.sendItemRedeemedEmail(redeemSystemId, nftId);
+  };
+
   return (
     <RedeemServiceContext.Provider
       value={{
@@ -167,13 +193,16 @@ export const RedeemServiceProvider = (props: RedeemProviderProps) => {
         updateRedeemSystemInfo,
         deleteRedeemSystemInfo,
         addRedeemSystemProduct,
-        getRedeemProductImageUrl,
+        getRedeemProductImageUrls,
         deleteRedeemSystemProduct,
         updateRedeemSystemProduct,
         updateRedeemSystemProductImage,
         redeemItem,
         getRedeemableIds,
         getRedeemedItem,
+        deleteRedeemSystemProductImage,
+        getRedeemRequests,
+        sendItemRedeemedEmail,
       }}
     >
       {props.children}

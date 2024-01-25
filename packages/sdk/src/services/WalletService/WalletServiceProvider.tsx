@@ -13,11 +13,19 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 export interface WalletServiceProviderProps
   extends WalletServiceProviderContentProps {
   appName?: string;
+
   walletConnectProjectId: string;
+
   alchemyApiKey?: string;
+
   chains: Array<any>;
 
   children: any;
+
+  /**
+   * If true, the wallet will refresh on chain change
+   */
+  refreshOnChainChange?: boolean;
 }
 
 export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
@@ -48,12 +56,12 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     publicClient,
   });
 
-  console.log("Setting config:", wagmiConfig);
-
   return (
     <WagmiConfig config={wagmiConfig}>
       <RainbowKitProvider chains={chains}>
-        <WalletServiceProviderContent>
+        <WalletServiceProviderContent
+          refreshOnChainChange={props.refreshOnChainChange ?? true}
+        >
           {props.children}
         </WalletServiceProviderContent>
       </RainbowKitProvider>

@@ -7,6 +7,7 @@ import {
   IGetRedeemedItemResponseDto,
   IProductVariationClientModel,
   IRedeemItemRequestDto,
+  RedeemRequestClientModel,
   RedeemSystemConfigClientModel,
   RedeemSystemInfoClientModel,
   RedeemSystemInfoPreviewClientModel,
@@ -54,17 +55,17 @@ export class RedeemService extends BaseService {
     );
   };
 
-  public getRedeemProductImageUrl = async (
+  public getRedeemProductImageUrls = async (
     redeemSystemId: string,
     productId: string
-  ): Promise<string> => {
-    let url = await this.apiCaller.get(
+  ): Promise<Array<string>> => {
+    let res = await this.apiCaller.get(
       `/info/${redeemSystemId}/product/${productId}/image`,
       {},
       true
     );
 
-    return url.url || "";
+    return res.urls || [];
   };
 
   public updateRedeemSystemProduct = async (
@@ -258,4 +259,57 @@ export class RedeemService extends BaseService {
       return null;
     }
   };
+
+  public deleteRedeemSystemProductImage = async (
+    redeemSystemId: string,
+    productId: string,
+    imageIndex: string
+  ): Promise<void> => {
+    const reqInit: any = {
+      responseType: "text",
+    };
+    await this.apiCaller.delete(
+      `/info/${redeemSystemId}/product/${productId}/image/${imageIndex}`,
+      reqInit
+    );
+  };
+
+  /**
+   * Gets all the requests belonging to a redeem system
+   *
+   * @param redeemSystemId ID of the redeem system
+   * @returns Array of redeem requests
+   */
+  public async getRedeemRequests(
+    redeemSystemId: string
+  ): Promise<Array<RedeemRequestClientModel>> {
+    const res = await this.apiCaller.get(
+      `/info/${redeemSystemId}/requests`,
+      {},
+      true
+    );
+
+    if (!res) return [];
+
+    return (
+      (serializer.deserializeObjectArray<RedeemRequestClientModel>(
+        res.requests || [],
+        RedeemRequestClientModel
+      ) as RedeemRequestClientModel[]) || []
+    );
+  }
+
+  /**
+   * Sends email notification to the user that the item has been redeemed
+   *
+   * @param redeemSystemId ID of the redeem system
+   * @param nftId ID of the NFT
+   */
+  public async sendItemRedeemedEmail(redeemSystemId: string, nftId: string) {
+    await this.apiCaller.post(
+      `/info/${redeemSystemId}/nftId/${nftId}/email`,
+      {},
+      true
+    );
+  }
 }

@@ -9,6 +9,9 @@ import {
   UserPreviewClientModel,
   IGetUserAppsResponseDto,
   IGetAppAdminsResponseDto,
+  IGetUserRoleResponseDto,
+  GetUserRoleResponseDto,
+  AppRole,
 } from "@minteeble/utils";
 
 const serializer = new JsonSerializer();
@@ -256,4 +259,22 @@ export class AppsService extends BaseService {
       true
     );
   };
+
+  public async getUserRole(): Promise<AppRole> {
+    const res: IGetUserRoleResponseDto = await this.apiCaller.get(
+      `/role`,
+      {
+        responseType: "text",
+      },
+      true
+    );
+
+    let deserializedResponse: GetUserRoleResponseDto =
+      (serializer.deserializeObject<GetUserRoleResponseDto>(
+        res,
+        GetUserRoleResponseDto
+      ) || {}) as GetUserRoleResponseDto;
+
+    return deserializedResponse.role;
+  }
 }
