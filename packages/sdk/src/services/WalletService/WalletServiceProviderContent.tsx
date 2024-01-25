@@ -14,7 +14,7 @@ import {
 } from "wagmi";
 // import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { privateKeyToAccount } from "viem/accounts";
-import { fetchBlockNumber, signMessage } from "wagmi/actions";
+import { fetchBlockNumber, signMessage, switchNetwork } from "wagmi/actions";
 
 export interface WalletServiceProviderContentProps {
   /**
@@ -41,15 +41,6 @@ export const WalletServiceProviderContent = (
   const [userIsSigning, setUserIsSigning] = useState<boolean>(false);
   const [accounts, setAccounts] = useState<Array<string> | null>(null);
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
-
-  const {
-    chains: switchChains,
-    error,
-    pendingChainId,
-    switchNetwork,
-  } = useSwitchNetwork({
-    throwForSwitchChainNotSupported: true,
-  });
 
   useEffect(() => {
     console.log("Wagmi chain", chain);
@@ -172,6 +163,10 @@ export const WalletServiceProviderContent = (
     });
   };
 
+  const switchChain = async (chainId: number) => {
+    await switchNetwork({ chainId: chainId });
+  };
+
   return (
     <WalletServiceContext.Provider
       value={{
@@ -184,6 +179,7 @@ export const WalletServiceProviderContent = (
         userIsSigning,
         currentChain,
         walletClient: walletClient || null,
+        switchChain,
       }}
     >
       {props.children}

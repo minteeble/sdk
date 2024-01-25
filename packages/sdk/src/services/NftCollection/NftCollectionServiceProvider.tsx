@@ -125,7 +125,7 @@ export const NftCollectionServiceProvider = (
       );
     } else {
       let chains =
-        EnvManager.environment === EnvironmentType.Prod
+        EnvManager.instance.environment === EnvironmentType.Prod
           ? NetworkUtils.getMainnetNetworks()
           : NetworkUtils.getTestnetNetworks();
 

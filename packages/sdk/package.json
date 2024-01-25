@@ -1,6 +1,6 @@
 {
   "name": "@minteeble/sdk",
-  "version": "2.0.51",
+  "version": "2.0.56",
   "description": "Minteeble React.js SDK package.",
   "main": "./lib/cjs/index.js",
   "module": "./lib/esm/index.js",
@@ -15,7 +15,7 @@
     "pub": "yarn build && lerna publish"
   },
   "dependencies": {
-    "@minteeble/utils": "^1.0.189",
+    "@minteeble/utils": "^1.0.191",
     "aws-amplify": "^4.3.37",
     "axios": "^1.3.3",
     "core-js": "^3.24.1",

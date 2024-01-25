@@ -13,6 +13,7 @@ export interface WalletServiceContent {
   accounts: Array<string> | null;
   currentChain: NetworkModel | null;
   walletClient: WalletClient | null;
+  switchChain(chainId: number): Promise<void>;
 }
 
 export const WalletServiceContext = createContext<WalletServiceContent>({
@@ -24,4 +25,5 @@ export const WalletServiceContext = createContext<WalletServiceContent>({
   accounts: null,
   currentChain: null,
   walletClient: null,
+  switchChain: async () => {},
 });
