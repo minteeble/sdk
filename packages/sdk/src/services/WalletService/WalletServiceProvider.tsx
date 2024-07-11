@@ -9,7 +9,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 
 export interface WalletServiceProviderProps
-  extends WalletServiceProviderContentProps {
+  extends Omit<WalletServiceProviderContentProps, "wagmiConfig"> {
   appName?: string;
 
   walletConnectProjectId: string;

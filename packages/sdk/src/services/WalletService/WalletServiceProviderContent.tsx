@@ -178,6 +178,7 @@ export const WalletServiceProviderContent = (
         currentChain,
         walletClient: walletClient || null,
         switchChain,
+        wagmiConfig: props.wagmiConfig,
       }}
     >
       {props.children}
