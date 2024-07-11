@@ -4,11 +4,9 @@ import {
   WalletServiceProviderContentProps,
 } from "./WalletServiceProviderContent";
 
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { InjectedConnector } from "wagmi/connectors/injected";
+import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { WagmiProvider } from "wagmi";
 
 export interface WalletServiceProviderProps
   extends WalletServiceProviderContentProps {
@@ -29,42 +27,38 @@ export interface WalletServiceProviderProps
 }
 
 export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
-  let providers = [publicProvider()];
+  // let providers = [publicProvider()];
 
-  if (props.alchemyApiKey) {
-    providers.push(
-      alchemyProvider({
-        apiKey: props.alchemyApiKey,
-      })
-    );
-  }
+  // if (props.alchemyApiKey) {
+  //   providers.push(
+  //     alchemyProvider({
+  //       apiKey: props.alchemyApiKey,
+  //     })
+  //   );
+  // }
 
-  const { chains, publicClient } = configureChains(
-    props.chains || [],
-    providers
-  );
+  const config = getDefaultConfig({
+    appName: props.appName ?? "Minteeble App",
 
-  const { connectors } = getDefaultWallets({
-    appName: props.appName || "Minteeble Sdk Consumer",
     projectId: props.walletConnectProjectId,
-    chains,
+
+    chains: props.chains as any,
   });
 
-  const wagmiConfig = createConfig({
-    autoConnect: true,
-    connectors: connectors,
-    publicClient,
-  });
+  const queryClient = new QueryClient();
 
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <WalletServiceProviderContent
-          refreshOnChainChange={props.refreshOnChainChange ?? true}
-        >
-          {props.children}
-        </WalletServiceProviderContent>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          <WalletServiceProviderContent
+            refreshOnChainChange={props.refreshOnChainChange ?? true}
+            wagmiConfig={config}
+          >
+            {props.children}
+          </WalletServiceProviderContent>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 };

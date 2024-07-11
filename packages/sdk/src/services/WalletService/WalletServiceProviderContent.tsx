@@ -2,25 +2,24 @@ import { useEffect, useState } from "react";
 import WalletService from "./WalletService";
 import { WalletServiceContext } from "./WalletServiceContext";
 import React from "react";
-
 import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import {
   useWalletClient,
   useDisconnect,
-  useNetwork,
   useAccount,
-  useSwitchNetwork,
+  useSwitchChain,
+  useChainId,
 } from "wagmi";
-// import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { privateKeyToAccount } from "viem/accounts";
-import { fetchBlockNumber, signMessage, switchNetwork } from "wagmi/actions";
+import { signMessage } from "wagmi/actions";
 
 export interface WalletServiceProviderContentProps {
   /**
    * If true, the wallet will refresh on chain change
    */
   refreshOnChainChange?: boolean;
+
+  wagmiConfig: any;
 
   children: any;
 }
@@ -32,7 +31,8 @@ export const WalletServiceProviderContent = (
     null
   );
   const account = useAccount();
-  const { chain, chains } = useNetwork();
+  const { chains, switchChain: switchNetwork } = useSwitchChain();
+  const chainId = useChainId(props.wagmiConfig);
   const { data: walletClient, isError, isLoading } = useWalletClient();
   const { disconnect } = useDisconnect();
   const { openConnectModal } = useConnectModal();
@@ -43,8 +43,8 @@ export const WalletServiceProviderContent = (
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
   useEffect(() => {
-    console.log("Wagmi chain", chain);
-  }, [chain]);
+    console.log("Wagmi chain id", chainId);
+  }, [chainId]);
 
   useEffect(() => {
     console.log("Wagmi account", account);
@@ -67,35 +67,32 @@ export const WalletServiceProviderContent = (
   };
 
   useEffect(() => {
-    if (chain) {
-      const chainId = chain.id;
-      if (chainId) {
-        let networkInfo = NetworkUtils.getAllNetworks().find(
-          (net) => net.chainId == chainId
-        );
-        console.log("Current chain:", networkInfo);
-        if (networkInfo) {
-          if (currentChain && currentChain.chainId !== networkInfo.chainId) {
-            handleChainReload();
-          }
-          setCurrentChain(networkInfo);
-        } else {
-          console.log("Current chain: Unknown");
-          if (currentChain && currentChain.chainId !== 0) {
-            handleChainReload();
-          }
-          setCurrentChain({
-            chainId: 0,
-            name: "unknown",
-            currency: "",
-            urlName: "unknown",
-            isTestnet: false,
-            explorerUrlPattern: "",
-          });
+    if (chainId) {
+      let networkInfo = NetworkUtils.getAllNetworks().find(
+        (net) => net.chainId == chainId
+      );
+      console.log("Current chain:", networkInfo);
+      if (networkInfo) {
+        if (currentChain && currentChain.chainId !== networkInfo.chainId) {
+          handleChainReload();
         }
+        setCurrentChain(networkInfo);
+      } else {
+        console.log("Current chain: Unknown");
+        if (currentChain && currentChain.chainId !== 0) {
+          handleChainReload();
+        }
+        setCurrentChain({
+          chainId: 0,
+          name: "unknown",
+          currency: "",
+          urlName: "unknown",
+          isTestnet: false,
+          explorerUrlPattern: "",
+        });
       }
     }
-  }, [chain]);
+  }, [chainId]);
 
   useEffect(() => {
     let service = new WalletService();
@@ -143,12 +140,13 @@ export const WalletServiceProviderContent = (
   };
 
   const sign = async (_message: any): Promise<any> => {
-    return new Promise<any>(async (resolve, reject) => {
-      if (walletService && walletAddress && walletClient) {
+    return await new Promise<any>(async (resolve, reject) => {
+      if (walletAddress && walletClient) {
         try {
           setUserIsSigning(true);
 
-          const signature = await signMessage({
+          console.log("Signing message: ", _message);
+          const signature = await signMessage(props.wagmiConfig, {
             message: _message,
           });
 
