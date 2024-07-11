@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   WalletServiceProviderContent,
   WalletServiceProviderContentProps,
@@ -37,15 +37,17 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   //   );
   // }
 
-  const config = getDefaultConfig({
-    appName: props.appName ?? "Minteeble App",
+  const [config] = useState(
+    getDefaultConfig({
+      appName: props.appName ?? "Minteeble App",
 
-    projectId: props.walletConnectProjectId,
+      projectId: props.walletConnectProjectId,
 
-    chains: props.chains as any,
-  });
+      chains: props.chains as any,
+    })
+  );
 
-  const queryClient = new QueryClient();
+  const [queryClient] = useState<QueryClient>(new QueryClient());
 
   return (
     <WagmiProvider config={config}>
