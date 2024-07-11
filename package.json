@@ -16,7 +16,7 @@
     "pub": "lerna run pub"
   },
   "devDependencies": {
-    "lerna": "^6.5.1"
+    "lerna": "^8.1.6"
   },
   "workspaces": [
     "packages/*"
