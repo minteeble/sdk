@@ -1,4 +1,8 @@
-import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
+import {
+  readContract,
+  waitForTransactionReceipt,
+  writeContract,
+} from "viem/actions";
 import {
   IMinteebleErc721SmartContractInstance,
   MinteebleErc721SmartContractInstance,
@@ -30,14 +34,17 @@ export class MinteebleDynamicCollectionSmartContractInstance
     _groupId: number,
     _variationId: number
   ): Promise<void> {
-    let { hash } = await writeContract({
+    if (!this._walletClient) throw new Error("No wallet connected");
+    const hash = await writeContract(this._walletClient, {
       address: this.address as any,
       abi: this.abi,
       functionName: "pairGadget",
+      account: this._walletClient.account!,
       args: [_id, _groupId, _variationId],
+      chain: null,
     });
 
-    await waitForTransaction({
+    await waitForTransactionReceipt(this._walletClient, {
       hash,
     });
   }
@@ -47,16 +54,19 @@ export class MinteebleDynamicCollectionSmartContractInstance
     _groupId: number,
     _variationId: number
   ): Promise<void> {
-    let { hash } = await writeContract({
+    if (!this._walletClient) throw new Error("No wallet connected");
+    const hash = await writeContract(this._walletClient, {
       address: this.address as any,
       abi: this.abi,
       functionName: "unpairGadget",
       args: [_id, _groupId, _variationId],
+      account: this._walletClient.account!,
+      chain: null,
     });
 
     console.log("Triggered unpair");
 
-    await waitForTransaction({
+    await waitForTransactionReceipt(this._walletClient, {
       hash,
     });
 
@@ -64,7 +74,8 @@ export class MinteebleDynamicCollectionSmartContractInstance
   }
 
   public async getIteminfo(_id: string): Promise<{ gadgets: Array<bigint> }> {
-    let result = await readContract({
+    if (!this._walletClient) throw new Error("No wallet connected");
+    let result = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "getItemInfo",

@@ -1,4 +1,8 @@
-import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
+import {
+  readContract,
+  waitForTransactionReceipt,
+  writeContract,
+} from "viem/actions";
 import {
   IERC721SmartContractInstance,
   ERC721SMartContractInstance,
@@ -28,7 +32,7 @@ export class MinteebleErc721SmartContractInstance
   public override async getOwner(): Promise<string | null> {
     this.requireActive();
 
-    let owner: any = await readContract({
+    let owner: any = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "owner",
@@ -40,28 +44,30 @@ export class MinteebleErc721SmartContractInstance
 
   public async mintToken(amount: number): Promise<void> {
     // TODO here
-    // this.requireActive();
+    this.requireActive();
 
     console.log("REQUESTED MINT", amount);
 
     let price = await this.mintPrice();
     let value = price * BigInt(amount);
 
-    let { hash } = await writeContract({
+    const hash = await writeContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "mint",
       args: [amount],
       value: value,
+      account: this._walletClient!.account!,
+      chain: null,
     });
 
-    await waitForTransaction({ hash });
+    await waitForTransactionReceipt(this._walletClient!, { hash });
 
     console.log("TRX", hash);
   }
 
   public async mintPrice(): Promise<bigint> {
-    let price = await readContract({
+    let price = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "mintPrice",
@@ -91,7 +97,7 @@ export class MinteebleErc721SmartContractInstance
   }
 
   public async isPaused(): Promise<boolean> {
-    let pausedState = await readContract({
+    let pausedState = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "paused",
@@ -106,7 +112,7 @@ export class MinteebleErc721SmartContractInstance
   }
 
   public async maxMintAmountPerTrx(): Promise<number> {
-    let amount = await readContract({
+    let amount = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "maxMintAmountPerTrx",

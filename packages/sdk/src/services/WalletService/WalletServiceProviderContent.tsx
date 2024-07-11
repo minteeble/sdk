@@ -33,7 +33,7 @@ export const WalletServiceProviderContent = (
   const account = useAccount();
   const { chains, switchChain: switchNetwork } = useSwitchChain();
   const chainId = useChainId(props.wagmiConfig);
-  const { data: walletClient, isError, isLoading } = useWalletClient();
+  const { data: walletClient } = useWalletClient();
   const { disconnect } = useDisconnect();
   const { openConnectModal } = useConnectModal();
 

@@ -1,4 +1,8 @@
-import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
+import {
+  readContract,
+  waitForTransactionReceipt,
+  writeContract,
+} from "viem/actions";
 import {
   IERC1155SmartContractInstance,
   ERC1155SmartContractInstance,
@@ -118,7 +122,7 @@ export class MinteebleERC1155SmartContractInstance
   implements IMinteebleERC1155SmartContractInstance
 {
   public async defaultAdminRole(): Promise<string> {
-    let role = await readContract({
+    let role = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "DEFAULT_ADMIN_ROLE",
@@ -129,7 +133,7 @@ export class MinteebleERC1155SmartContractInstance
   }
 
   public async hasRole(role: string, account: string): Promise<boolean> {
-    let result = await readContract({
+    let result = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "hasRole",
@@ -145,7 +149,7 @@ export class MinteebleERC1155SmartContractInstance
   }
 
   public async totalSupply(id: number): Promise<bigint> {
-    let result = await readContract({
+    let result = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "totalSupply",
@@ -156,7 +160,7 @@ export class MinteebleERC1155SmartContractInstance
   }
 
   public async mintPrice(id: number): Promise<bigint> {
-    let price = await readContract({
+    let price = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "mintPrice",
@@ -195,15 +199,17 @@ export class MinteebleERC1155SmartContractInstance
 
     let price = await this.mintPrice(_id);
 
-    let { hash } = await writeContract({
+    const hash = await writeContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "mint",
       args: [_id, _amount],
       value: price * BigInt(_amount),
+      account: this._walletClient!.account!,
+      chain: null,
     });
 
-    await waitForTransaction({
+    await waitForTransactionReceipt(this._walletClient!, {
       hash,
     });
   }
@@ -211,7 +217,7 @@ export class MinteebleERC1155SmartContractInstance
   public async balanceOf(_account: string): Promise<number> {
     this.requireActive();
 
-    let balance: any = await readContract({
+    let balance: any = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "balanceOf",
@@ -231,17 +237,17 @@ export class MinteebleERC1155SmartContractInstance
   }
 
   public async balanceOfBatch(
-    accounts: Array<String>,
+    accounts: Array<string>,
     ids: Array<number>
   ): Promise<Array<number>> {
     this.requireActive();
 
-    let balances: any[] = await readContract({
+    let balances: any[] = (await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "balanceOfBatch",
       args: [accounts, ids],
-    });
+    })) as any[];
 
     return balances.map((balance) => parseInt(balance));
   }
@@ -252,7 +258,7 @@ export class MinteebleERC1155SmartContractInstance
   ): Promise<boolean> {
     this.requireActive();
 
-    let res: any = await readContract({
+    let res: any = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "isApprovedForAll",
@@ -268,25 +274,27 @@ export class MinteebleERC1155SmartContractInstance
   ): Promise<void> {
     this.requireActive();
 
-    let { hash } = await writeContract({
+    const hash = await writeContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "setApprovalForAll",
       args: [_operator, _approved],
+      account: this._walletClient!.account!,
+      chain: null,
     });
 
-    await waitForTransaction({
+    await waitForTransactionReceipt(this._walletClient!, {
       hash,
     });
   }
 
   public async batchMintPrice(ids: Array<number>): Promise<Array<bigint>> {
-    let prices: any[] = await readContract({
+    let prices: any[] = (await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "batchMintPrice",
       args: [ids],
-    });
+    })) as any[];
 
     return prices.map((price) => BigInt(price));
   }
@@ -306,15 +314,17 @@ export class MinteebleERC1155SmartContractInstance
       totPrice += prices[i] * BigInt(amounts[i]);
     }
 
-    let { hash } = await writeContract({
+    const hash = await writeContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "mintBatchForAddress",
       args: [recipientAccount, ids, amounts],
       value: totPrice,
+      account: this._walletClient!.account!,
+      chain: null,
     });
 
-    await waitForTransaction({
+    await waitForTransactionReceipt(this._walletClient!, {
       hash,
     });
   }
