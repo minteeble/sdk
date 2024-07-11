@@ -4,10 +4,18 @@ import {
   WalletServiceProviderContentProps,
 } from "./WalletServiceProviderContent";
 
-import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import {
+  connectorsForWallets,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider } from "wagmi";
-
+import { WagmiProvider, createConfig } from "wagmi";
+import {
+  coinbaseWallet,
+  rainbowWallet,
+  walletConnectWallet,
+  metaMaskWallet,
+} from "@rainbow-me/rainbowkit/wallets";
 export interface WalletServiceProviderProps
   extends Omit<WalletServiceProviderContentProps, "wagmiConfig"> {
   appName?: string;
@@ -36,14 +44,31 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   //     })
   //   );
   // }
+  coinbaseWallet.preference = "all";
+
+  const connectors = connectorsForWallets(
+    [
+      {
+        groupName: "Recommended",
+        wallets: [
+          metaMaskWallet,
+          rainbowWallet,
+          walletConnectWallet,
+          coinbaseWallet,
+        ],
+      },
+    ],
+    {
+      appName: props.appName ?? "Minteeble App",
+      projectId: props.walletConnectProjectId,
+    }
+  );
 
   const [config] = useState(
-    getDefaultConfig({
-      appName: props.appName ?? "Minteeble App",
-
-      projectId: props.walletConnectProjectId,
-
+    createConfig({
+      connectors,
       chains: props.chains as any,
+      transports: {},
     })
   );
 
