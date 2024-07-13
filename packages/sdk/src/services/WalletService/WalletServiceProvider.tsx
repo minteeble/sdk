@@ -9,13 +9,14 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, createConfig } from "wagmi";
+import { WagmiProvider, createConfig, http } from "wagmi";
 import {
   coinbaseWallet,
   rainbowWallet,
   walletConnectWallet,
   metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
+import { NetworkUtils } from "@minteeble/utils";
 export interface WalletServiceProviderProps
   extends Omit<WalletServiceProviderContentProps, "wagmiConfig"> {
   appName?: string;
@@ -64,11 +65,18 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     }
   );
 
+  const transports = {};
+
+  NetworkUtils.getAllNetworks().forEach((network) => {
+    // @ts-ignore
+    transports[network.chainId] = http();
+  });
+
   const [config] = useState(
     createConfig({
       connectors,
       chains: props.chains as any,
-      transports: {},
+      transports,
     })
   );
 
