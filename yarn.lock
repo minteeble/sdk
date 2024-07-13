@@ -2141,17 +2141,24 @@
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@babel/runtime@^7.19.4", "@babel/runtime@^7.21.0", "@babel/runtime@^7.23.2":
+"@babel/runtime@^7.19.4", "@babel/runtime@^7.21.0":
   version "7.24.7"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.7.tgz#f4f0d5530e8dbdf59b3451b9b3e594b6ba082e12"
   integrity sha512-UwgBRMjJP+xv857DCngvqXI3Iq6J4v0wXmwc6sapg+zyhbwmQX67LUEFrkK5tbyJ30jGuG3ZvWpBiB9LCy1kWw==
   dependencies:
     regenerator-runtime "^0.14.0"
 
-"@coinbase/wallet-sdk@4.0.4":
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-4.0.4.tgz#634cd89bac93eeaf381a1f026476794e53431ed6"
-  integrity sha512-74c040CRnGhfRjr3ArnkAgud86erIqdkPHNt5HR1k9u97uTIZCJww9eGYT67Qf7gHPpGS/xW8Be1D4dvRm63FA==
+"@babel/runtime@^7.20.6":
+  version "7.24.8"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.24.8.tgz#5d958c3827b13cc6d05e038c07fb2e5e3420d82e"
+  integrity sha512-5F7SDGs1T72ZczbRwbGO9lQi0NLjQxzl6i4lJxLxfW9U5UluCSyEJeniWvnhl3/euNiqQVbo8zruhsDfid0esA==
+  dependencies:
+    regenerator-runtime "^0.14.0"
+
+"@coinbase/wallet-sdk@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@coinbase/wallet-sdk/-/wallet-sdk-4.0.0.tgz#1c492aab4d11dc7b08eed156f21c804ad47e8801"
+  integrity sha512-7q8k39a2Iuz30dAEeh86AaSAbLgVPW3gfLa1UYh2IqP7gS+X9witoMEMM8o016K6vxP5N++PrM+Lgu/O1KByBA==
   dependencies:
     buffer "^6.0.3"
     clsx "^1.2.1"
@@ -2398,33 +2405,33 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-3.1.1.tgz#e89b840a7af8097a8ed4953d8dc8470d1302d3ef"
   integrity sha512-ihb3B0T/wJm1eUuArYP4lCTSEoZsClHhuWyfo/kMX3m/odpqNcPfsz5O2A3NT7dXCAgWPGDQGPqygCpgeniKMw==
 
-"@metamask/sdk-communication-layer@0.26.4":
-  version "0.26.4"
-  resolved "https://registry.yarnpkg.com/@metamask/sdk-communication-layer/-/sdk-communication-layer-0.26.4.tgz#dda8e33a327f29962095b82c598799b852e40d81"
-  integrity sha512-+X4GEc5mV1gWK4moSswVlKsUh+RsA48qPlkxBLTUxQODSnyBe0TRMxE6mH+bSrfponnTzvBkGUXyEjvDwDjDHw==
+"@metamask/sdk-communication-layer@0.20.2":
+  version "0.20.2"
+  resolved "https://registry.yarnpkg.com/@metamask/sdk-communication-layer/-/sdk-communication-layer-0.20.2.tgz#7f7fd334b2d26abd1a5a1ec1ffadf823a9589344"
+  integrity sha512-TN+whYbCClFSkx52Ild1RcjoRyz8YZgwNvZeooIcZIvCfBM6U9W5273KGiY7WLc/oO4KKmFk17d7vMO4gNvhhw==
   dependencies:
     bufferutil "^4.0.8"
     date-fns "^2.29.3"
     debug "^4.3.4"
-    utf-8-validate "^5.0.2"
+    utf-8-validate "^6.0.3"
     uuid "^8.3.2"
 
-"@metamask/sdk-install-modal-web@0.26.4":
-  version "0.26.4"
-  resolved "https://registry.yarnpkg.com/@metamask/sdk-install-modal-web/-/sdk-install-modal-web-0.26.4.tgz#3e0700988fb148ebc9f48adb327a54498ac899db"
-  integrity sha512-7Cx7ZsaExbMwghlRrUWWI0Ksg0m7K60LtMjfuDpjvjWqoZa9MoPxitGDEXNbLaqvKn39ebPvNcPzQ6czA4ilTw==
+"@metamask/sdk-install-modal-web@0.20.2":
+  version "0.20.2"
+  resolved "https://registry.yarnpkg.com/@metamask/sdk-install-modal-web/-/sdk-install-modal-web-0.20.2.tgz#1cf0eb3c26291de7598190878fa9a893c4eb2d66"
+  integrity sha512-0QiaZhV15AGdN1zU2jfTI32eC3YkwEpzDfR9+oiZ9bd2G72c6lYBhTsmDGUd01aP6A+bqJR5PjI8Wh2AWtoLeA==
   dependencies:
     qr-code-styling "^1.6.0-rc.1"
 
-"@metamask/sdk@0.26.4":
-  version "0.26.4"
-  resolved "https://registry.yarnpkg.com/@metamask/sdk/-/sdk-0.26.4.tgz#4efa48c2def851956110e545c0fe6304a9019684"
-  integrity sha512-9Yh41KJkD9RhW0lRijnQzPV0ptblLorLdTsf5GnAl3yE72QIfaPBtsDxzLtX+0QLppiFfj7o8vRBYvBApG9k+Q==
+"@metamask/sdk@0.20.3":
+  version "0.20.3"
+  resolved "https://registry.yarnpkg.com/@metamask/sdk/-/sdk-0.20.3.tgz#73851d68ffe5d45c1872c024182922530b187b7a"
+  integrity sha512-HZ9NwA+LxiXzuy0YWbWsuD4xejQtp85bhcCAf8UgpA/0dOyF3RS4dKDdBBXSyRgk3RWPjeJgHxioaH4CmBmiRA==
   dependencies:
     "@metamask/onboarding" "^1.0.1"
     "@metamask/providers" "^15.0.0"
-    "@metamask/sdk-communication-layer" "0.26.4"
-    "@metamask/sdk-install-modal-web" "0.26.4"
+    "@metamask/sdk-communication-layer" "0.20.2"
+    "@metamask/sdk-install-modal-web" "0.20.2"
     "@types/dom-screen-wake-lock" "^1.0.0"
     bowser "^2.9.0"
     cross-fetch "^4.0.0"
@@ -2432,7 +2439,7 @@
     eciesjs "^0.3.15"
     eth-rpc-errors "^4.0.3"
     eventemitter2 "^6.4.7"
-    i18next "23.11.5"
+    i18next "22.5.1"
     i18next-browser-languagedetector "7.1.0"
     obj-multiplex "^1.0.0"
     pump "^3.0.0"
@@ -3600,23 +3607,23 @@
   resolved "https://registry.yarnpkg.com/@wagmi/chains/-/chains-1.7.0.tgz#8f6ad81cf867e1788417f7c978ca92bc083ecaf6"
   integrity sha512-TKVeHv0GqP5sV1yQ8BDGYToAFezPnCexbbBpeH14x7ywi5a1dDStPffpt9x+ytE6LJWkZ6pAMs/HNWXBQ5Nqmw==
 
-"@wagmi/connectors@5.0.22":
-  version "5.0.22"
-  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-5.0.22.tgz#ba239e49159d2abb742d43665a149d3d9e24e6c6"
-  integrity sha512-zIewJ+EpuL+RgcfUcPGbdWb+gJu64lK7xnhhve3E30rrjZfGjMWmuWM112X5CDjl1w3qeoZZQWzmSmrZq+d+7Q==
+"@wagmi/connectors@5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@wagmi/connectors/-/connectors-5.0.2.tgz#4b70aca8f8a2099a026413500abb02d6d6e8e9e6"
+  integrity sha512-2YgcgVn6S8kuOe/PVweK0ucxNqO651VqlPWD+MrPxEVwcpEPLNKvtrYdLRDTSnwwUEqEzgnDwEAhcrniK76+Kw==
   dependencies:
-    "@coinbase/wallet-sdk" "4.0.4"
-    "@metamask/sdk" "0.26.4"
+    "@coinbase/wallet-sdk" "4.0.0"
+    "@metamask/sdk" "0.20.3"
     "@safe-global/safe-apps-provider" "0.18.1"
     "@safe-global/safe-apps-sdk" "8.1.0"
     "@walletconnect/ethereum-provider" "2.13.0"
     "@walletconnect/modal" "2.6.2"
     cbw-sdk "npm:@coinbase/wallet-sdk@3.9.3"
 
-"@wagmi/core@2.11.7":
-  version "2.11.7"
-  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.11.7.tgz#70738a43702dc5f41981aa64550784e136953b12"
-  integrity sha512-O9bMbh9VebCUwoOgNhn27bX/VU8Lge9noD/ypUw3qpGGDBOv0/kwHyxJsvQipyDn55cKxpqW2KKo/7sIDgqVzA==
+"@wagmi/core@2.10.2":
+  version "2.10.2"
+  resolved "https://registry.yarnpkg.com/@wagmi/core/-/core-2.10.2.tgz#00e680df650bda8cda010d9077089f98d82a84fd"
+  integrity sha512-SfQ1F7Azjlx4cKGfmg9+GEUGbukCxraoLYZyCUgTLpKw2OY+4sHsPRwHQENQt/YRWKMyG3/byEYRna2Kv1anpw==
   dependencies:
     eventemitter3 "5.0.1"
     mipd "0.0.5"
@@ -5846,12 +5853,12 @@ i18next-browser-languagedetector@7.1.0:
   dependencies:
     "@babel/runtime" "^7.19.4"
 
-i18next@23.11.5:
-  version "23.11.5"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-23.11.5.tgz#d71eb717a7e65498d87d0594f2664237f9e361ef"
-  integrity sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==
+i18next@22.5.1:
+  version "22.5.1"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-22.5.1.tgz#99df0b318741a506000c243429a7352e5f44d424"
+  integrity sha512-8TGPgM3pAD+VRsMtUMNknRz3kzqwp/gPALrWMsDnmC1mKqJwpWyooQRLMcbTwq8z8YwSmuj+ZYvc+xCuEpkssA==
   dependencies:
-    "@babel/runtime" "^7.23.2"
+    "@babel/runtime" "^7.20.6"
 
 iconv-lite@^0.4.24:
   version "0.4.24"
@@ -9037,6 +9044,13 @@ utf-8-validate@^5.0.2:
   dependencies:
     node-gyp-build "^4.3.0"
 
+utf-8-validate@^6.0.3:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/utf-8-validate/-/utf-8-validate-6.0.4.tgz#1305a1bfd94cecb5a866e6fc74fd07f3ed7292e5"
+  integrity sha512-xu9GQDeFp+eZ6LnCywXN/zBancWvOpUMzgjLPSjy4BRHSmTelvn2E0DG0o1sTiw5hkCKBHo8rwSKncfRfv2EEQ==
+  dependencies:
+    node-gyp-build "^4.3.0"
+
 util-deprecate@^1.0.1, util-deprecate@^1.0.2, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
@@ -9150,13 +9164,13 @@ viem@^2.17.3:
     isows "1.0.4"
     ws "8.17.1"
 
-wagmi@^2.10.10:
-  version "2.10.10"
-  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.10.10.tgz#91fea7a18c290c4170715dc355b8a329801d7ba5"
-  integrity sha512-J0ahwaIuo3uiUDt88zMJtkJRiW3W3kw7I7tK8XcvARNM6ODu44Sp++h5fWnXtZnkLaTaYWceg2RXN64pLD8FsA==
+wagmi@2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.9.2.tgz#003bd39482ed3a992ecbfdf922e289ce03d99153"
+  integrity sha512-FUSYm0RY2Zo7qL3LKDymtAk+oAiLJc0UUhfAEGhAgYBYqYXsDEpPoZM14i8zi6t4FMGlMONuyOTb0sediCJN1g==
   dependencies:
-    "@wagmi/connectors" "5.0.22"
-    "@wagmi/core" "2.11.7"
+    "@wagmi/connectors" "5.0.2"
+    "@wagmi/core" "2.10.2"
     use-sync-external-store "1.2.0"
 
 walk-up-path@^3.0.1:

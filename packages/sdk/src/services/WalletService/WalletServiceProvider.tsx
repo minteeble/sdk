@@ -18,7 +18,10 @@ import {
 } from "@rainbow-me/rainbowkit/wallets";
 import { NetworkUtils } from "@minteeble/utils";
 export interface WalletServiceProviderProps
-  extends Omit<WalletServiceProviderContentProps, "wagmiConfig"> {
+  extends Omit<
+    Omit<WalletServiceProviderContentProps, "wagmiConfig">,
+    "queryClient"
+  > {
   appName?: string;
 
   walletConnectProjectId: string;
@@ -89,6 +92,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
           <WalletServiceProviderContent
             refreshOnChainChange={props.refreshOnChainChange ?? true}
             wagmiConfig={config}
+            queryClient={queryClient}
           >
             {props.children}
           </WalletServiceProviderContent>

@@ -4,14 +4,10 @@ import { WalletServiceContext } from "./WalletServiceContext";
 import React from "react";
 import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import {
-  useWalletClient,
-  useDisconnect,
-  useAccount,
-  useSwitchChain,
-  useChainId,
-} from "wagmi";
+import { useWalletClient, useAccount, useSwitchChain, useChainId } from "wagmi";
+import { disconnect } from "@wagmi/core";
 import { signMessage } from "wagmi/actions";
+import { QueryClient } from "@tanstack/react-query";
 
 export interface WalletServiceProviderContentProps {
   /**
@@ -20,6 +16,8 @@ export interface WalletServiceProviderContentProps {
   refreshOnChainChange?: boolean;
 
   wagmiConfig: any;
+
+  queryClient: QueryClient;
 
   children: any;
 }
@@ -34,7 +32,6 @@ export const WalletServiceProviderContent = (
   const { chains, switchChain: switchNetwork } = useSwitchChain();
   const chainId = useChainId(props.wagmiConfig);
   const { data: walletClient } = useWalletClient();
-  const { disconnect } = useDisconnect();
   const { openConnectModal } = useConnectModal();
 
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -67,7 +64,7 @@ export const WalletServiceProviderContent = (
   };
 
   useEffect(() => {
-    if (chainId) {
+    if (chainId && walletClient) {
       let networkInfo = NetworkUtils.getAllNetworks().find(
         (net) => net.chainId == chainId
       );
@@ -91,8 +88,12 @@ export const WalletServiceProviderContent = (
           explorerUrlPattern: "",
         });
       }
+    } else {
+      console.log("Current chain:", null);
+
+      setCurrentChain(null);
     }
-  }, [chainId]);
+  }, [chainId, walletClient]);
 
   useEffect(() => {
     let service = new WalletService();
@@ -126,10 +127,11 @@ export const WalletServiceProviderContent = (
   }, [walletClient]);
 
   const disconnectWallet = async (): Promise<void> => {
-    // modal?.clearCachedProvider();
+    await props.queryClient.invalidateQueries();
     setWalletAddress("");
     setCurrentChain(null);
-    disconnect();
+    disconnect(props.wagmiConfig);
+    window.localStorage.removeItem("wagmi.store");
   };
 
   const connectWallet = async (): Promise<void> => {
