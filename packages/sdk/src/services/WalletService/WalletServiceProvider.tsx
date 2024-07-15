@@ -17,12 +17,16 @@ import {
   metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
 import { NetworkUtils } from "@minteeble/utils";
+import { mainnet } from "viem/chains";
+import { defineChain } from "viem";
 export interface WalletServiceProviderProps
   extends Omit<
     Omit<WalletServiceProviderContentProps, "wagmiConfig">,
     "queryClient"
   > {
   appName?: string;
+
+  appIcon?: string;
 
   walletConnectProjectId: string;
 
@@ -64,15 +68,16 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     ],
     {
       appName: props.appName ?? "Minteeble App",
+      appIcon: props.appIcon,
       projectId: props.walletConnectProjectId,
     }
   );
 
   const transports = {};
 
-  NetworkUtils.getAllNetworks().forEach((network) => {
+  props.chains.forEach((network) => {
     // @ts-ignore
-    transports[network.chainId] = http();
+    transports[network.id] = http();
   });
 
   const [config] = useState(
