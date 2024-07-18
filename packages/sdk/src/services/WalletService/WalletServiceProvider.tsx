@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   WalletServiceProviderContent,
   WalletServiceProviderContentProps,
@@ -16,9 +16,7 @@ import {
   walletConnectWallet,
   metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-import { NetworkUtils } from "@minteeble/utils";
-import { mainnet } from "viem/chains";
-import { defineChain } from "viem";
+
 export interface WalletServiceProviderProps
   extends Omit<
     Omit<WalletServiceProviderContentProps, "wagmiConfig">,
@@ -52,35 +50,38 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   //     })
   //   );
   // }
-  coinbaseWallet.preference = "all";
 
-  const connectors = connectorsForWallets(
-    [
-      {
-        groupName: "Recommended",
-        wallets: [
-          metaMaskWallet,
-          rainbowWallet,
-          walletConnectWallet,
-          coinbaseWallet,
-        ],
-      },
-    ],
-    {
-      appName: props.appName ?? "Minteeble App",
-      appIcon: props.appIcon,
-      projectId: props.walletConnectProjectId,
-    }
-  );
-
-  const transports = {};
+  //States
+  const tTmp = {};
 
   props.chains.forEach((network) => {
     // @ts-ignore
-    transports[network.id] = http();
+    tTmp[network.id] = http();
   });
+  coinbaseWallet.preference = "all";
 
-  const [config] = useState(
+  const [connectors, setConnectors] = useState<any>(
+    connectorsForWallets(
+      [
+        {
+          groupName: "Recommended",
+          wallets: [
+            metaMaskWallet,
+            rainbowWallet,
+            walletConnectWallet,
+            coinbaseWallet,
+          ],
+        },
+      ],
+      {
+        appName: props.appName ?? "Minteeble App",
+        appIcon: props.appIcon,
+        projectId: props.walletConnectProjectId,
+      }
+    )
+  );
+  const [transports, setTransports] = useState<any>(tTmp);
+  const [config, setConfig] = useState<any>(
     createConfig({
       connectors,
       chains: props.chains as any,
@@ -89,6 +90,54 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   );
 
   const [queryClient] = useState<QueryClient>(new QueryClient());
+
+  //Effects
+  useEffect(() => {
+    coinbaseWallet.preference = "all";
+
+    const tmp = connectorsForWallets(
+      [
+        {
+          groupName: "Recommended",
+          wallets: [
+            metaMaskWallet,
+            rainbowWallet,
+            walletConnectWallet,
+            coinbaseWallet,
+          ],
+        },
+      ],
+      {
+        appName: props.appName ?? "Minteeble App",
+        appIcon: props.appIcon,
+        projectId: props.walletConnectProjectId,
+      }
+    );
+    setConnectors(tmp);
+  }, []);
+
+  useEffect(() => {
+    const tmp = {};
+
+    props.chains.forEach((network) => {
+      // @ts-ignore
+      tmp[network.id] = http();
+    });
+
+    setTransports(tmp);
+  }, [props.chains]);
+
+  useEffect(() => {
+    if (transports) {
+      setConfig(
+        createConfig({
+          connectors,
+          chains: props.chains as any,
+          transports,
+        })
+      );
+    }
+  }, [transports]);
 
   return (
     <WagmiProvider config={config}>
