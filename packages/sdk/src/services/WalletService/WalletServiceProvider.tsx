@@ -58,7 +58,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
     // @ts-ignore
     tTmp[network.id] = http();
   });
-  coinbaseWallet.preference = "all";
+  // coinbaseWallet.preference = "all";
 
   const [connectors, setConnectors] = useState<any>(
     connectorsForWallets(
@@ -93,7 +93,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
 
   //Effects
   useEffect(() => {
-    coinbaseWallet.preference = "all";
+    // coinbaseWallet.preference = "all";
 
     const tmp = connectorsForWallets(
       [
