@@ -1,4 +1,8 @@
-import { readContract, waitForTransaction, writeContract } from "wagmi/actions";
+import {
+  readContract,
+  waitForTransactionReceipt,
+  writeContract,
+} from "viem/actions";
 import {
   IMinteebleERC1155SmartContractInstance,
   MinteebleERC1155SmartContractInstance,
@@ -62,7 +66,7 @@ export class MinteebleGadgetsSmartContractInstance
     _groupId: number,
     _variationId: number
   ): Promise<number> {
-    let tokenId = await readContract({
+    let tokenId = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "groupIdToTokenId",
@@ -75,12 +79,12 @@ export class MinteebleGadgetsSmartContractInstance
   public async tokenIdToGroupId(
     _tokenId: number
   ): Promise<{ groupId: number; variationId: number }> {
-    let result = await readContract({
+    let result = (await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "tokenIdToGroupId",
       args: [_tokenId],
-    });
+    })) as any[];
 
     // return result as any;
     // return { groupId: 0, variationId: 0 };
@@ -102,7 +106,7 @@ export class MinteebleGadgetsSmartContractInstance
   }
 
   public async getGadgetGroups(): Promise<bigint> {
-    let result = await readContract({
+    let result = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "getGadgetGroups",
@@ -113,7 +117,7 @@ export class MinteebleGadgetsSmartContractInstance
   }
 
   public async getGadgetGroupVariations(groupId: number): Promise<bigint> {
-    let result = await readContract({
+    let result = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "getGadgetGroupVariations",
@@ -124,27 +128,31 @@ export class MinteebleGadgetsSmartContractInstance
   }
 
   public async addGadgetGroup(): Promise<void> {
-    let { hash } = await writeContract({
+    const hash = await writeContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "addGadgetGroup",
       args: [],
+      account: this._walletClient!.account!,
+      chain: null,
     });
 
-    await waitForTransaction({
+    await waitForTransactionReceipt(this._walletClient!, {
       hash,
     });
   }
 
   public async addVariation(groupId: number): Promise<void> {
-    let { hash } = await writeContract({
+    const hash = await writeContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "addVariation",
       args: [groupId],
+      account: this._walletClient!.account!,
+      chain: null,
     });
 
-    await waitForTransaction({
+    await waitForTransactionReceipt(this._walletClient!, {
       hash,
     });
   }

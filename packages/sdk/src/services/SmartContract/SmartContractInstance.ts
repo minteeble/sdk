@@ -1,17 +1,8 @@
 import {
-  INftCollectionInfoClientModel,
   ISmartContractClientModel,
   SmartContractClientModel,
 } from "@minteeble/utils";
-import { WalletClient } from "viem";
-import {
-  fetchBlockNumber,
-  signMessage,
-  getContract,
-  readContract,
-  writeContract,
-  GetContractResult,
-} from "wagmi/actions";
+import { WalletClient, getContract } from "viem";
 
 export interface ISmartContractInstance extends ISmartContractClientModel {
   active: boolean;
@@ -27,7 +18,7 @@ export class SmartContractInstance
 
   protected _walletClient: WalletClient | null;
 
-  protected _contract: GetContractResult<any, any> | null;
+  protected _contract: ReturnType<typeof getContract> | null;
 
   constructor(
     smartContractModel?: SmartContractClientModel,
@@ -60,9 +51,10 @@ export class SmartContractInstance
 
   public async connect(): Promise<void> {
     if (!this._active && this._walletClient) {
-      let contract = getContract({
-        abi: this.abi,
+      const contract = getContract({
+        abi: this.abi as any,
         address: this.address as any,
+        client: this._walletClient,
       });
       // contract.
       // let contract = new this._walletClient.eth.Contract(
@@ -77,7 +69,7 @@ export class SmartContractInstance
   /**
    * Returns web3 contract object is instance is active. Returns null otherwise
    */
-  public get contract(): GetContractResult<any, any> | null {
+  public get contract(): ReturnType<typeof getContract> | null {
     return this._contract || null;
   }
 }

@@ -14,6 +14,7 @@ export interface WalletServiceContent {
   currentChain: NetworkModel | null;
   walletClient: WalletClient | null;
   switchChain(chainId: number): Promise<void>;
+  wagmiConfig: any;
 }
 
 export const WalletServiceContext = createContext<WalletServiceContent>({
@@ -26,4 +27,5 @@ export const WalletServiceContext = createContext<WalletServiceContent>({
   currentChain: null,
   walletClient: null,
   switchChain: async () => {},
+  wagmiConfig: {},
 });

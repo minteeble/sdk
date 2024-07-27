@@ -2,25 +2,22 @@ import { useEffect, useState } from "react";
 import WalletService from "./WalletService";
 import { WalletServiceContext } from "./WalletServiceContext";
 import React from "react";
-
 import { NetworkModel, NetworkUtils } from "@minteeble/utils";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import {
-  useWalletClient,
-  useDisconnect,
-  useNetwork,
-  useAccount,
-  useSwitchNetwork,
-} from "wagmi";
-// import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { privateKeyToAccount } from "viem/accounts";
-import { fetchBlockNumber, signMessage, switchNetwork } from "wagmi/actions";
+import { useWalletClient, useAccount, useSwitchChain, useChainId } from "wagmi";
+import { disconnect } from "@wagmi/core";
+import { signMessage } from "wagmi/actions";
+import { QueryClient } from "@tanstack/react-query";
 
 export interface WalletServiceProviderContentProps {
   /**
    * If true, the wallet will refresh on chain change
    */
   refreshOnChainChange?: boolean;
+
+  wagmiConfig: any;
+
+  queryClient: QueryClient;
 
   children: any;
 }
@@ -32,9 +29,9 @@ export const WalletServiceProviderContent = (
     null
   );
   const account = useAccount();
-  const { chain, chains } = useNetwork();
-  const { data: walletClient, isError, isLoading } = useWalletClient();
-  const { disconnect } = useDisconnect();
+  const { chains, switchChain: switchNetwork } = useSwitchChain();
+  const chainId = useChainId(props.wagmiConfig);
+  const { data: walletClient } = useWalletClient();
   const { openConnectModal } = useConnectModal();
 
   const [walletAddress, setWalletAddress] = useState<string>("");
@@ -43,8 +40,8 @@ export const WalletServiceProviderContent = (
   const [currentChain, setCurrentChain] = useState<NetworkModel | null>(null);
 
   useEffect(() => {
-    console.log("Wagmi chain", chain);
-  }, [chain]);
+    console.log("Wagmi chain id", chainId);
+  }, [chainId]);
 
   useEffect(() => {
     console.log("Wagmi account", account);
@@ -67,35 +64,36 @@ export const WalletServiceProviderContent = (
   };
 
   useEffect(() => {
-    if (chain) {
-      const chainId = chain.id;
-      if (chainId) {
-        let networkInfo = NetworkUtils.getAllNetworks().find(
-          (net) => net.chainId == chainId
-        );
-        console.log("Current chain:", networkInfo);
-        if (networkInfo) {
-          if (currentChain && currentChain.chainId !== networkInfo.chainId) {
-            handleChainReload();
-          }
-          setCurrentChain(networkInfo);
-        } else {
-          console.log("Current chain: Unknown");
-          if (currentChain && currentChain.chainId !== 0) {
-            handleChainReload();
-          }
-          setCurrentChain({
-            chainId: 0,
-            name: "unknown",
-            currency: "",
-            urlName: "unknown",
-            isTestnet: false,
-            explorerUrlPattern: "",
-          });
+    if (chainId && walletClient) {
+      let networkInfo = NetworkUtils.getAllNetworks().find(
+        (net) => net.chainId == chainId
+      );
+      console.log("Current chain:", networkInfo);
+      if (networkInfo) {
+        if (currentChain && currentChain.chainId !== networkInfo.chainId) {
+          handleChainReload();
         }
+        setCurrentChain(networkInfo);
+      } else {
+        console.log("Current chain: Unknown");
+        if (currentChain && currentChain.chainId !== 0) {
+          handleChainReload();
+        }
+        setCurrentChain({
+          chainId: 0,
+          name: "unknown",
+          currency: "",
+          urlName: "unknown",
+          isTestnet: false,
+          explorerUrlPattern: "",
+        });
       }
+    } else {
+      console.log("Current chain:", null);
+
+      setCurrentChain(null);
     }
-  }, [chain]);
+  }, [chainId, walletClient]);
 
   useEffect(() => {
     let service = new WalletService();
@@ -129,10 +127,11 @@ export const WalletServiceProviderContent = (
   }, [walletClient]);
 
   const disconnectWallet = async (): Promise<void> => {
-    // modal?.clearCachedProvider();
+    await props.queryClient.invalidateQueries();
     setWalletAddress("");
     setCurrentChain(null);
-    disconnect();
+    disconnect(props.wagmiConfig);
+    window.localStorage.removeItem("wagmi.store");
   };
 
   const connectWallet = async (): Promise<void> => {
@@ -143,12 +142,13 @@ export const WalletServiceProviderContent = (
   };
 
   const sign = async (_message: any): Promise<any> => {
-    return new Promise<any>(async (resolve, reject) => {
-      if (walletService && walletAddress && walletClient) {
+    return await new Promise<any>(async (resolve, reject) => {
+      if (walletAddress && walletClient) {
         try {
           setUserIsSigning(true);
 
-          const signature = await signMessage({
+          console.log("Signing message: ", _message);
+          const signature = await signMessage(props.wagmiConfig, {
             message: _message,
           });
 
@@ -180,6 +180,7 @@ export const WalletServiceProviderContent = (
         currentChain,
         walletClient: walletClient || null,
         switchChain,
+        wagmiConfig: props.wagmiConfig,
       }}
     >
       {props.children}

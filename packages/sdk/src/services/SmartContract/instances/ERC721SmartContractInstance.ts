@@ -1,4 +1,4 @@
-import { readContract } from "wagmi/actions";
+import { readContract } from "viem/actions";
 import {
   ISmartContractInstance,
   SmartContractInstance,
@@ -20,7 +20,7 @@ export class ERC721SMartContractInstance
   public async getOwner(): Promise<string | null> {
     this.requireActive();
 
-    let owner: any = await readContract({
+    let owner: any = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "owner",
@@ -33,7 +33,7 @@ export class ERC721SMartContractInstance
   public async ownedIds(ownerAddress: string): Promise<Array<string>> {
     this.requireActive();
 
-    let ids: any = await readContract({
+    let ids: any = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "walletOfOwner",
@@ -44,7 +44,9 @@ export class ERC721SMartContractInstance
   }
 
   public async getTotalSupply(): Promise<number> {
-    const totalSupply: any = await readContract({
+    this.requireActive();
+
+    const totalSupply: any = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "totalSupply",
@@ -55,7 +57,9 @@ export class ERC721SMartContractInstance
   }
 
   public async getMaxSupply(): Promise<number> {
-    const maxSupply: any = await readContract({
+    this.requireActive();
+
+    const maxSupply: any = await readContract(this._walletClient!, {
       address: this.address as any,
       abi: this.abi,
       functionName: "maxSupply",
