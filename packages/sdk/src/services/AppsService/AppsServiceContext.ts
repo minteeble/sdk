@@ -2,6 +2,7 @@ import { createContext } from "react";
 
 import {
   AppInfoClientModel,
+  AppRole,
   ICreateAppResponseDto,
   IGetAppResponseDto,
   UserPreviewClientModel,
@@ -34,6 +35,8 @@ export interface AppsServiceContent {
   joinApp: (urlName: string) => Promise<{ urlName: string } | null>;
 
   leaveApp: (urlName: string) => Promise<void>;
+
+  getUserRole(): Promise<AppRole>;
 }
 
 export const appServiceContext = createContext<AppsServiceContent>({
@@ -60,4 +63,6 @@ export const appServiceContext = createContext<AppsServiceContent>({
   joinApp: () => new Promise(() => {}),
 
   leaveApp: () => new Promise(() => {}),
+
+  getUserRole: () => new Promise(() => {}),
 });

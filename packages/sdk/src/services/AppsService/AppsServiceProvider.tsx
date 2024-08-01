@@ -4,6 +4,7 @@ import React from "react";
 
 import {
   AppInfoClientModel,
+  AppRole,
   ICreateAppResponseDto,
   IGetAppResponseDto,
   UserPreviewClientModel,
@@ -82,6 +83,10 @@ const AppsServiceProvider = (props: AppsServiceProviderProps) => {
     await AppsService.instance.leaveApp(urlName);
   };
 
+  const getUserRole = async (): Promise<AppRole> => {
+    return await AppsService.instance.getUserRole();
+  };
+
   return (
     <appServiceContext.Provider
       value={{
@@ -97,6 +102,7 @@ const AppsServiceProvider = (props: AppsServiceProviderProps) => {
         removeAppUser,
         joinApp,
         leaveApp,
+        getUserRole,
       }}
     >
       {props.children}
