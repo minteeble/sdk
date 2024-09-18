@@ -131,7 +131,6 @@ export const WalletServiceProviderContent = (
     setWalletAddress("");
     setCurrentChain(null);
     disconnect(props.wagmiConfig);
-    window.localStorage.removeItem("wagmi.store");
   };
 
   const connectWallet = async (): Promise<void> => {
