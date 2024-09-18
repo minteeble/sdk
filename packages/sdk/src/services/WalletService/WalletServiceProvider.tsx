@@ -6,6 +6,7 @@ import {
 
 import {
   connectorsForWallets,
+  getDefaultConfig,
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -52,92 +53,92 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   // }
 
   //States
-  const tTmp = {};
+  // const tTmp = {};
 
-  props.chains.forEach((network) => {
-    // @ts-ignore
-    tTmp[network.id] = http();
-  });
+  // props.chains.forEach((network) => {
+  //   // @ts-ignore
+  //   tTmp[network.id] = http();
+  // });
   // coinbaseWallet.preference = "all";
 
-  const [connectors, setConnectors] = useState<any>(
-    connectorsForWallets(
-      [
-        {
-          groupName: "Recommended",
-          wallets: [
-            metaMaskWallet,
-            rainbowWallet,
-            walletConnectWallet,
-            coinbaseWallet,
-          ],
-        },
-      ],
-      {
-        appName: props.appName ?? "Minteeble App",
-        appIcon: props.appIcon,
-        projectId: props.walletConnectProjectId,
-      }
-    )
-  );
-  const [transports, setTransports] = useState<any>(tTmp);
+  // const [connectors, setConnectors] = useState<any>(
+  //   connectorsForWallets(
+  //     [
+  //       {
+  //         groupName: "Recommended",
+  //         wallets: [
+  //           metaMaskWallet,
+  //           rainbowWallet,
+  //           walletConnectWallet,
+  //           coinbaseWallet,
+  //         ],
+  //       },
+  //     ],
+  //     {
+  //       appName: props.appName ?? "Minteeble App",
+  //       appIcon: props.appIcon,
+  //       projectId: props.walletConnectProjectId,
+  //     }
+  //   )
+  // );
+  // const [transports, setTransports] = useState<any>(tTmp);
   const [config, setConfig] = useState<any>(
-    createConfig({
-      connectors,
+    getDefaultConfig({
+      appName: props.appName ?? "Minteeble App",
+      projectId: props.walletConnectProjectId,
       chains: props.chains as any,
-      transports,
     })
   );
 
   const [queryClient] = useState<QueryClient>(new QueryClient());
 
   //Effects
-  useEffect(() => {
-    // coinbaseWallet.preference = "all";
+  // useEffect(() => {
+  //   // coinbaseWallet.preference = "all";
 
-    const tmp = connectorsForWallets(
-      [
-        {
-          groupName: "Recommended",
-          wallets: [
-            metaMaskWallet,
-            rainbowWallet,
-            walletConnectWallet,
-            coinbaseWallet,
-          ],
-        },
-      ],
-      {
-        appName: props.appName ?? "Minteeble App",
-        appIcon: props.appIcon,
-        projectId: props.walletConnectProjectId,
-      }
-    );
-    setConnectors(tmp);
-  }, []);
+  //   const tmp = connectorsForWallets(
+  //     [
+  //       {
+  //         groupName: "Recommended",
+  //         wallets: [
+  //           metaMaskWallet,
+  //           rainbowWallet,
+  //           walletConnectWallet,
+  //           coinbaseWallet,
+  //         ],
+  //       },
+  //     ],
+  //     {
+  //       appName: props.appName ?? "Minteeble App",
+  //       appIcon: props.appIcon,
+  //       projectId: props.walletConnectProjectId,
+  //     }
+  //   );
+  //   setConnectors(tmp);
+  // }, []);
 
-  useEffect(() => {
-    const tmp = {};
+  // useEffect(() => {
+  //   const tmp = {};
 
-    props.chains.forEach((network) => {
-      // @ts-ignore
-      tmp[network.id] = http();
-    });
+  //   props.chains.forEach((network) => {
+  //     // @ts-ignore
+  //     tmp[network.id] = http();
+  //   });
 
-    setTransports(tmp);
-  }, [props.chains]);
+  //   setTransports(tmp);
+  // }, [props.chains]);
 
-  useEffect(() => {
-    if (transports) {
-      setConfig(
-        createConfig({
-          connectors,
-          chains: props.chains as any,
-          transports,
-        })
-      );
-    }
-  }, [transports]);
+  // useEffect(() => {
+  //   if (transports) {
+  //     setConfig(
+  //       createConfig({
+  //         connectors,
+  //         chains: props.chains as any,
+  //         transports,
+  //       })
+  //     );
+  //   }
+  // }, [transports]);
 
   return (
     <WagmiProvider config={config}>
