@@ -10,7 +10,7 @@ import {
   RainbowKitProvider,
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, createConfig, http } from "wagmi";
+import { Config, Storage, WagmiProvider, createConfig, http } from "wagmi";
 import {
   coinbaseWallet,
   rainbowWallet,
@@ -35,6 +35,8 @@ export interface WalletServiceProviderProps
 
   children: any;
 
+  config?: Config;
+
   /**
    * If true, the wallet will refresh on chain change
    */
@@ -54,6 +56,19 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
 
   //States
   // const tTmp = {};
+  // const localStorage: Storage = {
+  //   key: "wagmi-info",
+  //   getItem: async (key) => {
+  //     const value = window.localStorage.getItem(key);
+  //     return value ? JSON.parse(value) : null;
+  //   },
+  //   setItem: async (key, value) => {
+  //     window.localStorage.setItem(key, JSON.stringify(value));
+  //   },
+  //   removeItem: async (key) => {
+  //     window.localStorage.removeItem(key);
+  //   },
+  // };
 
   // props.chains.forEach((network) => {
   //   // @ts-ignore
@@ -82,12 +97,13 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   //   )
   // );
   // const [transports, setTransports] = useState<any>(tTmp);
-  const [config, setConfig] = useState<any>(
-    getDefaultConfig({
-      appName: props.appName ?? "Minteeble App",
-      projectId: props.walletConnectProjectId,
-      chains: props.chains as any,
-    })
+  const [config, setConfig] = useState<Config>(
+    props.config ||
+      getDefaultConfig({
+        appName: props.appName ?? "Minteeble App",
+        projectId: props.walletConnectProjectId,
+        chains: props.chains as any,
+      })
   );
 
   const [queryClient] = useState<QueryClient>(new QueryClient());
@@ -133,6 +149,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   //     setConfig(
   //       createConfig({
   //         connectors,
+  //         storage: localStorage,
   //         chains: props.chains as any,
   //         transports,
   //       })
