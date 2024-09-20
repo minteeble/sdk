@@ -12,7 +12,7 @@ export class SharedResoucesService extends BaseService {
    */
   private static _instance: SharedResoucesService;
 
-  private constructor() {
+  constructor() {
     super("shared-resources");
   }
 

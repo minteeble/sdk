@@ -8,7 +8,7 @@ const SharedResoucesServiceProvider = (
 ) => {
   //Methods
   const urlCaller = async (url: string): Promise<any | null> => {
-    return await SharedResoucesService.instance.urlCaller(url);
+    return SharedResoucesService.instance.urlCaller(url);
   };
 
   return (
