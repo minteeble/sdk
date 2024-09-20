@@ -2501,10 +2501,10 @@
     semver "^7.5.4"
     uuid "^9.0.1"
 
-"@minteeble/utils@^1.0.193":
-  version "1.0.193"
-  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.193.tgz#c9c797eb8b7622b90917afa7e53116665c727bd8"
-  integrity sha512-CGMPsibasr0tmuIYqm8ueUfKUawZOl8kui8Ts2e2AgWN0wlOmd2JoB2lrDH+VM3471/Rizjs07FBw2oS64/bmg==
+"@minteeble/utils@^1.0.195":
+  version "1.0.195"
+  resolved "https://registry.yarnpkg.com/@minteeble/utils/-/utils-1.0.195.tgz#02b885d3c154413785e29e26dbc32d91b2fce5c1"
+  integrity sha512-MwXcb/ij0H6PH3ipGYjbPEG2bkEoHmaeciX42JaMy53CZJg8qTiwaFuTr7/iVdxsT6nWnHqzlZ9ftDeDhodZ+A==
   dependencies:
     typescript-json-serializer "^6.0.1"
 
