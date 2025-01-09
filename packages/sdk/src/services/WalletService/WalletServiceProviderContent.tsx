@@ -64,9 +64,10 @@ export const WalletServiceProviderContent = (
   };
 
   useEffect(() => {
-    if (chainId && walletClient) {
+    if (chainId && walletClient && account) {
+      const accountChainId = account.chainId;
       let networkInfo = NetworkUtils.getAllNetworks().find(
-        (net) => net.chainId == chainId
+        (net) => net.chainId == accountChainId
       );
       console.log("Current chain:", networkInfo);
       if (networkInfo) {
@@ -93,7 +94,7 @@ export const WalletServiceProviderContent = (
 
       setCurrentChain(null);
     }
-  }, [chainId, walletClient]);
+  }, [chainId, walletClient, account]);
 
   useEffect(() => {
     let service = new WalletService();
