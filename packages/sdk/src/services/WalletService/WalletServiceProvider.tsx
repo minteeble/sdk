@@ -160,7 +160,9 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
+        {/* @ts-ignore */}
         <RainbowKitProvider>
+          {/* @ts-ignore */}
           <WalletServiceProviderContent
             refreshOnChainChange={props.refreshOnChainChange ?? true}
             wagmiConfig={config}
