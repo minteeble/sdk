@@ -210,6 +210,7 @@ export class RendererService extends BaseService {
     let customAttributes = {};
 
     Object.keys(renderer.attributes).forEach((key) => {
+      // @ts-ignore
       customAttributes[key] = renderer.attributes[key];
     });
 

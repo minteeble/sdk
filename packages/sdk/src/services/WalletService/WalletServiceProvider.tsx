@@ -12,12 +12,12 @@ import {
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Config, Storage, WagmiProvider, createConfig, http } from "wagmi";
 import {
-  coinbaseWallet,
   rainbowWallet,
   walletConnectWallet,
   metaMaskWallet,
 } from "@rainbow-me/rainbowkit/wallets";
-
+import { OnchainKitProvider } from "@coinbase/onchainkit";
+import { coinbaseWallet } from "wagmi/connectors";
 export interface WalletServiceProviderProps
   extends Omit<
     Omit<WalletServiceProviderContentProps, "wagmiConfig">,
@@ -36,6 +36,8 @@ export interface WalletServiceProviderProps
   children: any;
 
   config?: Config;
+
+  modal?: "rainbowkit" | "onchainkit";
 
   /**
    * If true, the wallet will refresh on chain change
@@ -97,13 +99,27 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   //   )
   // );
   // const [transports, setTransports] = useState<any>(tTmp);
-  const [config, setConfig] = useState<Config>(
+  const [config, setConfig] = useState<any>(
     props.config ||
-      getDefaultConfig({
-        appName: props.appName ?? "Minteeble App",
-        projectId: props.walletConnectProjectId,
-        chains: props.chains as any,
-      })
+      (!props.modal || props.modal === "rainbowkit"
+        ? getDefaultConfig({
+            appName: props.appName ?? "Minteeble App",
+            projectId: props.walletConnectProjectId,
+            chains: props.chains as any,
+          })
+        : createConfig({
+            chains: props.chains as any,
+            connectors: [
+              coinbaseWallet({
+                appName: props.appName ?? "Minteeble App",
+                appLogoUrl: props.appIcon,
+              }),
+            ],
+            ssr: false,
+            transports: {
+              [props.chains[0].id]: http(),
+            },
+          }))
   );
 
   const [queryClient] = useState<QueryClient>(new QueryClient());
@@ -158,20 +174,23 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   // }, [transports]);
 
   return (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        {/* @ts-ignore */}
-        <RainbowKitProvider>
-          {/* @ts-ignore */}
-          <WalletServiceProviderContent
-            refreshOnChainChange={props.refreshOnChainChange ?? true}
-            wagmiConfig={config}
-            queryClient={queryClient}
-          >
-            {props.children}
-          </WalletServiceProviderContent>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <OnchainKitProvider
+      apiKey="WQagHVilxCnEkX0NGuVtE8SY6B5hSLp4"
+      chain={props.chains[0]}
+    >
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider>
+            <WalletServiceProviderContent
+              refreshOnChainChange={props.refreshOnChainChange ?? true}
+              wagmiConfig={config}
+              queryClient={queryClient}
+            >
+              {props.children}
+            </WalletServiceProviderContent>
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </OnchainKitProvider>
   );
 };

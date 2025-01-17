@@ -12,7 +12,7 @@ export interface WalletServiceContent {
   walletAddress: string;
   accounts: Array<string> | null;
   currentChain: NetworkModel | null;
-  walletClient: WalletClient | null;
+  walletClient: any | null;
   switchChain(chainId: number): Promise<void>;
   wagmiConfig: any;
 }
