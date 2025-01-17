@@ -173,22 +173,34 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   //   }
   // }, [transports]);
 
-  return (
+  return !props.modal || props.modal === "rainbowkit" ? (
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider>
+          <WalletServiceProviderContent
+            refreshOnChainChange={props.refreshOnChainChange ?? true}
+            wagmiConfig={config}
+            queryClient={queryClient}
+          >
+            {props.children}
+          </WalletServiceProviderContent>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  ) : (
     <OnchainKitProvider
       apiKey="WQagHVilxCnEkX0NGuVtE8SY6B5hSLp4"
       chain={props.chains[0]}
     >
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider>
-            <WalletServiceProviderContent
-              refreshOnChainChange={props.refreshOnChainChange ?? true}
-              wagmiConfig={config}
-              queryClient={queryClient}
-            >
-              {props.children}
-            </WalletServiceProviderContent>
-          </RainbowKitProvider>
+          <WalletServiceProviderContent
+            refreshOnChainChange={props.refreshOnChainChange ?? true}
+            wagmiConfig={config}
+            queryClient={queryClient}
+          >
+            {props.children}
+          </WalletServiceProviderContent>
         </QueryClientProvider>
       </WagmiProvider>
     </OnchainKitProvider>
