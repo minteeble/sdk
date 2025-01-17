@@ -1,18 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   WalletServiceProviderContent,
   WalletServiceProviderContentProps,
 } from "./WalletServiceProviderContent";
 
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { InjectedConnector } from "wagmi/connectors/injected";
-
+import {
+  connectorsForWallets,
+  getDefaultConfig,
+  RainbowKitProvider,
+} from "@rainbow-me/rainbowkit";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Config, Storage, WagmiProvider, createConfig, http } from "wagmi";
+import {
+  coinbaseWallet,
+  rainbowWallet,
+  walletConnectWallet,
+  metaMaskWallet,
+} from "@rainbow-me/rainbowkit/wallets";
+import { OnchainKitProvider } from "@coinbase/onchainkit";
 export interface WalletServiceProviderProps
-  extends WalletServiceProviderContentProps {
+  extends Omit<
+    Omit<WalletServiceProviderContentProps, "wagmiConfig">,
+    "queryClient"
+  > {
   appName?: string;
+
+  appIcon?: string;
 
   walletConnectProjectId: string;
 
@@ -22,6 +35,10 @@ export interface WalletServiceProviderProps
 
   children: any;
 
+  config?: Config;
+
+  modal?: "rainbowkit" | "onchainkit";
+
   /**
    * If true, the wallet will refresh on chain change
    */
@@ -29,42 +46,137 @@ export interface WalletServiceProviderProps
 }
 
 export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
-  let providers = [publicProvider()];
+  // let providers = [publicProvider()];
 
-  if (props.alchemyApiKey) {
-    providers.push(
-      alchemyProvider({
-        apiKey: props.alchemyApiKey,
+  // if (props.alchemyApiKey) {
+  //   providers.push(
+  //     alchemyProvider({
+  //       apiKey: props.alchemyApiKey,
+  //     })
+  //   );
+  // }
+
+  //States
+  // const tTmp = {};
+  // const localStorage: Storage = {
+  //   key: "wagmi-info",
+  //   getItem: async (key) => {
+  //     const value = window.localStorage.getItem(key);
+  //     return value ? JSON.parse(value) : null;
+  //   },
+  //   setItem: async (key, value) => {
+  //     window.localStorage.setItem(key, JSON.stringify(value));
+  //   },
+  //   removeItem: async (key) => {
+  //     window.localStorage.removeItem(key);
+  //   },
+  // };
+
+  // props.chains.forEach((network) => {
+  //   // @ts-ignore
+  //   tTmp[network.id] = http();
+  // });
+  // coinbaseWallet.preference = "all";
+
+  // const [connectors, setConnectors] = useState<any>(
+  //   connectorsForWallets(
+  //     [
+  //       {
+  //         groupName: "Recommended",
+  //         wallets: [
+  //           metaMaskWallet,
+  //           rainbowWallet,
+  //           walletConnectWallet,
+  //           coinbaseWallet,
+  //         ],
+  //       },
+  //     ],
+  //     {
+  //       appName: props.appName ?? "Minteeble App",
+  //       appIcon: props.appIcon,
+  //       projectId: props.walletConnectProjectId,
+  //     }
+  //   )
+  // );
+  // const [transports, setTransports] = useState<any>(tTmp);
+  const [config, setConfig] = useState<any>(
+    props.config ||
+      getDefaultConfig({
+        appName: props.appName ?? "Minteeble App",
+        projectId: props.walletConnectProjectId,
+        chains: props.chains as any,
       })
-    );
-  }
-
-  const { chains, publicClient } = configureChains(
-    props.chains || [],
-    providers
   );
 
-  const { connectors } = getDefaultWallets({
-    appName: props.appName || "Minteeble Sdk Consumer",
-    projectId: props.walletConnectProjectId,
-    chains,
-  });
+  const [queryClient] = useState<QueryClient>(new QueryClient());
 
-  const wagmiConfig = createConfig({
-    autoConnect: true,
-    connectors: connectors,
-    publicClient,
-  });
+  //Effects
+  // useEffect(() => {
+  //   // coinbaseWallet.preference = "all";
+
+  //   const tmp = connectorsForWallets(
+  //     [
+  //       {
+  //         groupName: "Recommended",
+  //         wallets: [
+  //           metaMaskWallet,
+  //           rainbowWallet,
+  //           walletConnectWallet,
+  //           coinbaseWallet,
+  //         ],
+  //       },
+  //     ],
+  //     {
+  //       appName: props.appName ?? "Minteeble App",
+  //       appIcon: props.appIcon,
+  //       projectId: props.walletConnectProjectId,
+  //     }
+  //   );
+  //   setConnectors(tmp);
+  // }, []);
+
+  // useEffect(() => {
+  //   const tmp = {};
+
+  //   props.chains.forEach((network) => {
+  //     // @ts-ignore
+  //     tmp[network.id] = http();
+  //   });
+
+  //   setTransports(tmp);
+  // }, [props.chains]);
+
+  // useEffect(() => {
+  //   if (transports) {
+  //     setConfig(
+  //       createConfig({
+  //         connectors,
+  //         storage: localStorage,
+  //         chains: props.chains as any,
+  //         transports,
+  //       })
+  //     );
+  //   }
+  // }, [transports]);
 
   return (
-    <WagmiConfig config={wagmiConfig}>
-      <RainbowKitProvider chains={chains}>
-        <WalletServiceProviderContent
-          refreshOnChainChange={props.refreshOnChainChange ?? true}
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <OnchainKitProvider
+          apiKey="WQagHVilxCnEkX0NGuVtE8SY6B5hSLp4"
+          chain={props.chains[0]}
         >
-          {props.children}
-        </WalletServiceProviderContent>
-      </RainbowKitProvider>
-    </WagmiConfig>
+          <RainbowKitProvider>
+            <WalletServiceProviderContent
+              refreshOnChainChange={props.refreshOnChainChange ?? true}
+              wagmiConfig={config}
+              queryClient={queryClient}
+            >
+              {props.children}
+            </WalletServiceProviderContent>
+          </RainbowKitProvider>
+        </OnchainKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
   );
 };
