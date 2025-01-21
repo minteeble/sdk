@@ -41,6 +41,8 @@ export interface WalletServiceProviderProps
 
   onChainKitApiKey?: string;
 
+  onChainKitprojectId?: string;
+
   /**
    * If true, the wallet will refresh on chain change
    */
@@ -190,7 +192,11 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
       </QueryClientProvider>
     </WagmiProvider>
   ) : (
-    <OnchainKitProvider apiKey={props.onChainKitApiKey} chain={props.chains[0]}>
+    <OnchainKitProvider
+      apiKey={props.onChainKitApiKey}
+      chain={props.chains[0]}
+      projectId={props.onChainKitprojectId}
+    >
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <WalletServiceProviderContent
