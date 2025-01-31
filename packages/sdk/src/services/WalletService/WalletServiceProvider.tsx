@@ -196,6 +196,19 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
       apiKey={props.onChainKitApiKey}
       chain={props.chains[0]}
       projectId={props.onChainKitprojectId}
+      config={{
+        appearance: {
+          name: props.appName ?? "Minteeble App",
+          logo: props.appIcon,
+          mode: "auto",
+          theme: "default",
+        },
+        wallet: {
+          display: "modal",
+          termsUrl: "https://www.coinbase.com/legal/cookie",
+          privacyUrl: "https://www.coinbase.com/legal/privacy",
+        },
+      }}
     >
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
