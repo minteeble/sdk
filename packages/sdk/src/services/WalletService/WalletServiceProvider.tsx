@@ -47,6 +47,11 @@ export interface WalletServiceProviderProps
    * If true, the wallet will refresh on chain change
    */
   refreshOnChainChange?: boolean;
+
+  /**
+   * Optional array of custom connectors to be added to the wallet configuration
+   */
+  connectors?: Array<any>;
 }
 
 export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
@@ -118,6 +123,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
                 appName: props.appName ?? "Minteeble App",
                 appLogoUrl: props.appIcon,
               }),
+              ...(props.connectors || []), // Spread custom connectors if provided
             ],
             ssr: false,
             transports: {
