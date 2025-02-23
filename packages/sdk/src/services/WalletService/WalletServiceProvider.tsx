@@ -52,6 +52,9 @@ export interface WalletServiceProviderProps
    * Optional array of custom connectors to be added to the wallet configuration
    */
   connectors?: Array<any>;
+
+  // New storage property
+  storage?: Storage | null | undefined;
 }
 
 export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
@@ -126,6 +129,8 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
               ...(props.connectors || []), // Spread custom connectors if provided
             ],
             ssr: false,
+            // Pass optional storage to createConfig
+            storage: props.storage,
             transports: {
               [props.chains[0].id]: http(),
             },
