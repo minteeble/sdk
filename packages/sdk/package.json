@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@minteeble/utils": "^1.0.195",
-    "@rainbow-me/rainbowkit": "2.2.1",
     "@tanstack/react-query": "5.66.9",
     "@wagmi/connectors": "5.7.3",
     "@wagmi/core": "2.16.3",
@@ -30,7 +29,6 @@
   },
   "devDependencies": {
     "@coinbase/onchainkit": "0.37.3",
-    "@rainbow-me/rainbowkit": "2.2.1",
     "@tanstack/react-query": "5.66.9",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
@@ -42,7 +40,6 @@
     "wagmi": "2.14.11"
   },
   "peerDependencies": {
-    "@rainbow-me/rainbowkit": "2.2.1",
     "@tanstack/react-query": "5.66.9",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -13,13 +13,11 @@ yarn link react-dom
 
 yarn unlink viem
 yarn unlink wagmi
-yarn unlink @rainbow-me/rainbowkit
 yarn unlink @tanstack/react-query
 yarn unlink @coinbase/onchainkit
 
 yarn link viem
 yarn link wagmi
-yarn link @rainbow-me/rainbowkit
 yarn link @tanstack/react-query
 yarn link @coinbase/onchainkit
 
@@ -36,10 +34,8 @@ yarn link react-dom
 
 yarn unlink viem
 yarn unlink wagmi
-yarn unlink @rainbow-me/rainbowkit
 yarn unlink @coinbase/onchainkit
 
 yarn link viem
 yarn link wagmi
-yarn link @rainbow-me/rainbowkit
 yarn link @coinbase/onchainkit

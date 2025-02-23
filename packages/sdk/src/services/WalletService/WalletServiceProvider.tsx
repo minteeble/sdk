@@ -4,18 +4,9 @@ import {
   WalletServiceProviderContentProps,
 } from "./WalletServiceProviderContent";
 
-import {
-  connectorsForWallets,
-  getDefaultConfig,
-  RainbowKitProvider,
-} from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Config, Storage, WagmiProvider, createConfig, http } from "wagmi";
-import {
-  rainbowWallet,
-  walletConnectWallet,
-  metaMaskWallet,
-} from "@rainbow-me/rainbowkit/wallets";
+
 import { OnchainKitProvider } from "@coinbase/onchainkit";
 import { coinbaseWallet } from "wagmi/connectors";
 export interface WalletServiceProviderProps
@@ -113,28 +104,22 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   // const [transports, setTransports] = useState<any>(tTmp);
   const [config, setConfig] = useState<any>(
     props.config ||
-      (!props.modal || props.modal === "rainbowkit"
-        ? getDefaultConfig({
+      createConfig({
+        chains: props.chains as any,
+        connectors: [
+          coinbaseWallet({
             appName: props.appName ?? "Minteeble App",
-            projectId: props.walletConnectProjectId,
-            chains: props.chains as any,
-          })
-        : createConfig({
-            chains: props.chains as any,
-            connectors: [
-              coinbaseWallet({
-                appName: props.appName ?? "Minteeble App",
-                appLogoUrl: props.appIcon,
-              }),
-              ...(props.connectors || []), // Spread custom connectors if provided
-            ],
-            ssr: false,
-            // Pass optional storage to createConfig
-            storage: props.storage,
-            transports: {
-              [props.chains[0].id]: http(),
-            },
-          }))
+            appLogoUrl: props.appIcon,
+          }),
+          ...(props.connectors || []), // Spread custom connectors if provided
+        ],
+        ssr: false,
+        // Pass optional storage to createConfig
+        storage: props.storage,
+        transports: {
+          [props.chains[0].id]: http(),
+        },
+      })
   );
 
   const [queryClient] = useState<QueryClient>(new QueryClient());
@@ -189,19 +174,7 @@ export const WalletServiceProvider = (props: WalletServiceProviderProps) => {
   // }, [transports]);
 
   return !props.modal || props.modal === "rainbowkit" ? (
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>
-          <WalletServiceProviderContent
-            refreshOnChainChange={props.refreshOnChainChange ?? true}
-            wagmiConfig={config}
-            queryClient={queryClient}
-          >
-            {props.children}
-          </WalletServiceProviderContent>
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <>Unsupported</>
   ) : (
     <OnchainKitProvider
       apiKey={props.onChainKitApiKey}

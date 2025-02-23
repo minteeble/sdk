@@ -3,7 +3,7 @@ import WalletService from "./WalletService";
 import { WalletServiceContext } from "./WalletServiceContext";
 import React from "react";
 import { NetworkModel, NetworkUtils } from "@minteeble/utils";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
+// import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { useWalletClient, useAccount, useSwitchChain, useChainId } from "wagmi";
 import { disconnect } from "@wagmi/core";
 import { signMessage } from "wagmi/actions";
@@ -32,7 +32,7 @@ export const WalletServiceProviderContent = (
   const { chains, switchChain: switchNetwork } = useSwitchChain();
   const chainId = useChainId(props.wagmiConfig);
   const { data: walletClient } = useWalletClient();
-  const { openConnectModal } = useConnectModal();
+  // const { openConnectModal } = useConnectModal();
 
   const [walletAddress, setWalletAddress] = useState<string>("");
   const [userIsSigning, setUserIsSigning] = useState<boolean>(false);
@@ -135,10 +135,10 @@ export const WalletServiceProviderContent = (
   };
 
   const connectWallet = async (): Promise<void> => {
-    if (openConnectModal) {
-      console.log("Opening connect modal.");
-      openConnectModal();
-    }
+    // if (openConnectModal) {
+    //   console.log("Opening connect modal.");
+    //   // openConnectModal();
+    // }
   };
 
   const sign = async (_message: any): Promise<any> => {
